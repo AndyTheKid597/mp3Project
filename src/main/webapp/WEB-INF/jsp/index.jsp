@@ -14,24 +14,68 @@
 </head>
 <body>
 
-
-<br>
-<h3>Persons List</h3>
+<h3>chanson List</h3>
 <c:if test="${!empty listChansons}">
 	<table class="tg">
 	<tr>
 		<th width="80">Chanson ID</th>
 		<th width="120">Chanson Name</th>
+		<th width="120">Modifier</th>
 
 	</tr>
-	<c:forEach items="${listChansons}" var="person">
+	<c:forEach items="${listChansons}" var="sg">
 		<tr>
-			<td>${person.id}</td>
-			<td>${person.nomfichier}</td>
-
+			<td>${sg.id}</td>
+			<td>${sg.nomfichier}</td>
+			<td><a href="<c:url value='/edit/${sg.id}' />" >Edit</a></td>
 		</tr>
 	</c:forEach>
 	</table>
 </c:if>
+<br/>
+    <h3> ajoutpersonne </h3>
+    <c:url var="addAction" value="/add" ></c:url>
+
+<form:form action="${addAction}" commandName="hira">
+<table>
+	<c:if test="${!empty hira.nomfichier}">
+	<tr>
+		<td>
+			<form:label path="id">
+				<spring:message text="ID"/>
+			</form:label>
+		</td>
+		<td>
+			<form:input path="id" readonly="true" size="8"  disabled="true" />
+			<form:hidden path="id" />
+		</td> 
+	</tr>
+	</c:if>
+	<tr>
+		<td>
+			<form:label path="nomfichier">
+				<spring:message text="Nom du fichier"/>
+			</form:label>
+		</td>
+		<td>
+			<form:input path="nomfichier" />
+		</td> 
+	</tr>
+
+	<tr>
+		<td colspan="2">
+			<c:if test="${!empty hira.nomfichier}">
+				<input type="submit"
+					value="<spring:message text="Update chanson"/>" />
+			</c:if>
+			<c:if test="${empty hira.nomfichier}">
+				<input type="submit"
+					value="<spring:message text="Ajouter chanson"/>" />
+			</c:if>
+		</td>
+	</tr>
+</table>	
+</form:form>
+<br>
 </body>
 </html>

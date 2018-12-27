@@ -12,5 +12,8 @@ import nopacks.projet.modeles.Chanson;
  */
 public interface ChansonService {
     public void addChanson(Chanson p);
+        public void updateChanson(Chanson p);
+    public Chanson findChansonById(int id);
     public List<Chanson> listChansons();
+    public void deleteChanson(int id);
 }

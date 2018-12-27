@@ -13,7 +13,13 @@ import nopacks.projet.modeles.BaseModele;
  * @author ASUS
  */
 public interface InterfaceDAO {
+    public void beginTransaction();
+    public void endTransaction();
     public void save(BaseModele p);
-    public List<BaseModele> findAll();
+    public BaseModele findById(BaseModele p);
+    public List<BaseModele> findAllPage(BaseModele p,int page,int parpage);
+    public void update(BaseModele p);
+    public void delete(BaseModele p);
+    public List<BaseModele> findAll(BaseModele p);
     //mbola banga be fa vo amboarina io 
 }

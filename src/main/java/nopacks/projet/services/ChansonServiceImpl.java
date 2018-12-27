@@ -27,12 +27,34 @@ public class ChansonServiceImpl implements ChansonService {
     @Override
     @Transactional
     public void addChanson(Chanson p) {
+        this.chansonDAO.beginTransaction();
         this.chansonDAO.save(p);
+        this.chansonDAO.endTransaction();
     }
 
     @Override
     public List<Chanson> listChansons() {
-        return (List<Chanson>)(Object) this.chansonDAO.findAll();
+        Chanson ct=new Chanson();
+        return (List<Chanson>)(Object) this.chansonDAO.findAll(ct);
     }
-    
+
+    @Override
+    public Chanson findChansonById(int id) {
+        Chanson ct=new Chanson();
+        ct.setId(id);
+        return (Chanson) this.chansonDAO.findById(ct);
+    }
+
+    @Override
+    @Transactional
+    public void updateChanson(Chanson p) {
+        this.chansonDAO.update(p);
+    }    
+
+    @Override
+    public void deleteChanson(int id) {
+        Chanson hira=new Chanson();
+        hira.setId(id);
+        this.chansonDAO.delete(hira);
+    }
 }
