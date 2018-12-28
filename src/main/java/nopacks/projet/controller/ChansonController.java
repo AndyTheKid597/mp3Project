@@ -1,7 +1,9 @@
 package nopacks.projet.controller;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import javax.servlet.ServletContext;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -25,7 +29,7 @@ public class ChansonController {
     private ChansonService personService;
 @Autowired
         ServletContext context;
-
+    String UPLOAD_DIRECTORY="/upl";
     @Autowired(required = true)
     @Qualifier(value = "chansonService")
     public void setChansonService(ChansonService ps) {
@@ -124,4 +128,30 @@ public class ChansonController {
 
     }
 
+    
+    @RequestMapping("uploadform")   //itestena anle upload
+    public ModelAndView uploadForm(){  
+        return new ModelAndView("uploadform");    
+    }  
+    
+    
+        @RequestMapping(value="savefile",method=RequestMethod.POST)  
+    public ModelAndView saveimage( @RequestParam CommonsMultipartFile file) throws Exception{  
+  
+
+    String path = context.getRealPath("");  
+    String filename = file.getOriginalFilename();  
+  
+    System.out.println(path+UPLOAD_DIRECTORY+" "+filename);        
+  
+    byte[] bytes = file.getBytes();  
+    BufferedOutputStream stream =new BufferedOutputStream(new FileOutputStream(  
+         new File(path + UPLOAD_DIRECTORY+File.separator + filename)));  
+    stream.write(bytes);  
+    stream.flush();  
+    stream.close();  
+           
+    return new ModelAndView("uploadform","filesuccess","File successfully saved!");  
+    }  
+    
 }
