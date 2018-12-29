@@ -26,19 +26,19 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ChansonController {
 
-    private ChansonService personService;
+    private ChansonService chansonService;
 @Autowired
         ServletContext context;
     String UPLOAD_DIRECTORY="/upl";
     @Autowired(required = true)
     @Qualifier(value = "chansonService")
     public void setChansonService(ChansonService ps) {
-        this.personService = ps;
+        this.chansonService = ps;
     }
 
     @RequestMapping(value = "/chansons", method = RequestMethod.GET) //ny ray amin ireto no mande selon anle spring
     public String listChansons(Model model) {
-        model.addAttribute("listChansons", this.personService.listChansons());
+        model.addAttribute("listChansons", this.chansonService.listChansons());
         return "index";
     }
 
@@ -46,17 +46,17 @@ public class ChansonController {
     public ModelAndView listChansons() {
         ModelAndView model = new ModelAndView("index");
 
-        model.addObject("listChansons", this.personService.listChansons());
+        model.addObject("listChansons", this.chansonService.listChansons());
         model.addObject("hira", new Chanson());
-//model.addAttribute("listChansons", this.personService.listChansons());
+//model.addAttribute("listChansons", this.chansonService.listChansons());
         return model;
     }
 
     @RequestMapping("/edit/{id}")
     public ModelAndView editChanson(@PathVariable("id") int id) {
         ModelAndView model = new ModelAndView("index");
-        model.addObject("hira", this.personService.findChansonById(id));
-        model.addObject("listChansons", this.personService.listChansons());
+        model.addObject("hira", this.chansonService.findChansonById(id));
+        model.addObject("listChansons", this.chansonService.listChansons());
         return model;
     }
 
@@ -110,18 +110,25 @@ public class ChansonController {
     @RequestMapping("/delete/{id}")
     public String deleteChanson(@PathVariable("id") int id) {
 
-        this.personService.deleteChanson(id);
+        this.chansonService.deleteChanson(id);
         return "redirect:/chansons2";
+    }
+    
+    @RequestMapping("/findall/{page}/{parpage}")
+    public ModelAndView findAllPage(@PathVariable("page") int page, @PathVariable("parpage") int parpage) {
+        ModelAndView md=new ModelAndView("testpagin");
+        md.addObject("resultat",this.chansonService.listChansonsPage(page, parpage));
+        return md;
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addChanson(@ModelAttribute("hira") Chanson p) {
 
         if (p.getId() == 0) {
-            this.personService.addChanson(p);
+            this.chansonService.addChanson(p);
         } else {
 
-            this.personService.updateChanson(p);
+            this.chansonService.updateChanson(p);
         }
 
         return "redirect:/chansons2";

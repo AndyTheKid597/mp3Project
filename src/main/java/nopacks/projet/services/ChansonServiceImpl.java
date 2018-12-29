@@ -9,6 +9,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 import nopacks.projet.DAO.HibernateDAO;
 import nopacks.projet.modeles.Chanson;
+import nopacks.projet.modeles.ResultatPagination;
 import org.springframework.stereotype.Service;
 
 /**
@@ -56,5 +57,10 @@ public class ChansonServiceImpl implements ChansonService {
         Chanson hira=new Chanson();
         hira.setId(id);
         this.chansonDAO.delete(hira);
+    }
+
+    @Override
+    public ResultatPagination listChansonsPage(int page, int parpage) {
+       return this.chansonDAO.findAllPage(new Chanson(), page, parpage);
     }
 }

@@ -6,13 +6,15 @@
 package nopacks.projet.services;
 import java.util.List;
 import nopacks.projet.modeles.Chanson;
+import nopacks.projet.modeles.ResultatPagination;
 /**
  *
  * @author ASUS
  */
 public interface ChansonService {
+    public ResultatPagination listChansonsPage(int page, int parpage);
     public void addChanson(Chanson p);
-        public void updateChanson(Chanson p);
+    public void updateChanson(Chanson p);
     public Chanson findChansonById(int id);
     public List<Chanson> listChansons();
     public void deleteChanson(int id);
