@@ -116,6 +116,8 @@ public class ChansonController {
     
     @RequestMapping("/findall/{page}/{parpage}")
     public ModelAndView findAllPage(@PathVariable("page") int page, @PathVariable("parpage") int parpage) {
+        if(parpage<=0) parpage=10;
+        if(page<0) page=0;
         ModelAndView md=new ModelAndView("testpagin");
         md.addObject("resultat",this.chansonService.listChansonsPage(page, parpage));
         return md;
