@@ -24,6 +24,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Set;
 
 @Controller
 public class ChansonController {
@@ -73,6 +79,27 @@ public class ChansonController {
         return model;
     }
 
+    @RequestMapping("/testObjet")
+    public ModelAndView creerObjetForm(){
+        ModelAndView md=new ModelAndView("testcobj");
+        return md;
+    }
+    
+    @RequestMapping(value="/cObjet", method = RequestMethod.POST)
+    public ModelAndView creerObjet(HttpServletRequest req, HttpServletResponse res){
+        ModelAndView md=new ModelAndView("testcobj");
+        Chanson valiny;
+        try{
+            valiny=(Chanson)getObject(req,"nopacks.projet.modeles.Chanson");
+        } catch(Exception e){
+            e.printStackTrace();
+            valiny=null;
+        }
+        System.out.println(valiny.getNomfichier());
+        md.addObject("resultat",valiny);
+        return md;
+    }
+    
     @RequestMapping(value = "download/{nom}", method = RequestMethod.GET)
 
     public void downloadTest(HttpServletRequest request, HttpServletResponse response, @PathVariable("nom") String nom) throws IOException {
@@ -177,4 +204,76 @@ public class ChansonController {
         return new ModelAndView("uploadform", "filesuccess", "File successfully saved!");
     }
 
+    private Method getSetter(Object cible, String nom) throws Exception{
+        String charac = nom.substring(0, 1).toUpperCase();
+        String realattrib = charac + nom.substring(1);
+        Method[] liste=cible.getClass().getDeclaredMethods();
+        for(Method ray:liste){
+            if(ray.getName().equals("set"+realattrib)) return ray;
+        }
+        throw new NoSuchMethodException("set"+realattrib);
+    }
+    
+    private void callSetter(Object cible, String attribut, String valeur) throws Exception {
+
+        Method antsoina = getSetter(cible,attribut);
+        Class[] cl = antsoina.getParameterTypes();
+        if (cl.length > 1) {
+            throw new Exception("methode setter erronee pour la classe " + cible.getClass() + " attribut: " + attribut);
+        }
+        Class typeArgument = cl[0];
+        if (typeArgument == String.class) {
+            antsoina.invoke(cible, valeur);
+        } else if (typeArgument == Integer.class) {
+            antsoina.invoke(cible, Integer.parseInt(valeur));
+        } else if (typeArgument == Float.class) {
+            antsoina.invoke(cible, Float.parseFloat(valeur));
+        } else if (typeArgument == Double.class) {
+            antsoina.invoke(cible, Double.parseDouble(valeur));
+        } else if (typeArgument == Long.class) {
+            antsoina.invoke(cible, Long.parseLong(valeur));
+        }
+    }
+
+    public Object getObject(HttpServletRequest req, Object izy) throws Exception {
+        Object rt = null;
+        if (izy.getClass() == String.class) {
+            rt = loadClassByName((String) izy);
+        } else {
+            rt = loadClassByInstance(izy);
+        }
+        Enumeration<String> parameterNames = req.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String paramName = parameterNames.nextElement();
+            String[] paramValues = req.getParameterValues(paramName);
+            if (paramValues.length > 1) {
+                throw new Exception("trop de valeurs pour un attribut");
+            }
+            String param = paramValues[0];
+            callSetter(rt, paramName, param);
+            System.out.println(paramName + " set to " + param);
+        }
+        return rt;
+    }
+
+    private Object loadClassByName(String nom) throws Exception {
+        return loadClassByClass(Class.forName(nom));
+    }
+
+    private Object loadClassByInstance(Object efaloade) throws Exception {
+        return loadClassByClass(efaloade.getClass());
+
+    }
+
+    private Object loadClassByClass(Class classe) throws Exception {
+        try {
+            Constructor constructor = classe.getConstructor();
+            Object rt = constructor.newInstance();
+            return rt;
+        } catch (Exception e) {
+            e.printStackTrace();
+            //return null; //to do
+            throw e;
+        }
+    }
 }
