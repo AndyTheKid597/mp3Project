@@ -5,8 +5,10 @@
  */
 package nopacks.projet.services;
 import java.util.List;
+import nopacks.projet.DAO.InterfaceDAO;
 import nopacks.projet.modeles.Chanson;
 import nopacks.projet.modeles.ResultatPagination;
+import nopacks.projet.mp3.mp3Finder;
 /**
  *
  * @author ASUS
@@ -18,4 +20,9 @@ public interface ChansonService {
     public Chanson findChansonById(int id);
     public List<Chanson> listChansons();
     public void deleteChanson(int id);
+    public void setUploadDir(String upd);
+    public String getUploadDir();
+    public List<String> findAllMp3InFolder();
+    public void setChansonDAO(InterfaceDAO chansonDAO);
+    public void setFinder(mp3Finder finder);
 }

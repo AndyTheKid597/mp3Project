@@ -8,8 +8,12 @@ package nopacks.projet.services;
 import java.util.List;
 import javax.transaction.Transactional;
 import nopacks.projet.DAO.HibernateDAO;
+import nopacks.projet.DAO.InterfaceDAO;
 import nopacks.projet.modeles.Chanson;
 import nopacks.projet.modeles.ResultatPagination;
+import nopacks.projet.mp3.mp3Finder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,9 +23,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChansonServiceImpl implements ChansonService {
 
-    private HibernateDAO chansonDAO;
+    private InterfaceDAO chansonDAO;
+     private   String UPLOAD_DIRECTORY="E:/mp3/";
+     private mp3Finder finder;
 
-    public void setChansonDAO(HibernateDAO chansonDAO) {
+     public void setFinder(mp3Finder finder){
+         this.finder=finder;
+     }
+     
+    public void setChansonDAO(InterfaceDAO chansonDAO) {
         this.chansonDAO = chansonDAO;
     }
     
@@ -62,5 +72,22 @@ public class ChansonServiceImpl implements ChansonService {
     @Override
     public ResultatPagination listChansonsPage(int page, int parpage) {
        return this.chansonDAO.findAllPage(new Chanson(), page, parpage);
+    }
+
+    @Override
+    public void setUploadDir(String upd) {
+           UPLOAD_DIRECTORY=upd;
+    }
+
+    @Override
+    public String getUploadDir() {
+            return UPLOAD_DIRECTORY;
+    }
+
+    @Override
+    public List<String> findAllMp3InFolder() {
+     List<String> rt= this.finder.findAllInFolder(UPLOAD_DIRECTORY);
+     //System.out.println(rt.size());
+     return rt;
     }
 }
