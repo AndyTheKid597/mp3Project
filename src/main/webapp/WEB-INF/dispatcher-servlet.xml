@@ -40,7 +40,7 @@
 
 	
     <beans:bean id="multipartResolver"   
-                    class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/> 
+                class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/> 
         
     <beans:bean id="mp3Finder" class="nopacks.projet.mp3.mp3Finder">
 
@@ -49,7 +49,12 @@
     <beans:bean id="mp3Util" class="nopacks.projet.mp3.mp3Util">
 
     </beans:bean>
-              
+    <beans:bean id="connexion" class="nopacks.projet.DAO.Connexion">
+            <beans:property name="dataSource" ref="dataSource" />
+    </beans:bean>
+        <beans:bean id="generiqueDAO" class="nopacks.projet.DAO.GeneriqueDAO">
+            <beans:property name="connexion" ref="connexion" />
+    </beans:bean>
     <beans:bean id="hibernateDAO" class="nopacks.projet.DAO.HibernateDAO">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
     </beans:bean>
