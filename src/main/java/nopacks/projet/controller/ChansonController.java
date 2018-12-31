@@ -64,7 +64,6 @@ public class ChansonController {
     @RequestMapping(value = "/chansons2", method = RequestMethod.GET)
     public ModelAndView listChansons() {
         ModelAndView model = new ModelAndView("index");
-
         model.addObject("listChansons", this.chansonService.listChansons());
         model.addObject("hira", new Chanson());
 //model.addAttribute("listChansons", this.chansonService.listChansons());
