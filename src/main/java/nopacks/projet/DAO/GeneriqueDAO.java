@@ -73,13 +73,18 @@ public class GeneriqueDAO implements InterfaceDAO {
     @PostConstruct
     public void tester() {
         try {
-            Chanson testchan=new Chanson();
+            Chanson testchan = new Chanson();
             testchan.setAuteur("itestena anle reflection");
             ArrayList<String[]> rtt = getAttributsBaseModele(testchan);
             for (String[] tp : rtt) {
                 System.out.println(tp[0] + "   " + tp[1]);
             }
-            System.out.println(" valeur auteru : "+callGetter(testchan,"auteur"));
+            System.out.println(" valeur auteru : " + callGetter(testchan, "auteur"));
+            System.out.println(" classe : " + callGetter(testchan, "id").getClass()); // bon ny int sy ny otranzan zany anaty objet Integer
+            String[] vc= getColAndVal(testchan);
+            System.out.println(vc[0]);
+            System.out.println(vc[1]);
+            System.out.println("fin");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -92,12 +97,74 @@ public class GeneriqueDAO implements InterfaceDAO {
         return rt;
     }
 
-    
-     private Object callGetter(Object cible, String attribut) throws Exception {
-        Method antsoina = getGetter(cible,attribut);
-        return antsoina.invoke(cible,null);
-     }
-    
+    private String[] getColAndVal(BaseModele cible) throws Exception {
+        return getColAndVal(cible, getAttributsBaseModele(cible));
+    }
+
+    private String getCol(BaseModele cible) throws Exception {
+        return getCol(cible, getAttributsBaseModele(cible));
+    }
+
+    private String getCol(BaseModele cible, ArrayList<String[]> attributs) throws Exception {
+        String rt;
+        StringBuilder sb1 = new StringBuilder();
+                boolean fst = true;
+        for (String[] att : attributs) {
+            if (!fst) {
+                sb1.append(" , ");
+                
+            }
+            sb1.append(att[1]);
+            fst = false;
+        }
+        rt = sb1.toString();
+        sb1 = null;
+        return rt;
+    }
+
+    private String[] getColAndVal(BaseModele cible, ArrayList<String[]> attributs) throws Exception {
+        String[] rt = new String[2];
+        StringBuilder sb1 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        boolean fst = true;
+        for (String[] att : attributs) {
+            if(att[0]=="id") continue;
+            if (!fst) {
+                sb1.append(" , ");
+                sb2.append(" , ");
+            }
+            Object tpget = callGetter(cible, att[0]);
+            String atr = toAttribRequete(tpget);
+            sb1.append(atr);
+            sb2.append(att[1]);
+            fst = false;
+            tpget = null;
+            atr = null;
+        }
+        rt[0] = sb1.toString();
+        rt[1] = sb2.toString();
+        sb1 = null;
+        sb2 = null;
+        return rt;
+    }
+
+    private String toAttribRequete(Object valiny) {
+        if (valiny==null){
+            return "null";
+        } else if (valiny.getClass() == Integer.class) {
+            return ((Integer) valiny).toString();
+        } else if (valiny.getClass() == String.class) {
+            return "'" + valiny + "'";
+        }
+        
+        return null;
+    }
+
+    private Object callGetter(Object cible, String attribut) throws Exception {
+        Method antsoina = getGetter(cible, attribut);
+        return antsoina.invoke(cible, null);
+    }
+
     private ArrayList<String[]> getAttributsBaseModele(BaseModele p) throws Exception {
         //BaseModele efa misy id
         ArrayList<String[]> rt = null;
