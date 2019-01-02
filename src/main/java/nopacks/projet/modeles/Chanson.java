@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name="bibliotheque")
 public class Chanson extends BaseModele{
     private String nomfichier,titre,d_up,d_down,auteur,album,date,commentaire,genre,track;
-    private long duration;
+    private Long duration;
     public Chanson(){}
     public String getNomfichier() {
         return nomfichier;
@@ -98,7 +98,7 @@ public class Chanson extends BaseModele{
         this.track = track;
     }
 
-    public long getDuration() {
+    public long getDuration() { //boxing
         return duration;
     }
 
