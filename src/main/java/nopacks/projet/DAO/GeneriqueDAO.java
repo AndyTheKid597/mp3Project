@@ -97,7 +97,57 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     @Override
     public ResultatPagination findAllPage(BaseModele p, int page, int parpage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ResultatPagination rp= new ResultatPagination();
+         List<BaseModele> rt = null;
+        Connection cx = null;
+        int count=0;
+        try {
+            //System.out.println("findAll ");
+            //System.out.println();
+            //System.out.println();
+            //System.out.println();
+            cx = connexion.getConnection();
+            String n_table = getNomTable(p);
+            ArrayList<String[]> attr = this.getAttributsBaseModele(p);
+            //System.out.println(attr.size());
+            //System.out.println("select * from "+n_table);
+            Statement ps1= cx.createStatement();
+            ResultSet rs2=ps1.executeQuery("select count(*) from "+n_table);
+            rs2.next();
+            count=rs2.getInt(1);
+            rs2.close();
+            ps1.close();
+            Statement ps = cx.createStatement();
+            
+            ResultSet rs = ps.executeQuery("select * from " + n_table+" limit "+parpage+" offset "+(page*parpage));
+            rt = new ArrayList<BaseModele>();
+            while (rs.next()) {
+                //System.out.println(" next ");
+                rt.add(rsToObject(p, rs, attr));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw (ex);
+        } finally {
+            try {
+                if (cx != null) {
+                    cx.close();
+                }
+            } catch (Exception ex) {
+
+            }
+            //System.out.println();
+            //System.out.println();
+            //System.out.println();
+            //System.out.println("fin find");
+            rp.setResultats(rt);
+        rp.setNumPage(page);
+        rp.setParPage(parpage);
+        rp.setTailleTotale(count);
+        return rp;
+        }
     }
 
     @Override
