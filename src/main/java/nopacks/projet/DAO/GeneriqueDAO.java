@@ -70,7 +70,7 @@ public class GeneriqueDAO implements InterfaceDAO {
                 i++;
             }
             System.out.println(ps);
-            ps.executeUpdate();
+           // ps.executeUpdate();
             ps.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -91,7 +91,43 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     @Override
     public void update(BaseModele p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Connection ct = connexion.getConnection();
+            ArrayList<String[]> attribs = this.getAttributsBaseModele(p);
+            HashMap<String, Object> cv = this.getColAndVal(p);
+            String rqt = " update " + this.getNomTable(p) + " set ";
+            String where = " where id=" + p.getId();
+            StringBuilder setena = new StringBuilder();
+            boolean vol=false;
+            for (String[] att : attribs) {
+                if (att[1].equals("id")) {
+                    continue;
+                }
+                if(!vol){
+                    setena.append(" , ");
+                }
+                setena.append(att[0]);
+                setena.append(" = ? ");
+                vol=false;
+            }
+            String st=setena.toString();
+            rqt=rqt+st+where;
+            PreparedStatement ps = ct.prepareStatement(rqt);
+            int i = 1;
+            for (String[] att : attribs) {
+                if (att[1].equals("id")) {
+                    continue;
+                }
+                ps.setObject(i, cv.get(att[0]));
+                i++;
+            }
+            System.out.println(ps);
+            //ps.executeUpdate();
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+        }
     }
 
     @Override
@@ -102,7 +138,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             st.executeUpdate(rqt);
             st.close();
         } catch (SQLException ex) {
-               ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -182,6 +218,7 @@ public class GeneriqueDAO implements InterfaceDAO {
                 Chanson tpchan = ((Chanson) bm);
                 System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
             }
+           // this.update(testchan);
             // this.save(liste.get(0)); //efa mandeha
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -242,7 +279,8 @@ public class GeneriqueDAO implements InterfaceDAO {
     private HashMap<String, Object> getColAndVal(BaseModele cible, ArrayList<String[]> attributs) throws Exception {
         HashMap<String, Object> rt = new HashMap<>();
         for (String[] att : attributs) {
-
+            System.out.println(cible);
+            System.out.println(att[0]);
             rt.put(att[1], callGetter(cible, att[0]));
         }
         return rt;
@@ -262,6 +300,7 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     private Object callGetter(Object cible, String attribut) throws Exception {
         Method antsoina = getGetter(cible, attribut);
+        System.out.println(antsoina);
         return antsoina.invoke(cible, null);
     }
 

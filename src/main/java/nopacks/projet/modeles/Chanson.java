@@ -18,7 +18,9 @@ import javax.persistence.Table;
 public class Chanson extends BaseModele{
     private String nomfichier,titre,d_up,d_down,auteur,album,date,commentaire,genre,track;
     private Long duration;
-    public Chanson(){}
+    public Chanson(){
+        duration=new Long(0);
+    }
     public String getNomfichier() {
         return nomfichier;
     }
