@@ -12,6 +12,7 @@ import javax.persistence.Table;
  *
  * @author ASUS
  */
+@nopacks.projet.DAO.annotations.Table(nom="bibliotheque")
 @Entity
 @Table(name="bibliotheque")
 public class Chanson extends BaseModele{

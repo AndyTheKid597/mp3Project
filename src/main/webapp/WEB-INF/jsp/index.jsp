@@ -20,6 +20,7 @@
 	<tr>
 		<th width="80">Chanson ID</th>
 		<th width="120">Chanson Name</th>
+                <th width="120">Duration</th>
 		<th width="120">Modifier</th>
 
 	</tr>
@@ -27,6 +28,7 @@
 		<tr>
 			<td>${sg.id}</td>
 			<td>${sg.nomfichier}</td>
+                        <td>${sg.duration}</td>
 			<td><a href="<c:url value='/edit/${sg.id}' />" >Edit</a></td>
 		</tr>
 	</c:forEach>
@@ -59,6 +61,16 @@
 		</td>
 		<td>
 			<form:input path="nomfichier" />
+		</td> 
+	</tr>
+        	<tr>
+		<td>
+			<form:label path="duration">
+				<spring:message text="Dration"/>
+			</form:label>
+		</td>
+		<td>
+			<form:input path="duration" />
 		</td> 
 	</tr>
 

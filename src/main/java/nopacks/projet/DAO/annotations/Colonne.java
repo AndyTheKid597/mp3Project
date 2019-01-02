@@ -5,10 +5,14 @@
  */
 package nopacks.projet.DAO.annotations;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  *
  * @author ASUS
  */
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Colonne {
     String nom();
 }

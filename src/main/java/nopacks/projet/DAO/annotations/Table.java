@@ -13,6 +13,6 @@ import java.lang.annotation.RetentionPolicy;
  * @author ASUS
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Tsizy {
-    
+public @interface Table {
+    String nom();
 }

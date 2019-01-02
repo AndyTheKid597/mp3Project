@@ -5,8 +5,14 @@
  */
 package nopacks.projet.DAO;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,10 +20,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import nopacks.projet.DAO.annotations.Colonne;
+import nopacks.projet.DAO.annotations.Table;
 import nopacks.projet.DAO.annotations.Tsizy;
 import nopacks.projet.modeles.BaseModele;
 import nopacks.projet.modeles.Chanson;
 import nopacks.projet.modeles.ResultatPagination;
+import org.apache.commons.dbcp.BasicDataSource;
 
 /**
  *
@@ -25,10 +33,10 @@ import nopacks.projet.modeles.ResultatPagination;
  */
 public class GeneriqueDAO implements InterfaceDAO {
 
-    private Connexion connexion;
+    private BasicDataSource connexion;
 
-    public void setConnexion(Connexion connexion) {
-        this.connexion = connexion;
+    public void setConnexion(BasicDataSource ds) {
+        this.connexion = ds;
     }
 
     @Override
@@ -68,7 +76,68 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     @Override
     public List<BaseModele> findAll(BaseModele p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<BaseModele> rt = null;
+        Connection cx = null;
+        try {
+            //System.out.println("findAll ");
+            //System.out.println();
+            //System.out.println();
+            //System.out.println();
+            cx = connexion.getConnection();
+            String n_table = getNomTable(p);
+            ArrayList<String[]> attr = this.getAttributsBaseModele(p);
+            //System.out.println(attr.size());
+            //System.out.println("select * from "+n_table);
+            Statement ps = cx.createStatement();
+            ResultSet rs = ps.executeQuery("select * from " + n_table);
+            rt = new ArrayList<BaseModele>();
+            while (rs.next()) {
+                //System.out.println(" next ");
+                rt.add(rsToObject(p, rs, attr));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw (ex);
+        } finally {
+            try {
+                if (cx != null) {
+                    cx.close();
+                }
+            } catch (Exception ex) {
+
+            }
+            //System.out.println();
+            //System.out.println();
+            //System.out.println();
+            //System.out.println("fin find");
+            return rt;
+        }
+    }
+
+    private BaseModele rsToObject(BaseModele p, ResultSet rs, ArrayList<String[]> attribs) throws Exception {
+        BaseModele rt = p.getClass().newInstance();
+        //System.out.println(attribs.size());
+        for (String[] ray : attribs) {
+            //System.out.println(ray[1]);
+            Object averiny = rs.getObject(ray[1]);
+            if (averiny == null) {
+                continue;
+            }
+            //System.out.println(ray[1]+" "+averiny);
+            callSetter(rt, ray[0], averiny);
+            //System.out.println(" manaraka amzay ");
+        }
+        return rt;
+    }
+
+    private String getNomTable(BaseModele p) {
+        Table at = p.getClass().getAnnotation(Table.class);
+        if (at != null) {
+            return at.nom();
+        }
+        return p.getClass().getSimpleName();
     }
 
     @PostConstruct
@@ -76,16 +145,14 @@ public class GeneriqueDAO implements InterfaceDAO {
         try {
             Chanson testchan = new Chanson();
             testchan.setAuteur("itestena anle reflection");
-            ArrayList<String[]> rtt = getAttributsBaseModele(testchan);
-            for (String[] tp : rtt) {
-                System.out.println(tp[0] + "   " + tp[1]);
+            List<BaseModele> liste = findAll(testchan);
+            for (BaseModele bm : liste) {
+                Chanson tpchan = ((Chanson) bm);
+                System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
             }
-            System.out.println(" valeur auteru : " + callGetter(testchan, "auteur"));
-            System.out.println(" classe : " + callGetter(testchan, "id").getClass()); // bon ny int sy ny otranzan zany anaty objet Integer
-            HashMap<String,Object> vc= getColAndVal(testchan,rtt);
-            System.out.println("fin");
         } catch (Exception ex) {
             ex.printStackTrace();
+            throw (ex);
         }
     }
 
@@ -96,7 +163,18 @@ public class GeneriqueDAO implements InterfaceDAO {
         return rt;
     }
 
-    private HashMap<String,Object> getColAndVal(BaseModele cible) throws Exception {
+    private Method getSetter(Object cible, String nom) throws Exception {
+        return getSetter(cible, nom, getGetter(cible, nom).getReturnType());
+    }
+
+    private Method getSetter(Object cible, String nom, Class classe) throws Exception { //atribut : nomChanson => getNomChanson
+        String charac = nom.substring(0, 1).toUpperCase();
+        String realattrib = charac + nom.substring(1);
+        Method rt = cible.getClass().getMethod("set" + realattrib, classe);
+        return rt;
+    }
+
+    private HashMap<String, Object> getColAndVal(BaseModele cible) throws Exception {
         return getColAndVal(cible, getAttributsBaseModele(cible));
     }
 
@@ -107,11 +185,11 @@ public class GeneriqueDAO implements InterfaceDAO {
     private String getCol(BaseModele cible, ArrayList<String[]> attributs) throws Exception {
         String rt;
         StringBuilder sb1 = new StringBuilder();
-                boolean fst = true;
+        boolean fst = true;
         for (String[] att : attributs) {
             if (!fst) {
                 sb1.append(" , ");
-                
+
             }
             sb1.append(att[1]);
             fst = false;
@@ -121,30 +199,64 @@ public class GeneriqueDAO implements InterfaceDAO {
         return rt;
     }
 
-    private HashMap<String,Object> getColAndVal(BaseModele cible, ArrayList<String[]> attributs) throws Exception {
-        HashMap<String,Object> rt = new HashMap<>();
+    private HashMap<String, Object> getColAndVal(BaseModele cible, ArrayList<String[]> attributs) throws Exception {
+        HashMap<String, Object> rt = new HashMap<>();
         for (String[] att : attributs) {
-            
+
             rt.put(att[1], callGetter(cible, att[0]));
         }
         return rt;
     }
 
     private String toAttribRequete(Object valiny) {
-        if (valiny==null){
+        if (valiny == null) {
             return "null";
         } else if (valiny.getClass() == Integer.class) {
             return ((Integer) valiny).toString();
         } else if (valiny.getClass() == String.class) {
             return "'" + valiny + "'";
         }
-        
+
         return null;
     }
 
     private Object callGetter(Object cible, String attribut) throws Exception {
         Method antsoina = getGetter(cible, attribut);
         return antsoina.invoke(cible, null);
+    }
+
+    private void callSetter(Object cible, String attribut, Object arg) throws Exception {
+        try {
+            Method antsoina = getSetter(cible, attribut);
+            Class rttype = antsoina.getParameterTypes()[0];
+            //System.out.println(arg.getClass());
+            //System.out.println(rttype);
+            //System.out.println(antsoina);
+            if (rttype == Integer.TYPE) {
+
+                if (arg.getClass() == Integer.class) {
+                    //System.out.println("niditra teto");
+                    antsoina.invoke(cible, ((Integer) arg).intValue());
+                } else if (arg.getClass() == Float.class) {
+                    //System.out.println("niditra teto");
+                    antsoina.invoke(cible, ((Float) arg).intValue());
+                } else if (arg.getClass() == Double.class) {
+                    //System.out.println("niditra teto");
+                    antsoina.invoke(cible, ((Double) arg).intValue());
+                } else if (arg.getClass() == Long.class) {
+                    //System.out.println("niditra teto");
+                    antsoina.invoke(cible, ((Long) arg).intValue());
+                } else {
+                    antsoina.invoke(cible, ((Integer) arg).intValue());
+                }
+            } else {
+                antsoina.invoke(cible, arg);
+            }
+            //System.out.println("tody");
+        } catch (Exception ex) {
+            //System.out.println(ex.getMessage());
+            throw (ex);
+        }
     }
 
     private ArrayList<String[]> getAttributsBaseModele(BaseModele p) throws Exception {
