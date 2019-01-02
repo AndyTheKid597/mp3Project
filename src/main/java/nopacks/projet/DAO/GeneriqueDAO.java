@@ -232,26 +232,26 @@ public class GeneriqueDAO implements InterfaceDAO {
             //System.out.println(arg.getClass());
             //System.out.println(rttype);
             //System.out.println(antsoina);
-            if (rttype == Integer.TYPE) {
-
-                if (arg.getClass() == Integer.class) {
-                    //System.out.println("niditra teto");
-                    antsoina.invoke(cible, ((Integer) arg).intValue());
-                } else if (arg.getClass() == Float.class) {
-                    //System.out.println("niditra teto");
-                    antsoina.invoke(cible, ((Float) arg).intValue());
-                } else if (arg.getClass() == Double.class) {
-                    //System.out.println("niditra teto");
-                    antsoina.invoke(cible, ((Double) arg).intValue());
-                } else if (arg.getClass() == Long.class) {
-                    //System.out.println("niditra teto");
-                    antsoina.invoke(cible, ((Long) arg).intValue());
-                } else {
-                    antsoina.invoke(cible, ((Integer) arg).intValue());
-                }
-            } else {
+//            if (rttype == Integer.TYPE) {
+//
+//                if (arg.getClass() == Integer.class) {
+//                    //System.out.println("niditra teto");
+//                    antsoina.invoke(cible, ((Integer) arg).intValue());
+//                } else if (arg.getClass() == Float.class) {
+//                    //System.out.println("niditra teto");
+//                    antsoina.invoke(cible, ((Float) arg).intValue());
+//                } else if (arg.getClass() == Double.class) {
+//                    //System.out.println("niditra teto");
+//                    antsoina.invoke(cible, ((Double) arg).intValue());
+//                } else if (arg.getClass() == Long.class) {
+//                    //System.out.println("niditra teto");
+//                    antsoina.invoke(cible, ((Long) arg).intValue());
+//                } else {
+//                    antsoina.invoke(cible, ((Integer) arg).intValue());
+//                }
+//            } else {
                 antsoina.invoke(cible, arg);
-            }
+ //           }
             //System.out.println("tody");
         } catch (Exception ex) {
             //System.out.println(ex.getMessage());
