@@ -8,6 +8,7 @@ package nopacks.projet.DAO;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,9 +82,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             }
             System.out.println(" valeur auteru : " + callGetter(testchan, "auteur"));
             System.out.println(" classe : " + callGetter(testchan, "id").getClass()); // bon ny int sy ny otranzan zany anaty objet Integer
-            String[] vc= getColAndVal(testchan);
-            System.out.println(vc[0]);
-            System.out.println(vc[1]);
+            HashMap<String,Object> vc= getColAndVal(testchan,rtt);
             System.out.println("fin");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -97,7 +96,7 @@ public class GeneriqueDAO implements InterfaceDAO {
         return rt;
     }
 
-    private String[] getColAndVal(BaseModele cible) throws Exception {
+    private HashMap<String,Object> getColAndVal(BaseModele cible) throws Exception {
         return getColAndVal(cible, getAttributsBaseModele(cible));
     }
 
@@ -122,29 +121,12 @@ public class GeneriqueDAO implements InterfaceDAO {
         return rt;
     }
 
-    private String[] getColAndVal(BaseModele cible, ArrayList<String[]> attributs) throws Exception {
-        String[] rt = new String[2];
-        StringBuilder sb1 = new StringBuilder();
-        StringBuilder sb2 = new StringBuilder();
-        boolean fst = true;
+    private HashMap<String,Object> getColAndVal(BaseModele cible, ArrayList<String[]> attributs) throws Exception {
+        HashMap<String,Object> rt = new HashMap<>();
         for (String[] att : attributs) {
-            if(att[0]=="id") continue;
-            if (!fst) {
-                sb1.append(" , ");
-                sb2.append(" , ");
-            }
-            Object tpget = callGetter(cible, att[0]);
-            String atr = toAttribRequete(tpget);
-            sb1.append(atr);
-            sb2.append(att[1]);
-            fst = false;
-            tpget = null;
-            atr = null;
+            
+            rt.put(att[1], callGetter(cible, att[0]));
         }
-        rt[0] = sb1.toString();
-        rt[1] = sb2.toString();
-        sb1 = null;
-        sb2 = null;
         return rt;
     }
 
