@@ -81,7 +81,18 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     @Override
     public BaseModele findById(BaseModele p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            PreparedStatement ps=connexion.getConnection().prepareStatement("select * from "+this.getNomTable(p)+" where id=?");
+            ps.setInt(1,p.getId());
+            ResultSet rs=ps.executeQuery();
+            ArrayList<String[]> attribs=this.getAttributsBaseModele(p);
+            if(!rs.next()) return null;
+            BaseModele resultat=rsToObject(p,rs,attribs);
+            return resultat;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     @Override
