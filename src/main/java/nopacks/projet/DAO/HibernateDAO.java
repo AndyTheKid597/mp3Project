@@ -5,12 +5,18 @@
  */
 package nopacks.projet.DAO;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import nopacks.projet.DAO.criteres.CritereGenerator;
 import nopacks.projet.DAO.criteres.Requete;
 import nopacks.projet.modeles.BaseModele;
 import nopacks.projet.modeles.Chanson;
 import nopacks.projet.modeles.ResultatPagination;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -113,9 +119,54 @@ public class HibernateDAO implements InterfaceDAO {
         tx.commit();
     }
 
+    @PostConstruct
+    public void tester() {
+        try {
+            System.out.println("begin 22");
+            Chanson testchan = new Chanson();
+            Requete rq = new Requete(testchan);
+            rq.setCritere(CritereGenerator.or(CritereGenerator.like("nomfichier", "a"), CritereGenerator.gteq("id", new Integer(5))));
+            System.out.println(rq.contenu());
+            System.out.println(rq.where());
+            ResultatPagination liste2 = this.findAllPage(rq, 0, 10);
+            System.out.println("tonga farany22");
+            for (BaseModele bm : liste2.getResultats()) {
+                Chanson tpchan = ((Chanson) bm);
+                System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+    }
+
     @Override
     public ResultatPagination findAllPage(Requete rq, int page, int parpage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ResultatPagination rt = new ResultatPagination();
+        Session session = this.sessionFactory.openSession();
+        String nt = rq.getBm().getClass().getSimpleName();
+        String where = " where " + rq.where();
+        ArrayList<Object> conds = rq.mifanaraka();
+        int t = conds.size();
+        Query qrct = session.createQuery("select count(*) from " + nt + where);
+
+        for (int i = 0; i < t; i++) {
+            qrct.setParameter(i, conds.get(i));
+        }
+        long count = ((Long)qrct.uniqueResult()).longValue();
+        Query qr = session.createQuery(" from " + nt + where);
+
+        for (int i = 0; i < t; i++) {
+            qr.setParameter(i, conds.get(i));
+        }
+        qr.setMaxResults(parpage);
+        qr.setFirstResult(page * parpage);
+        List<BaseModele> list = qr.list();
+        rt.setResultats(list);
+        rt.setNumPage(page);
+        rt.setParPage(parpage);
+        rt.setTailleTotale(count);
+        return rt;
     }
 
 }

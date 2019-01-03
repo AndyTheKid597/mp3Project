@@ -466,7 +466,7 @@ public class GeneriqueDAO implements InterfaceDAO {
              System.out.println("select count(*) from " + n_table+where);
              
             for(int i=0;i<t;i++){
-             System.out.println(conds.get(i));
+            System.out.println(conds.get(i));
                 ps1.setObject(i+1, conds.get(i));
             }
             ResultSet rs2 = ps1.executeQuery();
