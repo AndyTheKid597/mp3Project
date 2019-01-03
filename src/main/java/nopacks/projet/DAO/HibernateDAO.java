@@ -6,6 +6,7 @@
 package nopacks.projet.DAO;
 
 import java.util.List;
+import nopacks.projet.DAO.criteres.Requete;
 import nopacks.projet.modeles.BaseModele;
 import nopacks.projet.modeles.Chanson;
 import nopacks.projet.modeles.ResultatPagination;
@@ -110,6 +111,11 @@ public class HibernateDAO implements InterfaceDAO {
     @Override
     public void endTransaction() {
         tx.commit();
+    }
+
+    @Override
+    public ResultatPagination findAllPage(Requete rq, int page, int parpage) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

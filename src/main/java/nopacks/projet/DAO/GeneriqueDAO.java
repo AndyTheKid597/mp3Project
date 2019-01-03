@@ -22,6 +22,8 @@ import javax.annotation.PostConstruct;
 import nopacks.projet.DAO.annotations.Colonne;
 import nopacks.projet.DAO.annotations.Table;
 import nopacks.projet.DAO.annotations.Tsizy;
+import nopacks.projet.DAO.criteres.CritereGenerator;
+import nopacks.projet.DAO.criteres.Requete;
 import nopacks.projet.modeles.BaseModele;
 import nopacks.projet.modeles.Chanson;
 import nopacks.projet.modeles.ResultatPagination;
@@ -70,7 +72,7 @@ public class GeneriqueDAO implements InterfaceDAO {
                 i++;
             }
             System.out.println(ps);
-           // ps.executeUpdate();
+            // ps.executeUpdate();
             ps.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -82,12 +84,14 @@ public class GeneriqueDAO implements InterfaceDAO {
     @Override
     public BaseModele findById(BaseModele p) {
         try {
-            PreparedStatement ps=connexion.getConnection().prepareStatement("select * from "+this.getNomTable(p)+" where id=?");
-            ps.setInt(1,p.getId());
-            ResultSet rs=ps.executeQuery();
-            ArrayList<String[]> attribs=this.getAttributsBaseModele(p);
-            if(!rs.next()) return null;
-            BaseModele resultat=rsToObject(p,rs,attribs);
+            PreparedStatement ps = connexion.getConnection().prepareStatement("select * from " + this.getNomTable(p) + " where id=?");
+            ps.setInt(1, p.getId());
+            ResultSet rs = ps.executeQuery();
+            ArrayList<String[]> attribs = this.getAttributsBaseModele(p);
+            if (!rs.next()) {
+                return null;
+            }
+            BaseModele resultat = rsToObject(p, rs, attribs);
             return resultat;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -97,10 +101,10 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     @Override
     public ResultatPagination findAllPage(BaseModele p, int page, int parpage) {
-        ResultatPagination rp= new ResultatPagination();
-         List<BaseModele> rt = null;
+        ResultatPagination rp = new ResultatPagination();
+        List<BaseModele> rt = null;
         Connection cx = null;
-        int count=0;
+        int count = 0;
         try {
             //System.out.println("findAll ");
             //System.out.println();
@@ -111,15 +115,15 @@ public class GeneriqueDAO implements InterfaceDAO {
             ArrayList<String[]> attr = this.getAttributsBaseModele(p);
             //System.out.println(attr.size());
             //System.out.println("select * from "+n_table);
-            Statement ps1= cx.createStatement();
-            ResultSet rs2=ps1.executeQuery("select count(*) from "+n_table);
+            Statement ps1 = cx.createStatement();
+            ResultSet rs2 = ps1.executeQuery("select count(*) from " + n_table);
             rs2.next();
-            count=rs2.getInt(1);
+            count = rs2.getInt(1);
             rs2.close();
             ps1.close();
             Statement ps = cx.createStatement();
-            
-            ResultSet rs = ps.executeQuery("select * from " + n_table+" limit "+parpage+" offset "+(page*parpage));
+
+            ResultSet rs = ps.executeQuery("select * from " + n_table + " limit " + parpage + " offset " + (page * parpage));
             rt = new ArrayList<BaseModele>();
             while (rs.next()) {
                 //System.out.println(" next ");
@@ -143,10 +147,10 @@ public class GeneriqueDAO implements InterfaceDAO {
             //System.out.println();
             //System.out.println("fin find");
             rp.setResultats(rt);
-        rp.setNumPage(page);
-        rp.setParPage(parpage);
-        rp.setTailleTotale(count);
-        return rp;
+            rp.setNumPage(page);
+            rp.setParPage(parpage);
+            rp.setTailleTotale(count);
+            return rp;
         }
     }
 
@@ -159,20 +163,20 @@ public class GeneriqueDAO implements InterfaceDAO {
             String rqt = " update " + this.getNomTable(p) + " set ";
             String where = " where id=" + p.getId();
             StringBuilder setena = new StringBuilder();
-            boolean vol=false;
+            boolean vol = false;
             for (String[] att : attribs) {
                 if (att[1].equals("id")) {
                     continue;
                 }
-                if(!vol){
+                if (!vol) {
                     setena.append(" , ");
                 }
                 setena.append(att[0]);
                 setena.append(" = ? ");
-                vol=false;
+                vol = false;
             }
-            String st=setena.toString();
-            rqt=rqt+st+where;
+            String st = setena.toString();
+            rqt = rqt + st + where;
             PreparedStatement ps = ct.prepareStatement(rqt);
             int i = 1;
             for (String[] att : attribs) {
@@ -279,11 +283,21 @@ public class GeneriqueDAO implements InterfaceDAO {
                 Chanson tpchan = ((Chanson) bm);
                 System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
             }
-           // this.update(testchan);
+            Requete rq = new Requete(testchan);
+            rq.setCritere(CritereGenerator.or(CritereGenerator.like("nomfichier", "a"), CritereGenerator.gteq("id", new Integer(5))));
+            System.out.println(rq.contenu());
+            System.out.println(rq.where());
+           ResultatPagination liste2 = this.findAllPage(rq, 0, 10);
+           System.out.println("tonga farany");
+                      for (BaseModele bm : liste2.getResultats()) {
+                Chanson tpchan = ((Chanson) bm);
+                System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
+            }
+            // this.update(testchan);
             // this.save(liste.get(0)); //efa mandeha
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw (ex);
+            //throw (ex);
         }
     }
 
@@ -426,5 +440,76 @@ public class GeneriqueDAO implements InterfaceDAO {
             throw (ex);
         }
         return rt;
+    }
+
+    @Override
+    public ResultatPagination findAllPage(Requete rq, int page, int parpage) {
+        ResultatPagination rp = new ResultatPagination();
+        BaseModele p = rq.getBm();
+        List<BaseModele> rt = null;
+        Connection cx = null;
+        int count = 0;
+        try {
+            //System.out.println("findAll ");
+            //System.out.println();
+            //System.out.println();
+            //System.out.println();
+            cx = connexion.getConnection();
+            String n_table = getNomTable(p);
+            String where=" where "+rq.where();
+            ArrayList<Object> conds=rq.mifanaraka();
+            int t=conds.size();
+            ArrayList<String[]> attr = this.getAttributsBaseModele(p);
+            //System.out.println(attr.size());
+            //System.out.println("select * from "+n_table);
+            PreparedStatement ps1 = cx.prepareStatement("select count(*) from " + n_table+where);
+             System.out.println("select count(*) from " + n_table+where);
+             
+            for(int i=0;i<t;i++){
+             System.out.println(conds.get(i));
+                ps1.setObject(i+1, conds.get(i));
+            }
+            ResultSet rs2 = ps1.executeQuery();
+            rs2.next();
+            count = rs2.getInt(1);
+            rs2.close();
+            ps1.close();
+            PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where+ " limit ? offset ? ");
+          
+            for(int i=0;i<t;i++){
+                ps.setObject(i+1, conds.get(i));
+            }
+            ps.setInt(t+1,parpage);
+            ps.setInt(t+2,(page * parpage));
+            
+            ResultSet rs = ps.executeQuery();
+            rt = new ArrayList<BaseModele>();
+            while (rs.next()) {
+                //System.out.println(" next ");
+                rt.add(rsToObject(p, rs, attr));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw (ex);
+        } finally {
+            try {
+                if (cx != null) {
+                    cx.close();
+                }
+            } catch (Exception ex) {
+
+            }
+            //System.out.println();
+            //System.out.println();
+            //System.out.println();
+            //System.out.println("fin find");
+            rp.setResultats(rt);
+            rp.setNumPage(page);
+            rp.setParPage(parpage);
+            rp.setTailleTotale(count);
+            return rp;
+        }
     }
 }
