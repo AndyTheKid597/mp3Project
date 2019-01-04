@@ -27,6 +27,7 @@
             <beans:list>
                 <beans:value>nopacks.projet.modeles.BaseModele</beans:value>
                 <beans:value>nopacks.projet.modeles.Chanson</beans:value>
+                <beans:value>nopacks.projet.modeles.Config</beans:value>
             </beans:list>
         </beans:property>
         <beans:property name="hibernateProperties">
