@@ -29,6 +29,7 @@
                 <beans:value>nopacks.projet.modeles.BaseModele</beans:value>
                 <beans:value>nopacks.projet.modeles.Chanson</beans:value>
                 <beans:value>nopacks.projet.modeles.Config</beans:value>
+                <beans:value>nopacks.projet.modeles.Client</beans:value>
             </beans:list>
         </beans:property>
         <beans:property name="hibernateProperties">
@@ -61,6 +62,9 @@
     <beans:bean id="chansonService" class="nopacks.projet.services.ChansonServiceImpl">
         <beans:property name="chansonDAO" ref="hibernateDAO"></beans:property>
         <beans:property name="finder" ref="mp3Finder"></beans:property>
+    </beans:bean>
+    <beans:bean id="clientService" class="nopacks.projet.services.ClientServiceImpl">
+        <beans:property name="clientDAO" ref="generiqueDAO"></beans:property>
     </beans:bean>
 
 	

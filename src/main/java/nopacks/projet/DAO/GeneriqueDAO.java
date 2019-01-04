@@ -251,17 +251,18 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     private BaseModele rsToObject(BaseModele p, ResultSet rs, ArrayList<String[]> attribs) throws Exception {
         BaseModele rt = p.getClass().newInstance();
-        //System.out.println(attribs.size());
+        System.out.println(attribs.size());
         for (String[] ray : attribs) {
-            //System.out.println(ray[1]);
+            System.out.println(ray[1]);
             Object averiny = rs.getObject(ray[1]);
             if (averiny == null) {
                 continue;
             }
-            //System.out.println(ray[1]+" "+averiny);
+            System.out.println(ray[1]+" "+averiny);
             callSetter(rt, ray[0], averiny);
-            //System.out.println(" manaraka amzay ");
+            System.out.println(" manaraka amzay ");
         }
+        System.out.println("on retourne");
         return rt;
     }
 
@@ -383,6 +384,8 @@ public class GeneriqueDAO implements InterfaceDAO {
         try {
             Method antsoina = getSetter(cible, attribut);
             Class rttype = antsoina.getParameterTypes()[0];
+            System.out.println("rttype "+rttype);
+            System.out.println("izy "+arg.getClass());
             //System.out.println(arg.getClass());
             //System.out.println(rttype);
             //System.out.println(antsoina);
@@ -408,7 +411,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             //           }
             //System.out.println("tody");
         } catch (Exception ex) {
-            //System.out.println(ex.getMessage());
+            System.out.println(ex.getMessage());
             throw (ex);
         }
     }
@@ -531,20 +534,23 @@ public class GeneriqueDAO implements InterfaceDAO {
             int t=conds.size();
             ArrayList<String[]> attr = this.getAttributsBaseModele(p);
             PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where);
+          System.out.println("select * from " + n_table +where);
           
             for(int i=0;i<t;i++){
+                System.out.println(conds.get(i));
                 ps.setObject(i+1, conds.get(i));
             }
             
             ResultSet rs = ps.executeQuery();
             if(!rs.next()) return null;
-                //System.out.println(" next ");
+                System.out.println(" next ");
                 retour= (BaseModele) rsToObject(p, rs, attr);
-            
+            System.out.println(retour.getId());
             rs.close();
             ps.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            System.out.println(ex.getMessage());
             throw (ex);
         } finally {
             try {
