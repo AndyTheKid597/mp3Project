@@ -20,28 +20,48 @@ import org.tritonus.share.sampled.file.TAudioFileFormat;
 public class mp3Util {
 
     String nomfichier;
+    private String repertoire;
     List<Byte> vao;
     List<Byte> vao2;
     AudioFileFormat baseFileFormat;
+    private File file;
+    private AudioInputStream in,din;
+    private AudioFormat baseFormat,decodedFormat;
+    public String getRepertoire() {
+        return repertoire;
+    }
+
+    public void setRepertoire(String repertoire) {
+        this.repertoire = repertoire;
+    }
 
     public void processFile(String nomdefichier) throws Exception {
-        nomfichier = nomdefichier;
+        System.out.println("tafiditra ato");
+        nomfichier = repertoire+nomdefichier;
         vao = null; //size 200
         vao2 = null; //size 200
         baseFileFormat = null;
-        File file = new File(nomfichier);
-        AudioInputStream in = AudioSystem.getAudioInputStream(file);
-        AudioInputStream din = null;
-        AudioFormat baseFormat = in.getFormat();
-        AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+        din=null;
+        in=null;
+        file=null;
+        System.out.println("trying to open file");
+         file = new File(nomfichier);
+         System.out.println("fichier ouvert");
+         in = AudioSystem.getAudioInputStream(file);
+         din = null;
+         System.out.println("inputstream azo");
+         baseFormat = in.getFormat();
+         decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
                 baseFormat.getSampleRate(),
                 16,
                 baseFormat.getChannels(),
                 baseFormat.getChannels() * 2,
                 baseFormat.getSampleRate(),
                 false);
+         System.out.println("format azo");
         din = AudioSystem.getAudioInputStream(decodedFormat, in);
-        // Play now. 
+System.out.println("azo input stream anle audio format");
+// Play now. 
         rawplay(decodedFormat, din);
 
         in.close();
@@ -96,38 +116,45 @@ public class mp3Util {
     }
 
     private void rawplay(AudioFormat targetFormat, AudioInputStream din) throws IOException, LineUnavailableException {
-        List<Byte> tableau = new ArrayList<Byte>();
-        byte[] data = new byte[4096];
-
-        int nBytesRead = 0, nBytesWritten = 0, ttlp = 0;
+        System.out.println("tonga eto am rawplay");
+       // List<Byte> tableau = new ArrayList<Byte>(100000000);
+       ByteArrayOutputStream bos=new ByteArrayOutputStream(); 
+       byte[] data = new byte[4096];
+        int nBytesRead = 0, nBytesWritten = 0, ttlp = 0, nbtr=0;
+        System.out.println("begin read");
         while (nBytesRead != -1) {
+            
             int ttl = 0;
-
             nBytesRead = din.read(data);
             if (nBytesRead != -1) {
-
+                  nbtr+=nBytesRead;
                 ttlp++;
             }
 
-            for (int i = 0; i < 4096; i++) {
+            //for (int i = 0; i < 4096; i++) {
                 //tableau.add((byte)Math.abs(data[i]));
-                tableau.add((byte) (data[i]));
-            }
+                //tableau.add((byte) (data[i]));
+                bos.write(data, 0, 4096);
+           // }
+            //System.out.println("vita "+ nbtr);
 
         }
+        byte[] tableau=bos.toByteArray();
+        bos.close();
+        System.out.println("fin read");
         // System.out.println("total "+tableau.size());
-        int part = tableau.size() / 200;
+        int part = tableau.length/ 200;
         int max = 0;
         int min = 1000;
         vao = new ArrayList<Byte>();
         vao2 = new ArrayList<Byte>();
-        int t = tableau.size();
+        int t = tableau.length;
         for (int i = 0; i < 200; i++) {
             int ttl = 0;
             int j = 0;
             for (j = 0; j < part && j + (i * part) < t; j++) {
 
-                byte tp = tableau.get(j + (i * part));
+                byte tp = tableau[j + (i * part)];
                 if (tp < 0) {
                     tp = 0;
                 }
@@ -149,7 +176,7 @@ public class mp3Util {
             int j = 0;
             for (j = 0; j < part && j + (i * part) < t; j++) {
 
-                byte tp = tableau.get(j + (i * part));
+                byte tp = tableau[j + (i * part)];
                 if (tp > 0) {
                     tp = 0;
                 }
@@ -184,7 +211,37 @@ public class mp3Util {
     public List<Byte> getMD() {
         return vao;
     }
+    
+    public String getMDString(){
+        StringBuilder rt= new StringBuilder();
+        boolean vol=false;
+        rt.append(" [ ");
+        for(Byte ray : vao){
+            if(vol){
+                rt.append(" , ");
+            }
+            rt.append(ray.toString());
+            vol=true;
+        }
+        rt.append(" ] ");
+        return rt.toString();
+    }
 
+    public String getMD2String(){
+        StringBuilder rt= new StringBuilder();
+        boolean vol=false;
+        rt.append(" [ ");
+        for(Byte ray : vao2){
+            if(vol){
+                rt.append(" , ");
+            }
+            rt.append(ray.toString());
+            vol=true;
+        }
+        rt.append(" ] ");
+        return rt.toString();
+    }
+    
     public List<Byte> getMD2() {
         return vao2;
     }
