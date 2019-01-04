@@ -6,6 +6,8 @@
 package nopacks.projet.mp3;
 
 import java.io.File;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,5 +35,11 @@ public class mp3Finder {
         
         folder=null; //gb collector idina
         return liste;
+    }
+    public String hash(List<String> fichiers) { //algo a remplacer dans le futur, bcp de collisions
+        StringBuilder sb=new StringBuilder();
+        for(String ray:fichiers) sb.append(ray);
+        String result=sb.toString();
+        return Integer.toString(result.hashCode());
     }
 }

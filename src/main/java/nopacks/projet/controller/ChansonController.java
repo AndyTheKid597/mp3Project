@@ -79,26 +79,33 @@ public class ChansonController {
     }
 
     @RequestMapping("/testObjet")
-    public ModelAndView creerObjetForm(){
-        ModelAndView md=new ModelAndView("testcobj");
+    public ModelAndView creerObjetForm() {
+        ModelAndView md = new ModelAndView("testcobj");
         return md;
     }
-    
-    @RequestMapping(value="/cObjet", method = RequestMethod.POST)
-    public ModelAndView creerObjet(HttpServletRequest req, HttpServletResponse res){
-        ModelAndView md=new ModelAndView("testcobj");
+
+    @RequestMapping(value = "/actualiser")
+    public String actualiser(){
+        this.chansonService.initialiserBF();
+        return "redirect:/chansons2";
+    }
+
+
+    @RequestMapping(value = "/cObjet", method = RequestMethod.POST)
+    public ModelAndView creerObjet(HttpServletRequest req, HttpServletResponse res) {
+        ModelAndView md = new ModelAndView("testcobj");
         Chanson valiny;
-        try{
-            valiny=(Chanson)getObject(req,"nopacks.projet.modeles.Chanson");
-        } catch(Exception e){
+        try {
+            valiny = (Chanson) getObject(req, "nopacks.projet.modeles.Chanson");
+        } catch (Exception e) {
             e.printStackTrace();
-            valiny=null;
+            valiny = null;
         }
         System.out.println(valiny.getNomfichier());
-        md.addObject("resultat",valiny);
+        md.addObject("resultat", valiny);
         return md;
     }
-    
+
     @RequestMapping(value = "download/{nom}", method = RequestMethod.GET)
 
     public void downloadTest(HttpServletRequest request, HttpServletResponse response, @PathVariable("nom") String nom) throws IOException {
@@ -203,19 +210,21 @@ public class ChansonController {
         return new ModelAndView("uploadform", "filesuccess", "File successfully saved!");
     }
 
-    private Method getSetter(Object cible, String nom) throws Exception{
+    private Method getSetter(Object cible, String nom) throws Exception {
         String charac = nom.substring(0, 1).toUpperCase();
         String realattrib = charac + nom.substring(1);
-        Method[] liste=cible.getClass().getDeclaredMethods();
-        for(Method ray:liste){
-            if(ray.getName().equals("set"+realattrib)) return ray;
+        Method[] liste = cible.getClass().getDeclaredMethods();
+        for (Method ray : liste) {
+            if (ray.getName().equals("set" + realattrib)) {
+                return ray;
+            }
         }
-        throw new NoSuchMethodException("set"+realattrib);
+        throw new NoSuchMethodException("set" + realattrib);
     }
-    
+
     private void callSetter(Object cible, String attribut, String valeur) throws Exception {
 
-        Method antsoina = getSetter(cible,attribut);
+        Method antsoina = getSetter(cible, attribut);
         Class[] cl = antsoina.getParameterTypes();
         if (cl.length > 1) {
             throw new Exception("methode setter erronee pour la classe " + cible.getClass() + " attribut: " + attribut);

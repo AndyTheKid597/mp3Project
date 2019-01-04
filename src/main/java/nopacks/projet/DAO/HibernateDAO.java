@@ -100,7 +100,9 @@ public class HibernateDAO implements InterfaceDAO {
     public void delete(BaseModele p) {
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
+        System.out.println(p.getId());
         BaseModele anatybase = (BaseModele) session.load(p.getClass(), p.getId());
+        
         if (anatybase != null) {
             session.delete(anatybase);
         }
@@ -153,7 +155,7 @@ public class HibernateDAO implements InterfaceDAO {
         for (int i = 0; i < t; i++) {
             qrct.setParameter(i, conds.get(i));
         }
-        long count = ((Long)qrct.uniqueResult()).longValue();
+        long count = ((Long) qrct.uniqueResult()).longValue();
         Query qr = session.createQuery(" from " + nt + where);
 
         for (int i = 0; i < t; i++) {
@@ -167,6 +169,30 @@ public class HibernateDAO implements InterfaceDAO {
         rt.setParPage(parpage);
         rt.setTailleTotale(count);
         return rt;
+    }
+
+    @Override
+    public BaseModele findBy(Requete rq) { //retourne unique
+        Session session = this.sessionFactory.openSession();
+        String nt = rq.getBm().getClass().getSimpleName();
+        String where = " where " + rq.where();
+        ArrayList<Object> conds = rq.mifanaraka();
+        int t = conds.size();
+        Query qrct = session.createQuery(" from " + nt + where);
+
+        for (int i = 0; i < t; i++) {
+            qrct.setParameter(i, conds.get(i));
+        }
+        List<BaseModele> res = qrct.list();
+        if (res.size() < 1) {
+            return null;
+        }
+        return res.get(0);
+    }
+
+    @Override
+    public void deleteAll(BaseModele p) {
+        sessionFactory.getCurrentSession().createQuery("delete from "+p.getClass().getSimpleName()).executeUpdate();
     }
 
 }

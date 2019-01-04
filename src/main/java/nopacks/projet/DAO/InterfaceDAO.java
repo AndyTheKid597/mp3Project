@@ -24,5 +24,6 @@ public interface InterfaceDAO {
     public void update(BaseModele p);
     public void delete(BaseModele p);
     public List<BaseModele> findAll(BaseModele p);
-    //mbola banga be fa vo amboarina io 
+    public BaseModele findBy(Requete rq); //resultat unique
+    public void deleteAll(BaseModele p);
 }

@@ -512,4 +512,62 @@ public class GeneriqueDAO implements InterfaceDAO {
             return rp;
         }
     }
+
+    @Override
+    public BaseModele findBy(Requete rq) {
+    BaseModele p = rq.getBm();
+        BaseModele retour = null;
+        Connection cx = null;
+        int count = 0;
+        try {
+            //System.out.println("findAll ");
+            //System.out.println();
+            //System.out.println();
+            //System.out.println();
+            cx = connexion.getConnection();
+            String n_table = getNomTable(p);
+            String where=" where "+rq.where();
+            ArrayList<Object> conds=rq.mifanaraka();
+            int t=conds.size();
+            ArrayList<String[]> attr = this.getAttributsBaseModele(p);
+            PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where);
+          
+            for(int i=0;i<t;i++){
+                ps.setObject(i+1, conds.get(i));
+            }
+            
+            ResultSet rs = ps.executeQuery();
+            if(!rs.next()) return null;
+                //System.out.println(" next ");
+                retour= (BaseModele) rsToObject(p, rs, attr);
+            
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw (ex);
+        } finally {
+            try {
+                if (cx != null) {
+                    cx.close();
+                }
+            } catch (Exception ex) {
+
+            }
+
+            return retour;
+        }   
+    }
+
+    @Override
+    public void deleteAll(BaseModele p) {
+        try {
+            String rqt = "delete from " + this.getNomTable(p);
+            Statement st = connexion.getConnection().createStatement();
+            st.executeUpdate(rqt);
+            st.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

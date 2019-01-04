@@ -25,4 +25,5 @@ public interface ChansonService {
     public List<String> findAllMp3InFolder();
     public void setChansonDAO(InterfaceDAO chansonDAO);
     public void setFinder(mp3Finder finder);
+    public void initialiserBF();
 }
