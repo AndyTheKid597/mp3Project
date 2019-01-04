@@ -9,6 +9,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
     <mvc:annotation-driven />
     <mvc:resources mapping="/res/**" location="file:E:/mp3/"/> 
+    <mvc:resources mapping="/admin/assets/**" location="/WEB-INF/assets-back/"/> 
     <context:component-scan base-package="nopacks.projet.controller , nopacks.projet.services" />
     <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
                 destroy-method="close">

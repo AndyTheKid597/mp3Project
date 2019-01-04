@@ -90,6 +90,12 @@ public class ChansonController {
         return "redirect:/chansons2";
     }
 
+    
+    @RequestMapping("/login")
+    public ModelAndView pageLogin(){
+        ModelAndView md=new ModelAndView("login");
+        return md;
+    }
 
     @RequestMapping(value = "/cObjet", method = RequestMethod.POST)
     public ModelAndView creerObjet(HttpServletRequest req, HttpServletResponse res) {
