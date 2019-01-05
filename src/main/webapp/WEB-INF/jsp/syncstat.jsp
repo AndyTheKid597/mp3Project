@@ -162,7 +162,7 @@
 var res = message.split(";");
 var rt="";
 res.forEach(function(ray){
-        rt='<div class="au-task__item au-task__item--success"> <div class="au-task__item-inner"> <h5 class="task"><a href="#">'+ray+'</a></h5></div></div>'+rt;
+        rt='<div class="au-task__item au-task__item--success"> <div class="au-task__item-inner"> <h5 class="task">'+ray+'</h5></div></div>'+rt;
          });
          console.log(rt);
               return rt;
