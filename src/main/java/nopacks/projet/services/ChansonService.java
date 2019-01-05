@@ -7,7 +7,9 @@ package nopacks.projet.services;
 import java.util.List;
 import nopacks.projet.DAO.InterfaceDAO;
 import nopacks.projet.modeles.Chanson;
+import nopacks.projet.modeles.Config;
 import nopacks.projet.modeles.ResultatPagination;
+import nopacks.projet.modeles.actualisationStatut;
 import nopacks.projet.mp3.mp3Finder;
 /**
  *
@@ -25,5 +27,6 @@ public interface ChansonService {
     public List<String> findAllMp3InFolder();
     public void setChansonDAO(InterfaceDAO chansonDAO);
     public void setFinder(mp3Finder finder);
-    public void initialiserBF();
+    public void initialiserBF(actualisationStatut sync_stat);
+    public Config getLastDate();
 }
