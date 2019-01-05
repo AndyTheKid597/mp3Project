@@ -143,9 +143,8 @@
                                 </li>
                             </ul>
                         </li>
-<spring:url var = "lien_acc" value='/accueil'  />
                         <li class="${lien=='accueil' ? 'active' : ''}" >
-                            <a  href="${lien_acc}">
+                            <a  href="${pageContext.servletContext.contextPath}/admin/accueil">
                                 <i class="fas fa-chart-bar"></i>Accueil</a>
                         </li>
                         <li>
