@@ -5,7 +5,7 @@
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="index.html">
-                            <img src="assets/images/icon/logo.png" alt="CoolAdmin" />
+                            <img src="${pageContext.servletContext.contextPath}/assets/images/icon/logo.png" alt="CoolAdmin" />
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
@@ -119,7 +119,7 @@
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
                 <a href="#">
-                    <img src="assets/images/icon/logo.png" alt="Nopacks" />
+                    <img src="${pageContext.servletContext.contextPath}/assets/images/icon/logo.png" alt="Nopacks" />
                 </a>
             </div>
             <div class="menu-sidebar__content js-scrollbar1">
