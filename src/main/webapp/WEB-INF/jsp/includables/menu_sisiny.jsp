@@ -143,9 +143,9 @@
                                 </li>
                             </ul>
                         </li>
-
+<spring:url var = "lien_acc" value='/accueil'  />
                         <li class="${lien=='accueil' ? 'active' : ''}" >
-                            <a  href="/MP3projet/admin/accueil">
+                            <a  href="${lien_acc}">
                                 <i class="fas fa-chart-bar"></i>Accueil</a>
                         </li>
                         <li>
