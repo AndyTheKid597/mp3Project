@@ -256,6 +256,8 @@ public class ChansonServiceImpl implements ChansonService {
             ch.setGenre(m_util.getGenre());
             ch.setTitre(m_util.getTitre());
             ch.setTrack(m_util.getTrack());
+            this.chansonDAO.save(ch);
+            ch.setId(this.chansonDAO.maxID(ch));
             return ch;
         } catch (Exception ex) {
             Logger.getLogger(ChansonServiceImpl.class.getName()).log(Level.SEVERE, null, ex);

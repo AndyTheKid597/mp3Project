@@ -14,7 +14,7 @@
 
         <!-- Title Page-->
         <title>Charts</title>
-<spring:url var="lien_assets" value="/admin/assets"/>
+        <spring:url var="lien_assets" value="/admin/assets"/>
         <!-- Fontfaces CSS-->
         <link href="${lien_assets}/css/font-face.css" rel="stylesheet" media="all">
         <link href="${lien_assets}/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
@@ -54,12 +54,17 @@
                 <div class="main-content">
                     <div class="section__content section__content--p30">
                         <div class="container-fluid">
+                            <c:set var = "listeChansons" value = "${valiny.resultats}"/>
                             <div class="row">
 
                                 <div class="col-lg-12">
                                     <!-- DATA TABLE -->
                                     <h3 class="title-5 m-b-35">liste des chansons</h3>
                                     <div class="table-responsive table-responsive-data2">
+                                          
+                   
+                          
+                          
                                         <table class="table table-data2">
                                             <thead>
                                                 <tr>
@@ -70,7 +75,11 @@
                                                     <th>date</th>
                                                     <th>genre</th>
                                                     <th>duration</th>
-                                                    <th></th>
+                                                    <th>           
+                                                            <form:form action="${pageContext.servletContext.contextPath}/admin/ajouterChanson" enctype="multipart/form-data" method="post" id="fileSubmitForm">
+                                                                <input name="file" id="fileInputAjout"  type="file" onchange="this.form.submit()" style="display:none;" /> <input type="button" onclick="document.getElementById('fileInputAjout').click()" class="btn btn-outline-primary" value="Ajouter"</input>
+                                                        </form:form></th>
+                                                    
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -96,14 +105,14 @@
                                                             <div class="table-data-feature">
 
                                                                 <a href="modifier/${sg.id}"> <button class="item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifier">
-                                                                    <i class="zmdi zmdi-edit"></i>
-                                                                </button>
+                                                                        <i class="zmdi zmdi-edit"></i>
+                                                                    </button>
                                                                 </a>
                                                                 <a href="supprimer/${sg.id}">    <button class="item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Supprimer">
-                                                                    <i class="zmdi zmdi-delete"></i>
-                                                                </button>
+                                                                        <i class="zmdi zmdi-delete"></i>
+                                                                    </button>
                                                                 </a>
-                                                                
+
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -122,6 +131,21 @@
                                         <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                    <c:if test="${valiny.hasPrevious}">
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="${pageContext.servletContext.contextPath}/accueil/${valiny.previous}/10" role="tab" >Precedent</a>
+                                        </li>
+                                    </c:if>
+                                    <c:if test="${valiny.hasPrevious}">
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="${pageContext.servletContext.contextPath}/accueil/${valiny.previous}/10" role="tab">Suivant</a>
+                                        </li>
+                                    </c:if>
+                                </ul>
                             </div>
                         </div>
                     </div>

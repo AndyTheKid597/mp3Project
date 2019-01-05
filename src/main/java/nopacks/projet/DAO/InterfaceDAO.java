@@ -26,4 +26,5 @@ public interface InterfaceDAO {
     public List<BaseModele> findAll(BaseModele p);
     public BaseModele findBy(Requete rq); //resultat unique
     public void deleteAll(BaseModele p);
+    public int maxID(BaseModele p);
 }

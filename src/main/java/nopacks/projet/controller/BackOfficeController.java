@@ -5,6 +5,9 @@
  */
 package nopacks.projet.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -65,14 +69,43 @@ public class BackOfficeController {
         if(testLogged(req)) ct=(Client)req.getAttribute("adminObject");
         if(md.asMap().containsKey("adminObjet")) ct=(Client)md.asMap().get("adminObjet");
         ModelAndView rt = new ModelAndView("accueilback");
-        rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
+        rt.addObject("valiny",this.chansonService.listChansonsPage(0,10));
+        //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("adminObjet",ct);
+        rt.addObject("lien","accueil");
+        return rt;
+    }
+    
+     @RequestMapping("/accueil/{page}/{parpage}")
+    public ModelAndView accueil(HttpServletRequest req, @RequestParam(value="page") int page, @RequestParam(value="parpage") int parpage) {
+        if(!testLogged(req)) return new ModelAndView("redirect:/admin/login?e=2");
+        ModelAndView rt = new ModelAndView("accueilback");
+        rt.addObject("valiny",this.chansonService.listChansonsPage(page,parpage));
+        //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("lien","accueil");
         return rt;
     }
 
     public boolean testLogged(HttpServletRequest req){
-       return req.getParameterMap().containsKey("adminObjet");
+       return req.getSession().getAttribute("adminObjet")!=null;
+    }
+    
+    @RequestMapping(value = "ajouterChanson", method = RequestMethod.POST)
+    public String saveChanson(@RequestParam CommonsMultipartFile file) throws Exception {
+
+        String path = context.getRealPath("");
+        String filename = file.getOriginalFilename();
+
+        System.out.println(path + this.chansonService.getUploadDir() + " " + filename);
+
+        byte[] bytes = file.getBytes();
+        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(
+                new File(this.chansonService.getUploadDir() + File.separator + filename)));
+        stream.write(bytes);
+        stream.flush();
+        stream.close();
+        Chanson ct=this.chansonService.fromFile(filename);
+        return "redirect:/admin/modifier/"+ct.getId();
     }
     
     @RequestMapping("/supprimer/{id}")

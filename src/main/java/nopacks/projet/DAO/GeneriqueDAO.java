@@ -576,4 +576,17 @@ public class GeneriqueDAO implements InterfaceDAO {
             ex.printStackTrace();
         }
     }
+
+    @Override
+    public int maxID(BaseModele p) {
+         try {
+            PreparedStatement ps = connexion.getConnection().prepareStatement("select max(id) from " + this.getNomTable(p));
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1;
+        }
+    }
 }

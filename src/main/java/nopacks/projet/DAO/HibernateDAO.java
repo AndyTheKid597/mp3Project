@@ -196,4 +196,16 @@ public class HibernateDAO implements InterfaceDAO {
         sessionFactory.getCurrentSession().createQuery("delete from "+p.getClass().getSimpleName()).executeUpdate();
     }
 
+    @Override
+    public int maxID(BaseModele p) {
+         try {
+              Session session = this.sessionFactory.openSession();
+           Query qrct = session.createQuery("select max(id) from " + p.getClass().getSimpleName());
+           return ((Integer)qrct.uniqueResult()).intValue();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1;
+        }        
+    }
+
 }
