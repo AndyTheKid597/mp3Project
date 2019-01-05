@@ -29,4 +29,5 @@ public interface ChansonService {
     public void setFinder(mp3Finder finder);
     public void initialiserBF(actualisationStatut sync_stat);
     public Config getLastDate();
+    public Chanson fromFile(String nomfichier);
 }

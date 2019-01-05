@@ -76,14 +76,15 @@ public class BackOfficeController {
     }
     
     @RequestMapping("/supprimer/{id}")
-    public String supprimerChanson(@PathVariable("id") int id){
+    public String supprimerChanson(@PathVariable("id") int id, HttpServletRequest req){
+         if(!testLogged(req) ) return "redirect:/admin/login?e=2";
         this.chansonService.deleteChanson(id);
         return "redirect:../accueil";
     }
     
      @RequestMapping(value="/modifier/{id}", method=RequestMethod.GET)
-     public ModelAndView modifierUneChanson(@PathVariable("id") int id, @RequestParam(value="s",required=false) String succ){
-         
+     public ModelAndView modifierUneChanson(@PathVariable("id") int id, @RequestParam(value="s",required=false) String succ, HttpServletRequest req){
+         if(!testLogged(req) ) return new ModelAndView("redirect:/admin/login?e=2");
          ModelAndView md = new ModelAndView("modifier");
          md.addObject("chanson",this.chansonService.findChansonById(id));
          md.addObject("action","../modifier");
@@ -92,7 +93,8 @@ public class BackOfficeController {
      }
      
      @RequestMapping(value="/modifier", method=RequestMethod.POST)
-     public String modif(@ModelAttribute("chanson") Chanson ray){
+     public String modif(@ModelAttribute("chanson") Chanson ray, HttpServletRequest req){
+         if(!testLogged(req) ) return "redirect:/admin/login?e=2";
                  System.out.println(" vomodif "+ray.getId());
          this.chansonService.updateChanson(ray);
 
