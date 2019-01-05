@@ -169,6 +169,7 @@ public class HibernateDAO implements InterfaceDAO {
         rt.setNumPage(page);
         rt.setParPage(parpage);
         rt.setTailleTotale(count);
+        session.close();
         return rt;
     }
 
@@ -188,6 +189,7 @@ public class HibernateDAO implements InterfaceDAO {
         if (res.size() < 1) {
             return null;
         }
+        session.close();
         return res.get(0);
     }
 
@@ -198,14 +200,18 @@ public class HibernateDAO implements InterfaceDAO {
 
     @Override
     public int maxID(BaseModele p) {
-         try {
-              Session session = this.sessionFactory.openSession();
+        Session session=null;
+        try {
+              session = this.sessionFactory.openSession();
            Query qrct = session.createQuery("select max(id) from " + p.getClass().getSimpleName());
+            session.close();
            return ((Integer)qrct.uniqueResult()).intValue();
         } catch (Exception ex) {
             ex.printStackTrace();
+            if(session!=null) session.close();
             return -1;
         }        
+        
     }
 
 }

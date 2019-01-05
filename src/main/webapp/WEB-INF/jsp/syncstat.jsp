@@ -169,7 +169,9 @@ res.forEach(function(ray){
          }
 
         function ol() {
+            console.log("trying to sync");
             $.ajax('${pageContext.servletContext.contextPath}/admin/beginSynchro');
+            console.log("voantso");
         }
 
         function actualiser() {
@@ -183,6 +185,9 @@ res.forEach(function(ray){
                         terminee();
                         console.log(dt.lastMessage);
                         clearInterval(boucler);
+                        if(dt.lastMessage!=""){
+                            document.getElementById("div_anatiny").innerHTML=makediv(dt.lastMessage)+document.getElementById("div_anatiny").innerHTML;
+                        }
                     } else {
                         if (dt.termine == dt.total) {
                             clearInterval(actualiser);
@@ -194,7 +199,7 @@ res.forEach(function(ray){
                             console.log(dt.lastMessage);
                         }
                         if(dt.lastMessage!=""){
-                            $("#div_anatiny").innerHTML=makediv(dt.lastMessage)+$("#div_anatiny").innerHTML;
+                            document.getElementById("div_anatiny").innerHTML=makediv(dt.lastMessage)+document.getElementById("div_anatiny").innerHTML;
                         }
                     }
                 }

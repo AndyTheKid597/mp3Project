@@ -116,6 +116,7 @@ public class ChansonServiceImpl implements ChansonService {
             Requete rq = new Requete(cfg);
             Requete rq2 = new Requete(cfg);
             boolean mitovy = false;
+            System.out.println("niditra ato");
             rq.setCritere(CritereGenerator.eq("cle", "last_hash"));
             rq2.setCritere(CritereGenerator.eq("cle", "last_date"));
             Config cfgvao = (Config) this.chansonDAO.findBy(rq);
