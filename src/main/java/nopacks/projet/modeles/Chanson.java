@@ -16,7 +16,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name="bibliotheque")
 public class Chanson extends BaseModele{
-    private String nomfichier,titre,d_up,d_down,auteur,album,date,commentaire,genre,track;
+    private String nomfichier,titre,d_up,d_down,auteur,album,date,commentaire,genre,track,image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
     private Long duration;
     public Chanson(){
         duration=new Long(0);

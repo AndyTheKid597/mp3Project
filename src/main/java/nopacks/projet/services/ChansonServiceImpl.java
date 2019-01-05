@@ -168,6 +168,7 @@ public class ChansonServiceImpl implements ChansonService {
                     if(ind!=-1){
                         System.out.println("remove from list fichier"+ray);
                         listeFichiersCopie.remove(ray);
+                        i_stat++;
                         sync_stat.setLastMessage("Fichier existant, fichier suivant");
                     } else {
                         System.out.println("niditra ato "+ind);
@@ -182,6 +183,7 @@ public class ChansonServiceImpl implements ChansonService {
                                       sync_stat.setLastMessage(" Suppression du fichier dans la base");
                       ch=null;
                     }
+                    sync_stat.setTermine(i_stat);
                 }
                             System.out.println("fin delete");
                 mp3Util m_util=new mp3Util();

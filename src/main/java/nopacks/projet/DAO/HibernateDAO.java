@@ -90,6 +90,7 @@ public class HibernateDAO implements InterfaceDAO {
         //session.update(p);
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
+        System.out.println(p.getId());
         session.update(p);
         tx.commit();
         session.close();

@@ -81,6 +81,23 @@ public class BackOfficeController {
         return "redirect:../accueil";
     }
     
+     @RequestMapping(value="/modifier/{id}", method=RequestMethod.GET)
+     public ModelAndView modifierUneChanson(@PathVariable("id") int id, @RequestParam(value="s",required=false) String succ){
+         
+         ModelAndView md = new ModelAndView("modifier");
+         md.addObject("chanson",this.chansonService.findChansonById(id));
+         md.addObject("action","../modifier");
+         md.addObject("succ",succ);
+         return md;
+     }
+     
+     @RequestMapping(value="/modifier", method=RequestMethod.POST)
+     public String modif(@ModelAttribute("chanson") Chanson ray){
+                 System.out.println(" vomodif "+ray.getId());
+         this.chansonService.updateChanson(ray);
+
+         return "redirect:modifier/"+ray.getId()+"?s=1";
+     }
     @RequestMapping("/beginSynchro")
     @Async
      public void beginSynchro(){
