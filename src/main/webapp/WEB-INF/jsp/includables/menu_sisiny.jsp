@@ -143,8 +143,9 @@
                                 </li>
                             </ul>
                         </li>
+
                         <li class="${lien=='accueil' ? 'active' : ''}" >
-                            <a  href="accueil">
+                            <a  href="/MP3projet/admin/accueil">
                                 <i class="fas fa-chart-bar"></i>Accueil</a>
                         </li>
                         <li>
