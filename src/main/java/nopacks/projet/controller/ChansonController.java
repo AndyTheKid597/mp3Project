@@ -84,11 +84,6 @@ public class ChansonController {
         return md;
     }
 
-    @RequestMapping(value = "/actualiser")
-    public String actualiser(){
-        this.chansonService.initialiserBF();
-        return "redirect:/chansons2";
-    }
 
     
     @RequestMapping("/login")
