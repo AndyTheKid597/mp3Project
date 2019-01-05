@@ -274,7 +274,7 @@ public class GeneriqueDAO implements InterfaceDAO {
         return p.getClass().getSimpleName();
     }
 
-    @PostConstruct
+
     public void tester() {
         try {
             Chanson testchan = new Chanson();

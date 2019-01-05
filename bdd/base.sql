@@ -32,6 +32,7 @@ CREATE TABLE `Client`(
 `login` varchar(60) NOT NULL DEFAULT '',
 `mdp` varchar(60) NOT NULL DEFAULT '',
 `email` varchar(60) NOT NULL DEFAULT '',
+`est_admin` boolean default false,
 PRIMARY KEY(`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 commit;

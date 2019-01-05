@@ -11,6 +11,9 @@
     <mvc:resources mapping="/res/**" location="file:E:/mp3/"/> 
     <mvc:resources mapping="/admin/assets/**" location="/WEB-INF/assets-back/"/> 
     <context:component-scan base-package="nopacks.projet.controller , nopacks.projet.services" />
+    
+    
+    
     <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
                 destroy-method="close">
         <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -45,6 +48,7 @@
     <beans:bean id="multipartResolver"   
                 class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/> 
         
+                
     <beans:bean id="mp3Finder" class="nopacks.projet.mp3.mp3Finder">
 
     </beans:bean>
@@ -53,8 +57,8 @@
 
     </beans:bean>
 
-        <beans:bean id="generiqueDAO" class="nopacks.projet.DAO.GeneriqueDAO">
-            <beans:property name="connexion" ref="dataSource" />
+    <beans:bean id="generiqueDAO" class="nopacks.projet.DAO.GeneriqueDAO">
+        <beans:property name="connexion" ref="dataSource" />
     </beans:bean>
     <beans:bean id="hibernateDAO" class="nopacks.projet.DAO.HibernateDAO">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />

@@ -5,6 +5,7 @@
  */
 package nopacks.projet.modeles;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 
 /**
@@ -12,9 +13,20 @@ import javax.persistence.Entity;
  * @author ASUS
  */
 @Entity
-public class Client extends BaseModele{
+public class Client extends BaseModele implements Serializable{
     private String nom,login,mdp,email;
+    private Boolean est_admin;
+    public Client(){
+        est_admin=false;
+    }
+    public Boolean getEst_admin() {
+        return est_admin;
+    }
 
+    public void setEst_admin(Boolean est_admin) {
+        this.est_admin = est_admin;
+    }
+    
     public String getNom() {
         return nom;
     }

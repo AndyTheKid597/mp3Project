@@ -13,6 +13,7 @@ import nopacks.projet.modeles.Client;
  */
 public interface ClientService {
     public Client testLogin(Client c);
+    public Client testLoginAdmin(Client c);
     public Client inscrireClient(Client c);
     public Client updateClient(Client c);
 }

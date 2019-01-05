@@ -121,7 +121,7 @@ public class HibernateDAO implements InterfaceDAO {
         tx.commit();
     }
 
-    @PostConstruct
+
     public void tester() {
         try {
             System.out.println("begin 22");

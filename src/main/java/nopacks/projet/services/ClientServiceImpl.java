@@ -50,4 +50,11 @@ public class ClientServiceImpl implements ClientService {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public Client testLoginAdmin(Client c) {
+        Client rt=testLogin(c);
+        if(rt==null || !rt.getEst_admin()) return null;
+        return rt;
+    }
+
 }

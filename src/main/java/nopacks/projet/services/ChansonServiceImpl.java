@@ -100,7 +100,7 @@ public class ChansonServiceImpl implements ChansonService {
      return rt;
     }
     
-    @PostConstruct
+
     public void tester(){
         System.out.println("intiialisation");
         //initialiser();
