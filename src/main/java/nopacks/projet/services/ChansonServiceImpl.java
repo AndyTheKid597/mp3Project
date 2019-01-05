@@ -214,7 +214,8 @@ public class ChansonServiceImpl implements ChansonService {
                     sync_stat.setTermine(i_stat);
                     i_stat++;
                 }
-                
+                sync_stat.setLastMessage("Synchronisation terminee");
+                sync_stat.setEnCours(false);
                 System.out.println("fin insert");
             }
         } catch (Exception ex) {

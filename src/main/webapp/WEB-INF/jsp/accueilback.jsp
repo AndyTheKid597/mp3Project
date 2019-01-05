@@ -13,9 +13,10 @@
         <meta name="keywords" content="au theme template">
 
         <!-- Title Page-->
-        <title>Charts</title>
+        <title>Accueil</title>
         <spring:url var="lien_assets" value="/admin/assets"/>
         <!-- Fontfaces CSS-->
+        
         <link href="${lien_assets}/css/font-face.css" rel="stylesheet" media="all">
         <link href="${lien_assets}/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
         <link href="${lien_assets}/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
@@ -78,7 +79,9 @@
                                                     <th>           
                                                             <form:form action="${pageContext.servletContext.contextPath}/admin/ajouterChanson" enctype="multipart/form-data" method="post" id="fileSubmitForm">
                                                                 <input name="file" id="fileInputAjout"  type="file" onchange="this.form.submit()" style="display:none;" /> <input type="button" onclick="document.getElementById('fileInputAjout').click()" class="btn btn-outline-primary" value="Ajouter"</input>
-                                                        </form:form></th>
+                                                        </form:form>
+                                                                <button onclick=" window.location.replace('${pageContext.servletContext.contextPath}/admin/syncstat')" class="btn btn-danger" >Synchroniser</button>
+                                                    </th>
                                                     
                                                 </tr>
                                             </thead>

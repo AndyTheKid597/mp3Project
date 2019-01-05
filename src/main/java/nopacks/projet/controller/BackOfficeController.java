@@ -90,6 +90,12 @@ public class BackOfficeController {
        return req.getSession().getAttribute("adminObjet")!=null;
     }
     
+    @RequestMapping("syncstat")
+    public ModelAndView statutDeLaSynchro(){
+        ModelAndView md= new ModelAndView("syncstat");
+        return md;
+    }
+    
     @RequestMapping(value = "ajouterChanson", method = RequestMethod.POST)
     public String saveChanson(@RequestParam CommonsMultipartFile file) throws Exception {
 
@@ -133,15 +139,19 @@ public class BackOfficeController {
 
          return "redirect:modifier/"+ray.getId()+"?s=1";
      }
-    @RequestMapping("/beginSynchro")
+    @RequestMapping("/beginSynchro")    
+     public @ResponseBody String beginSynchro(){
+         System.out.println(" Mega actualisation de la base");
+         Syncer();
+         return "{succes}";
+     }
     @Async
-     public void beginSynchro(){
-         if(sync_status==null || sync_status.isEnCours()==false){
+    public void Syncer(){
+        if(sync_status==null || sync_status.isEnCours()==false){
              sync_status=new actualisationStatut();
          }
          this.chansonService.initialiserBF(sync_status);
-     }
-    
+    }
      @RequestMapping("/statutSynchro")
      public @ResponseBody actualisationStatut getStatutSynchro(){
         if(sync_status!=null) return sync_status;
@@ -157,7 +167,7 @@ public class BackOfficeController {
         return "redirect:/admin/login";
     }
 
-    @RequestMapping(value="/login",params = {"e"})
+    @RequestMapping(value="/login")
     public ModelAndView loginAccueil(        @RequestParam(value="e",required=false) String err) {
         
         ModelAndView rt = new ModelAndView("login");
