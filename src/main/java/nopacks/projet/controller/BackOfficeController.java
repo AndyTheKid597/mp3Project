@@ -194,6 +194,14 @@ public class BackOfficeController {
         return rt;
     }
 
+    @RequestMapping(value="/stats")
+    public ModelAndView getStatistiques(HttpServletRequest req){
+        if(!testLogged(req) ) return new ModelAndView("redirect:/admin/login?e=2");
+        ModelAndView md=new ModelAndView("stats");
+        md.addObject("topChansons",this.chansonService.findChansonsPlusEcoutees(0, 10));
+        return md;
+    }
+    
     @RequestMapping(value = "/tester", method = RequestMethod.POST)
     public String testerLogin(@ModelAttribute("client") Client p, RedirectAttributes redirectAttrs) {
         Client rt = this.clientService.testLoginAdmin(p);
