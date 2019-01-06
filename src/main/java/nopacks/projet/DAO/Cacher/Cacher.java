@@ -30,6 +30,11 @@ public HashMap<String,HashMap<String,String>> getcf(){
        String nom=izy.getClass().getName();
        System.out.println("add to cache "+nom);
        if(config.containsKey(nom)){
+           String nomvl=valeur.getClass().getName();
+           if(!config.containsKey(nomvl)){
+               System.out.println("classe nom configuree "+nomvl);
+               return;
+           }
            initMemory(nom);
            HashMap<String,Stockage> tp=memory.get(nom);
            tp.put(getCle(izy),new Stockage(valeur));
@@ -57,7 +62,12 @@ public HashMap<String,HashMap<String,String>> getcf(){
            if(!tp.containsKey(cle)) return null;
                    System.out.println("misy anaty memoire le condition");
            Stockage sg=tp.get(cle);
-           if(sg.estExpire(config.get(nom).get("duree"))){
+           String nomrt=sg.getValue().getClass().getName();
+           if(!config.containsKey(nomrt)){
+               System.out.println("fa tsy configurer ilay classe anle retour ");
+               return null;
+           }
+           if(sg.estExpire(config.get(nomrt).get("duree"))){
                        System.out.println("cache expire");
                 tp.remove(cle);
                 return null;
