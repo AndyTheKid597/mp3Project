@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import nopacks.projet.DAO.Cacher.Cacher;
 import nopacks.projet.DAO.criteres.CritereGenerator;
 import nopacks.projet.DAO.criteres.Requete;
 import nopacks.projet.modeles.BaseModele;
@@ -31,7 +32,12 @@ public class HibernateDAO implements InterfaceDAO {
     private SessionFactory sessionFactory;
     private Transaction tx;
     private Session tempsession;
-
+    private Cacher cacher;
+    
+    public void setCacher(Cacher cacher){
+        this.cacher=cacher;
+    }
+    
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -154,6 +160,7 @@ public class HibernateDAO implements InterfaceDAO {
         Query qrct = session.createQuery("select count(*) from " + nt + where);
 
         for (int i = 0; i < t; i++) {
+            System.out.println(conds.get(i));
             qrct.setParameter(i, conds.get(i));
         }
         long count = ((Long) qrct.uniqueResult()).longValue();
@@ -175,6 +182,9 @@ public class HibernateDAO implements InterfaceDAO {
 
     @Override
     public BaseModele findBy(Requete rq) { //retourne unique
+                    Object rttest=this.cacher.get(rq);
+        if(rttest!=null) return (BaseModele) rttest;
+        System.out.println("skip code return");
         Session session = this.sessionFactory.openSession();
         String nt = rq.getBm().getClass().getSimpleName();
         String where = " where " + rq.where();
@@ -189,8 +199,11 @@ public class HibernateDAO implements InterfaceDAO {
         if (res.size() < 1) {
             return null;
         }
-        session.close();
-        return res.get(0);
+
+        BaseModele rt=res.get(0);
+              this.cacher.add(rq, rt);
+                      session.close();
+        return rt;
     }
 
     @Override
@@ -204,10 +217,12 @@ public class HibernateDAO implements InterfaceDAO {
         try {
               session = this.sessionFactory.openSession();
            Query qrct = session.createQuery("select max(id) from " + p.getClass().getSimpleName());
+           int rt=((Integer)qrct.uniqueResult()).intValue();
             session.close();
-           return ((Integer)qrct.uniqueResult()).intValue();
+            return rt;
         } catch (Exception ex) {
             ex.printStackTrace();
+            System.out.println(ex.getMessage());
             if(session!=null) session.close();
             return -1;
         }        

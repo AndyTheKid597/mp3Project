@@ -137,15 +137,20 @@
                             </div>
                             <div class="row">
                                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                        <c:set var="u_param" value=""/>
+                                    <c:if test="${!empty param}">
+
+                                        <c:set var="u_param" value="?q=${param}"/>
+                                    </c:if>
                                     <c:if test="${valiny.hasPrevious}">
                                         <li class="nav-item">
-                                            <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="${pageContext.servletContext.contextPath}/accueil/${valiny.previous}/10" role="tab" >Precedent</a>
+                                            <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="${pageContext.servletContext.contextPath}/${lien}/${valiny.previous}/10${u_param}}" role="tab" >Precedent</a>
                                         </li>
                                     </c:if>
                                     <c:if test="${valiny.hasPrevious}">
 
                                         <li class="nav-item">
-                                            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="${pageContext.servletContext.contextPath}/accueil/${valiny.previous}/10" role="tab">Suivant</a>
+                                            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="${pageContext.servletContext.contextPath}/${lien}/${valiny.previous}/10${u_param}" role="tab">Suivant</a>
                                         </li>
                                     </c:if>
                                 </ul>

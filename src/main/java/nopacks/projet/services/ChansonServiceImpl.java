@@ -34,81 +34,81 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ChansonServiceImpl implements ChansonService {
-    
+
     private InterfaceDAO chansonDAO;
     private String UPLOAD_DIRECTORY = "E:/mp3/";
     private mp3Finder finder;
-    
+
     public void setFinder(mp3Finder finder) {
         this.finder = finder;
     }
-    
+
     public void setChansonDAO(InterfaceDAO chansonDAO) {
         this.chansonDAO = chansonDAO;
     }
-    
+
     @Override
     @Transactional
     public void addChanson(Chanson p) {
-        
+
         this.chansonDAO.save(p);
-        
+
     }
-    
+
     @Override
     public List<Chanson> listChansons() {
         Chanson ct = new Chanson();
         return (List<Chanson>) (Object) this.chansonDAO.findAll(ct);
     }
-    
+
     @Override
     public Chanson findChansonById(int id) {
         Chanson ct = new Chanson();
         ct.setId(id);
         return (Chanson) this.chansonDAO.findById(ct);
     }
-    
+
     @Override
     @Transactional
     public void updateChanson(Chanson p) {
         this.chansonDAO.update(p);
-    }    
-    
+    }
+
     @Override
     public void deleteChanson(int id) {
         Chanson hira = new Chanson();
         hira.setId(id);
         this.chansonDAO.delete(hira);
     }
-    
+
     @Override
     public ResultatPagination listChansonsPage(int page, int parpage) {
         return this.chansonDAO.findAllPage(new Chanson(), page, parpage);
     }
-    
+
     @Override
     public void setUploadDir(String upd) {
         UPLOAD_DIRECTORY = upd;
     }
-    
+
     @Override
     public String getUploadDir() {
         return UPLOAD_DIRECTORY;
     }
-    
+
     @Override
     public List<String> findAllMp3InFolder() {
         List<String> rt = this.finder.findAllInFolder(UPLOAD_DIRECTORY);
         //System.out.println(rt.size());
         return rt;
     }
-    
+
     public void tester() {
         System.out.println("intiialisation");
         //initialiser();
         System.out.println("initialisation terminee");
     }
-    
+
     @Override
     public void initialiserBF(actualisationStatut sync_stat) {
         try {
@@ -139,7 +139,7 @@ public class ChansonServiceImpl implements ChansonService {
                 System.out.println("new config last date");
                 cfgvao = new Config();
                 cfgvao.setCle("last_date");
-                
+
                 cfgvao.setValeur(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Timestamp(System.currentTimeMillis())));
                 sync_stat.setLastMessage("Initialisation: " + cfgvao.getValeur());
                 this.chansonDAO.save(cfgvao);
@@ -173,7 +173,7 @@ public class ChansonServiceImpl implements ChansonService {
                         System.out.println("niditra ato " + ind);
                         System.out.println("taille " + listeID.size());
                         Chanson ch = new Chanson();
-                        
+
                         Integer val = listeID.get(listeNFBase.indexOf(ray));
                         System.out.println("ave eto ");
                         ch.setId(val.intValue());
@@ -225,7 +225,7 @@ public class ChansonServiceImpl implements ChansonService {
             sync_stat.setEnCours(false);
         }
     }
-    
+
     @Override
     public Config getLastDate() {
         try {
@@ -237,16 +237,16 @@ public class ChansonServiceImpl implements ChansonService {
             return null;
         }
     }
-    
+
     @Override
     public Chanson fromFile(String nomfichier) {
-        Chanson ch=null;
+        Chanson ch = null;
         try {
             mp3Util m_util = new mp3Util();
             m_util.setRepertoire(UPLOAD_DIRECTORY);
             m_util.processFile(nomfichier);
             System.out.println("vo process");
-           ch = new Chanson();
+            ch = new Chanson();
             ch.setNomfichier(nomfichier);
             ch.setD_down(m_util.getMD2String());
             ch.setD_up(m_util.getMDString());
@@ -261,6 +261,39 @@ public class ChansonServiceImpl implements ChansonService {
             this.chansonDAO.save(ch);
             ch.setId(this.chansonDAO.maxID(ch));
             return ch;
+        } catch (Exception ex) {
+            Logger.getLogger(ChansonServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public ResultatPagination rechercheSimpleChanson(String q, int page, int parpage) {
+        try {
+            Requete rq = new Requete(new Chanson());
+            rq.setCritere(
+                    CritereGenerator.or(
+                            CritereGenerator.or(
+                                    CritereGenerator.like("nomfichier", q),
+                                    CritereGenerator.like("titre", q)
+                            ),
+                            CritereGenerator.or(
+                                    CritereGenerator.or(
+                                            CritereGenerator.like("commentaire", q),
+                                            CritereGenerator.like("genre", q)
+                                    ),
+                                    CritereGenerator.or(
+                                            CritereGenerator.like("auteur", q),
+                                            CritereGenerator.or(
+                                                    CritereGenerator.like("album", q),
+                                                    CritereGenerator.like("date", q)
+                                            )
+                                    )
+                            )
+                    )
+            );
+            return this.chansonDAO.findAllPage(rq, page, parpage);
         } catch (Exception ex) {
             Logger.getLogger(ChansonServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage());

@@ -31,7 +31,10 @@ public class ClientServiceImpl implements ClientService {
             System.out.println(c.getLogin()+" "+c.getMdp());
             rq.setCritere(CritereGenerator.and(CritereGenerator.eq("login", c.getLogin()), CritereGenerator.eq("mdp", c.getMdp())));
             System.out.println(rq.contenu());
+           
             Client retour = (Client) this.clientDAO.findBy(rq);
+            System.out.println("eto tsik");
+            System.out.println(retour.getNom());
            if(retour!=null) retour.setMdp("");
             return retour;
         } catch (Exception ex) {

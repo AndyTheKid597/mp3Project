@@ -22,7 +22,15 @@ public class Client extends BaseModele implements Serializable{
     public Boolean getEst_admin() {
         return est_admin;
     }
-
+    public String hasher(){
+        String rt="";
+        if(nom!=null) rt+=nom;
+        if(mdp!=null) rt+=mdp;
+        if(login!=null) rt+=login;
+        if(email!=null) rt+=email;
+        if(est_admin!=null) rt+=est_admin;
+        return rt.hashCode()+"";
+    }
     public void setEst_admin(Boolean est_admin) {
         this.est_admin = est_admin;
     }

@@ -28,6 +28,6 @@ public class Like extends Critere{
     }
         @Override
     public void mifanaraka(ArrayList<Object> liste) {
-        liste.add(valeur);
+        liste.add("%"+valeur+"%");
     }
 }

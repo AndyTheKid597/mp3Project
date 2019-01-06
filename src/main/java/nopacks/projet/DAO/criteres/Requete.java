@@ -26,7 +26,9 @@ public class Requete {
     public String where(){
         return critere.where();
     }
-    
+     public String where2(){
+        return critere.where()+" "+bm.getClass().getName();
+    }
     public ArrayList<Object> mifanaraka(){
         ArrayList<Object> retour=new ArrayList<>();
         critere.mifanaraka(retour);

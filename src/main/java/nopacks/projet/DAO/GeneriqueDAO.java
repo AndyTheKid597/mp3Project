@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import nopacks.projet.DAO.Cacher.Cacher;
 import nopacks.projet.DAO.annotations.Colonne;
 import nopacks.projet.DAO.annotations.Table;
 import nopacks.projet.DAO.annotations.Tsizy;
@@ -36,7 +37,13 @@ import org.apache.commons.dbcp.BasicDataSource;
 public class GeneriqueDAO implements InterfaceDAO {
 
     private BasicDataSource connexion;
-
+    private Cacher cacher;
+    
+    public void setCacher(Cacher cacher){
+        this.cacher=cacher;
+    }
+    
+    
     public void setConnexion(BasicDataSource ds) {
         this.connexion = ds;
     }
@@ -81,6 +88,16 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     }
 
+    @PostConstruct
+    public void testatge(){
+        HashMap<String,HashMap<String,String>> config=this.cacher.getcf();
+        System.out.println("postiniiiiiiittt");
+        System.out.println(config.size());
+        String ind=config.keySet().iterator().next();
+        System.out.println(ind);
+        System.out.println(config.get(ind).get("duree"));
+    }
+    
     @Override
     public BaseModele findById(BaseModele p) {
         try {
@@ -518,6 +535,7 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     @Override
     public BaseModele findBy(Requete rq) {
+        
     BaseModele p = rq.getBm();
         BaseModele retour = null;
         Connection cx = null;
@@ -527,6 +545,8 @@ public class GeneriqueDAO implements InterfaceDAO {
             //System.out.println();
             //System.out.println();
             //System.out.println();
+            Object rttest=this.cacher.get(rq);
+        if(rttest!=null) retour=(BaseModele)rttest;
             cx = connexion.getConnection();
             String n_table = getNomTable(p);
             String where=" where "+rq.where();
@@ -548,6 +568,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             System.out.println(retour.getId());
             rs.close();
             ps.close();
+                  this.cacher.add(rq, retour);
         } catch (SQLException ex) {
             ex.printStackTrace();
             System.out.println(ex.getMessage());
@@ -560,7 +581,8 @@ public class GeneriqueDAO implements InterfaceDAO {
             } catch (Exception ex) {
 
             }
-
+            System.out.println("add depuis generique dao");
+       
             return retour;
         }   
     }

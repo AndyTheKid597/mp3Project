@@ -77,12 +77,30 @@ public class BackOfficeController {
     }
     
      @RequestMapping("/accueil/{page}/{parpage}")
-    public ModelAndView accueil(HttpServletRequest req, @RequestParam(value="page") int page, @RequestParam(value="parpage") int parpage) {
+    public ModelAndView accueil(HttpServletRequest req, @PathVariable(value="page") int page, @PathVariable(value="parpage") int parpage) {
         if(!testLogged(req)) return new ModelAndView("redirect:/admin/login?e=2");
         ModelAndView rt = new ModelAndView("accueilback");
         rt.addObject("valiny",this.chansonService.listChansonsPage(page,parpage));
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("lien","accueil");
+        return rt;
+    }
+    
+    @RequestMapping("/rechercher")
+    public ModelAndView rechercher(HttpServletRequest req, @RequestParam(value="q",required=false) String query){
+        return rechercher(req,0,10,query);
+    }
+    
+         @RequestMapping("/rechercher/{page}/{parpage}")
+    public ModelAndView rechercher(HttpServletRequest req, @PathVariable(value="page") int page, @PathVariable(value="parpage") int parpage, @RequestParam(value="q",required=false) String query) {
+        if(!testLogged(req)) return new ModelAndView("redirect:/admin/login?e=2");
+        if(query==null || query=="") return new ModelAndView("redirect:../accueil?empty=1");
+        ModelAndView rt = new ModelAndView("accueilback");
+        rt.addObject("valiny",this.chansonService.rechercheSimpleChanson(query,page,parpage));
+        //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
+        rt.addObject("lien","rechercher");
+        rt.addObject("param",query);
+        
         return rt;
     }
 
@@ -194,7 +212,7 @@ public class BackOfficeController {
     @RequestMapping("/logout")
     public ModelAndView deconnecter(SessionStatus stt) {
         stt.setComplete();
-        return new ModelAndView("login");
+        return new ModelAndView("redirect:../login");
     }
 
     private void adika(Client src, Client dest) {

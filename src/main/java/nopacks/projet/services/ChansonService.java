@@ -30,4 +30,5 @@ public interface ChansonService {
     public void initialiserBF(actualisationStatut sync_stat);
     public Config getLastDate();
     public Chanson fromFile(String nomfichier);
+    public ResultatPagination rechercheSimpleChanson(String q, int page, int parpage);
 }
