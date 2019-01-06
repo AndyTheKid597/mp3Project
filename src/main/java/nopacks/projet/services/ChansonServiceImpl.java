@@ -300,4 +300,10 @@ public class ChansonServiceImpl implements ChansonService {
             return null;
         }
     }
+    @Override
+    public ResultatPagination findChansonsPlusEcoutees(int page, int parpage){
+        Requete rq=new Requete(new Chanson());
+        rq.setOrder(CritereGenerator.desc("counter"));
+        return this.chansonDAO.findAllPage(rq, page, parpage);
+    }
 }

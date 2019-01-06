@@ -31,4 +31,5 @@ public interface ChansonService {
     public Config getLastDate();
     public Chanson fromFile(String nomfichier);
     public ResultatPagination rechercheSimpleChanson(String q, int page, int parpage);
+    public ResultatPagination findChansonsPlusEcoutees(int page, int parpage);
 }

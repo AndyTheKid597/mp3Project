@@ -15,21 +15,39 @@ import nopacks.projet.modeles.BaseModele;
 public class Requete {
     private BaseModele bm;
     private Critere critere;
+    private Order order;
     public Requete(){
         this(null);
     }
     
     public String contenu() throws Exception{ //iverifiena anle requete hoe normal tsara
+       if(critere==null) return null;
         return critere.convertir();
     }
     
+    public void setOrder(Order order){
+        this.order=order;
+    }
+    
+    public String orderby(){
+        if(order==null) return "";
+        return order.getRay();
+    }
+    
     public String where(){
+        
+       if(critere==null) return null;
         return critere.where();
+        
     }
      public String where2(){
-        return critere.where()+" "+bm.getClass().getName();
+        
+       if(critere==null) return null;
+         return critere.where()+" "+bm.getClass().getName();
     }
     public ArrayList<Object> mifanaraka(){
+        
+       if(critere==null) return null;
         ArrayList<Object> retour=new ArrayList<>();
         critere.mifanaraka(retour);
         return retour;

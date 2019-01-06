@@ -13,6 +13,12 @@ public class CritereGenerator {
     public static Or or(Critere c1, Critere c2) throws Exception{
         return new Or().setCritere(c1,c2);
     }
+    public static Order asc(String nom){
+        return new Order(nom,"asc");
+    }
+        public static Order desc(String nom){
+        return new Order(nom,"desc");
+    }
     public static Egal eq(String nom, Object valeur) throws Exception{
         return (Egal)new Egal().setCritere(nom,valeur);
     }

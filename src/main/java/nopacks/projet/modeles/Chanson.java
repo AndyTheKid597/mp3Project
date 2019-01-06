@@ -17,7 +17,15 @@ import javax.persistence.Table;
 @Table(name="bibliotheque")
 public class Chanson extends BaseModele{
     private String nomfichier,titre,d_up,d_down,auteur,album,date,commentaire,genre,track,image;
+    private Integer counter;
 
+    public Integer getCounter() {
+        return counter;
+    }
+
+    public void setCounter(Integer counter) {
+        this.counter = counter;
+    }
     public String getImage() {
         return image;
     }
@@ -28,6 +36,7 @@ public class Chanson extends BaseModele{
     private Long duration;
     public Chanson(){
         duration=new Long(0);
+        counter=new Integer(0);
     }
     public String getNomfichier() {
         return nomfichier;

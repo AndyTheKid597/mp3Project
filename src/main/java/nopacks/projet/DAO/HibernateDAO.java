@@ -33,11 +33,11 @@ public class HibernateDAO implements InterfaceDAO {
     private Transaction tx;
     private Session tempsession;
     private Cacher cacher;
-    
-    public void setCacher(Cacher cacher){
-        this.cacher=cacher;
+
+    public void setCacher(Cacher cacher) {
+        this.cacher = cacher;
     }
-    
+
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -109,7 +109,7 @@ public class HibernateDAO implements InterfaceDAO {
         Transaction tx = session.beginTransaction();
         System.out.println(p.getId());
         BaseModele anatybase = (BaseModele) session.load(p.getClass(), p.getId());
-        
+
         if (anatybase != null) {
             session.delete(anatybase);
         }
@@ -127,7 +127,6 @@ public class HibernateDAO implements InterfaceDAO {
     public void endTransaction() {
         tx.commit();
     }
-
 
     public void tester() {
         try {
@@ -154,20 +153,32 @@ public class HibernateDAO implements InterfaceDAO {
         ResultatPagination rt = new ResultatPagination();
         Session session = this.sessionFactory.openSession();
         String nt = rq.getBm().getClass().getSimpleName();
-        String where = " where " + rq.where();
-        ArrayList<Object> conds = rq.mifanaraka();
-        int t = conds.size();
+        String whcon = rq.where();
+        String where = " where ";
+        String od= rq.orderby();
+        if (whcon == null) {
+            where = "";
+        } else {
+            where = where + whcon;
+        }
+        ArrayList<Object> conds=null;
         Query qrct = session.createQuery("select count(*) from " + nt + where);
+        if (whcon != null) {
+             conds = rq.mifanaraka();
+            int t = conds.size();
 
-        for (int i = 0; i < t; i++) {
-            System.out.println(conds.get(i));
-            qrct.setParameter(i, conds.get(i));
+            for (int i = 0; i < t; i++) {
+                System.out.println(conds.get(i));
+                qrct.setParameter(i, conds.get(i));
+            }
         }
         long count = ((Long) qrct.uniqueResult()).longValue();
-        Query qr = session.createQuery(" from " + nt + where);
-
-        for (int i = 0; i < t; i++) {
-            qr.setParameter(i, conds.get(i));
+        Query qr = session.createQuery(" from " + nt + where+ od);
+        if (conds != null) {
+            int t = conds.size();
+            for (int i = 0; i < t; i++) {
+                qr.setParameter(i, conds.get(i));
+            }
         }
         qr.setMaxResults(parpage);
         qr.setFirstResult(page * parpage);
@@ -182,51 +193,65 @@ public class HibernateDAO implements InterfaceDAO {
 
     @Override
     public BaseModele findBy(Requete rq) { //retourne unique
-                    Object rttest=this.cacher.get(rq);
-        if(rttest!=null) return (BaseModele) rttest;
+        Object rttest = this.cacher.get(rq);
+        if (rttest != null) {
+            return (BaseModele) rttest;
+        }
         System.out.println("skip code return");
         Session session = this.sessionFactory.openSession();
         String nt = rq.getBm().getClass().getSimpleName();
-        String where = " where " + rq.where();
-        ArrayList<Object> conds = rq.mifanaraka();
-        int t = conds.size();
-        Query qrct = session.createQuery(" from " + nt + where);
+        String whcon = rq.where();
+        String where = " where ";
+                String od= rq.orderby();
+        if (whcon == null) {
+            where = "";
+        } else {
+            where = where + whcon;
+        }
+        Query qrct = session.createQuery(" from " + nt + where+ od);
 
-        for (int i = 0; i < t; i++) {
-            qrct.setParameter(i, conds.get(i));
+        if (whcon != null) {
+            ArrayList<Object> conds = rq.mifanaraka();
+            int t = conds.size();
+
+            for (int i = 0; i < t; i++) {
+                qrct.setParameter(i, conds.get(i));
+            }
         }
         List<BaseModele> res = qrct.list();
         if (res.size() < 1) {
             return null;
         }
 
-        BaseModele rt=res.get(0);
-              this.cacher.add(rq, rt);
-                      session.close();
+        BaseModele rt = res.get(0);
+        this.cacher.add(rq, rt);
+        session.close();
         return rt;
     }
 
     @Override
     public void deleteAll(BaseModele p) {
-        sessionFactory.getCurrentSession().createQuery("delete from "+p.getClass().getSimpleName()).executeUpdate();
+        sessionFactory.getCurrentSession().createQuery("delete from " + p.getClass().getSimpleName()).executeUpdate();
     }
 
     @Override
     public int maxID(BaseModele p) {
-        Session session=null;
+        Session session = null;
         try {
-              session = this.sessionFactory.openSession();
-           Query qrct = session.createQuery("select max(id) from " + p.getClass().getSimpleName());
-           int rt=((Integer)qrct.uniqueResult()).intValue();
+            session = this.sessionFactory.openSession();
+            Query qrct = session.createQuery("select max(id) from " + p.getClass().getSimpleName());
+            int rt = ((Integer) qrct.uniqueResult()).intValue();
             session.close();
             return rt;
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println(ex.getMessage());
-            if(session!=null) session.close();
+            if (session != null) {
+                session.close();
+            }
             return -1;
-        }        
-        
+        }
+
     }
 
 }

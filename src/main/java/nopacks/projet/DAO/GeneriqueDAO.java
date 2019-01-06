@@ -476,18 +476,26 @@ public class GeneriqueDAO implements InterfaceDAO {
             //System.out.println();
             cx = connexion.getConnection();
             String n_table = getNomTable(p);
-            String where=" where "+rq.where();
-            ArrayList<Object> conds=rq.mifanaraka();
-            int t=conds.size();
-            ArrayList<String[]> attr = this.getAttributsBaseModele(p);
+            String whcon=rq.where();
+            String where=" where ";
+            if(whcon!=null) where= where+rq.where();
+            else where="";
+                        ArrayList<String[]> attr = this.getAttributsBaseModele(p);
             //System.out.println(attr.size());
             //System.out.println("select * from "+n_table);
             PreparedStatement ps1 = cx.prepareStatement("select count(*) from " + n_table+where);
+            ArrayList<Object> conds=null;
+            int t=0;
+            if(whcon!=null){
+             conds=rq.mifanaraka();
+            t=conds.size();
+
              System.out.println("select count(*) from " + n_table+where);
              
             for(int i=0;i<t;i++){
             System.out.println(conds.get(i));
                 ps1.setObject(i+1, conds.get(i));
+            }
             }
             ResultSet rs2 = ps1.executeQuery();
             rs2.next();
@@ -495,10 +503,11 @@ public class GeneriqueDAO implements InterfaceDAO {
             rs2.close();
             ps1.close();
             PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where+ " limit ? offset ? ");
-          
+          if(whcon!=null){
             for(int i=0;i<t;i++){
                 ps.setObject(i+1, conds.get(i));
             }
+          }
             ps.setInt(t+1,parpage);
             ps.setInt(t+2,(page * parpage));
             
@@ -549,18 +558,27 @@ public class GeneriqueDAO implements InterfaceDAO {
         if(rttest!=null) retour=(BaseModele)rttest;
             cx = connexion.getConnection();
             String n_table = getNomTable(p);
-            String where=" where "+rq.where();
-            ArrayList<Object> conds=rq.mifanaraka();
-            int t=conds.size();
+            String whcon=rq.where();
+            String where=" where ";
+            if(whcon==null) where="";
+            else where=where+whcon;
+            ArrayList<Object> conds=null;
+            String od=rq.orderby();
+             PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where+od);
             ArrayList<String[]> attr = this.getAttributsBaseModele(p);
-            PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where);
+             if(whcon!=null){
+                
+            conds=rq.mifanaraka();
+            int t=conds.size();
+
+           
           System.out.println("select * from " + n_table +where);
           
             for(int i=0;i<t;i++){
                 System.out.println(conds.get(i));
                 ps.setObject(i+1, conds.get(i));
             }
-            
+             }
             ResultSet rs = ps.executeQuery();
             if(!rs.next()) return null;
                 System.out.println(" next ");

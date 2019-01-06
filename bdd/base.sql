@@ -16,6 +16,7 @@ CREATE TABLE `bibliotheque` (
 `track` varchar(120) ,
 `duration` BIGINT DEFAULT 0 ,
 `image` varchar(200),
+`counter` int default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 CREATE TABLE `Config`(
