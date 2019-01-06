@@ -112,7 +112,7 @@
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <li class="has-sub">
+                        <li class="${lien=='stats' ? 'active' : ''}" >
                             <a href="${pageContext.servletContext.contextPath}/admin/stats">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                         </li>

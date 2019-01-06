@@ -199,6 +199,7 @@ public class BackOfficeController {
         if(!testLogged(req) ) return new ModelAndView("redirect:/admin/login?e=2");
         ModelAndView md=new ModelAndView("stats");
         md.addObject("topChansons",this.chansonService.findChansonsPlusEcoutees(0, 10));
+        md.addObject("lien","stats");
         return md;
     }
     
