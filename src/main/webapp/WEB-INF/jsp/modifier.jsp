@@ -72,7 +72,7 @@
                                         </button>
                                     </div>
                                 </c:if>
-                                        <form:form action="${action}" modelAttribute="chanson">
+                                        <form:form action="${action}" modelAttribute="chanson" enctype="multipart/form-data">
                                             <form:input hidden="true" path="id"/>
                                             <div class="form-group">
                                                 <form:label path="nomfichier">
@@ -111,10 +111,9 @@
                                                 <form:input readonly="true" path="duration" class="form-control cc-name valid"/>
                                             </div>
                                                                                         <div class="form-group">
-                                                <form:label path="image">
-                                                        <spring:message text="Image"/>
-                                                </form:label>
-                                                <form:input path="image" class="form-control cc-name valid"/>
+                                                                                            <label>Image</label>
+                                                <input class="form-control cc-name valid" name="file" accept="image/*"  type="file"  />
+                                                <form:input readonly="true" path="image" class="form-control cc-name valid"/>
                                             </div>
                                             <div>
                                                 <form:button  class="btn btn-lg btn-info btn-block">

@@ -91,7 +91,7 @@ public class BackOfficeController {
         return rechercher(req,0,10,query);
     }
     
-         @RequestMapping("/rechercher/{page}/{parpage}")
+    @RequestMapping("/rechercher/{page}/{parpage}")
     public ModelAndView rechercher(HttpServletRequest req, @PathVariable(value="page") int page, @PathVariable(value="parpage") int parpage, @RequestParam(value="q",required=false) String query) {
         if(!testLogged(req)) return new ModelAndView("redirect:/admin/login?e=2");
         if(query==null || query=="") return new ModelAndView("redirect:../accueil?empty=1");
@@ -100,7 +100,6 @@ public class BackOfficeController {
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("lien","rechercher");
         rt.addObject("param",query);
-        
         return rt;
     }
 
@@ -150,9 +149,32 @@ public class BackOfficeController {
      }
      
      @RequestMapping(value="/modifier", method=RequestMethod.POST)
-     public String modif(@ModelAttribute("chanson") Chanson ray, HttpServletRequest req){
+     public String modif(@ModelAttribute("chanson") Chanson ray, HttpServletRequest req,@RequestParam(required=false) CommonsMultipartFile file){
          if(!testLogged(req) ) return "redirect:/admin/login?e=2";
                  System.out.println(" vomodif "+ray.getId());
+                 if(!file.isEmpty()){
+                     try{
+
+                         System.out.println("nisy fichier");
+        String path = context.getRealPath("");
+        String filename = file.getOriginalFilename();
+                         String nf="img/"+filename;
+                         System.out.println("azo nf "+nf);
+        System.out.println(path + this.chansonService.getUploadDir() + " " + filename);
+
+        byte[] bytes = file.getBytes();
+        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(
+                new File(this.chansonService.getUploadDir() + File.separator +"img"+File.separator + filename)));
+        stream.write(bytes);
+        stream.flush();
+        stream.close();
+        ray.setImage(nf);
+        System.out.println("vitaaaa"+nf);
+                     } catch (Exception ex){
+                         System.out.println("Upload exception");
+                         System.out.println(ex);
+                     }
+                 }
          this.chansonService.updateChanson(ray);
 
          return "redirect:modifier/"+ray.getId()+"?s=1";
