@@ -61,7 +61,7 @@
                                 <div class="col-lg-12">
                                     <!-- DATA TABLE -->
                                     <h3 class="title-5 m-b-35">liste des chansons</h3>
-                                    <div class="table-responsive table-responsive-data2">
+                                    <div class="table-responsive">
                                           
                    
                           
