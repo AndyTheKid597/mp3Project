@@ -312,4 +312,10 @@ public class ChansonServiceImpl implements ChansonService {
             p.setCounter(p.getCounter()+1);
             this.chansonDAO.update(p);
         }
+
+    @Override
+    public ResultatPagination findChansonsLast(int page, int parpage) {
+          Requete rq=new Requete(new Chanson());
+        rq.setOrder(CritereGenerator.desc("id"));
+        return this.chansonDAO.findAllPage(rq, page, parpage);  }
 }

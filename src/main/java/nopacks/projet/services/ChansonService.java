@@ -32,5 +32,6 @@ public interface ChansonService {
     public Chanson fromFile(String nomfichier);
     public ResultatPagination rechercheSimpleChanson(String q, int page, int parpage);
     public ResultatPagination findChansonsPlusEcoutees(int page, int parpage);
+    public ResultatPagination findChansonsLast(int page, int parpage);
     public void counterPlusChanson(Chanson p);
 }

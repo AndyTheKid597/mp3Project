@@ -46,6 +46,7 @@ public class SiteController {
     public ModelAndView accueil() {
         ModelAndView rt = new ModelAndView("accueilfront");
         rt.addObject("plusEcoutees",this.chansonService.findChansonsPlusEcoutees(0,10));
+        rt.addObject("derniersAjoutes",this.chansonService.findChansonsLast(0,10));
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("lien","accueil");
         return rt;
