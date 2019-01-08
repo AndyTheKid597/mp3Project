@@ -54,7 +54,7 @@
                             <div class="hero-slides-content text-center">
                                 <h6 data-animation="fadeInUp" data-delay="100ms">${sg.auteur}</h6>
                                 <h2 data-animation="fadeInUp" data-delay="300ms">${sg.titre}<span>${sg.titre}</span></h2>
-                                <a data-animation="fadeInUp" data-delay="500ms" href="#" class="btn oneMusic-btn mt-50">Ecouter<i class="fa fa-angle-double-right"></i></a>
+                                <a data-animation="fadeInUp" data-delay="500ms" href="${pageContext.servletContext.contextPath}/site/single/${sg.id}" class="btn oneMusic-btn mt-50">Ecouter<i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                         <!-- Single Album -->
                         <c:forEach items="${derniersAjoutes.resultats}" var="sg">
                         <div class="single-album">
-                            <img src="${lien_assets}/img/bg-img/a1.jpg" alt="">
+                            <img src="${pageContext.servletContext.contextPath}/res/${sg.image}" alt="">
                             <div class="album-info">
                                 <a href="#">
                                     <h5>${sg.auteur}</h5>

@@ -85,14 +85,20 @@
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
         <beans:property name="cacher" ref="cacher" />
     </beans:bean>
-    <beans:bean id="chansonService" class="nopacks.projet.services.ChansonServiceImpl">
+    <beans:bean id="chansonServiceHibernate" class="nopacks.projet.services.ChansonServiceImpl">
         <beans:property name="chansonDAO" ref="hibernateDAO"></beans:property>
         <beans:property name="finder" ref="mp3Finder"></beans:property>
     </beans:bean>
-    <beans:bean id="clientService" class="nopacks.projet.services.ClientServiceImpl">
+        <beans:bean id="chansonServiceGenerique" class="nopacks.projet.services.ChansonServiceImpl">
+        <beans:property name="chansonDAO" ref="generiqueDAO"></beans:property>
+        <beans:property name="finder" ref="mp3Finder"></beans:property>
+    </beans:bean>
+    <beans:bean id="clientServiceHibernate" class="nopacks.projet.services.ClientServiceImpl">
+        <beans:property name="clientDAO" ref="hibernateDAO"></beans:property>
+    </beans:bean>
+    <beans:bean id="clientServiceGenerique" class="nopacks.projet.services.ClientServiceImpl">
         <beans:property name="clientDAO" ref="generiqueDAO"></beans:property>
     </beans:bean>
-
 	
     <tx:annotation-driven transaction-manager="transactionManager"/>
 	

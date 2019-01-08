@@ -7,6 +7,7 @@ package nopacks.projet.controller;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import nopacks.projet.modeles.Chanson;
 import nopacks.projet.services.ChansonService;
 import nopacks.projet.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,13 @@ public class SiteController {
     ServletContext context;
 
     @Autowired(required = true)
-    @Qualifier(value = "chansonService")
+    @Qualifier(value = "chansonServiceHibernate")
     public void setChansonService(ChansonService ps) {
         this.chansonService = ps;
     }
 
     @Autowired(required = true)
-    @Qualifier(value = "clientService")
+    @Qualifier(value = "clientServiceHibernate")
     public void setClientService(ClientService ps) {
         this.clientService = ps;
     }
@@ -50,5 +51,14 @@ public class SiteController {
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("lien","accueil");
         return rt;
+    }
+    @RequestMapping("/single/{id}")
+    public ModelAndView anakray(@PathVariable(value="id") int idhira){
+        ModelAndView md= new ModelAndView("f_prod");
+        Chanson hira=this.chansonService.findChansonById(idhira);
+        this.chansonService.counterPlusChanson(hira);
+          md.addObject("hira",hira);
+          md.addObject("lien","single");
+        return md;
     }
 }

@@ -40,7 +40,7 @@ public class ChansonController {
 
     //String UPLOAD_DIRECTORY="/upl";
     @Autowired(required = true)
-    @Qualifier(value = "chansonService")
+    @Qualifier(value = "chansonServiceGenerique")
     public void setChansonService(ChansonService ps) {
         this.chansonService = ps;
     }

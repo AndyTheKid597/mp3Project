@@ -51,13 +51,13 @@ public class BackOfficeController {
     ServletContext context;
 
     @Autowired(required = true)
-    @Qualifier(value = "chansonService")
+    @Qualifier(value = "chansonServiceGenerique")
     public void setChansonService(ChansonService ps) {
         this.chansonService = ps;
     }
 
     @Autowired(required = true)
-    @Qualifier(value = "clientService")
+    @Qualifier(value = "clientServiceGenerique")
     public void setClientService(ClientService ps) {
         this.clientService = ps;
     }
