@@ -128,14 +128,9 @@
                                 </div>
 
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="copyright">
-                                        <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
+
+                            <div class="row" style="min-height:100px;">
+                                                                <div class="col-lg-12">
                                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                         <c:set var="u_param" value=""/>
                                     <c:if test="${!empty param}">
@@ -147,13 +142,14 @@
                                             <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="${pageContext.servletContext.contextPath}/${lien}/${valiny.previous}/10${u_param}}" role="tab" >Precedent</a>
                                         </li>
                                     </c:if>
-                                    <c:if test="${valiny.hasPrevious}">
+                                    <c:if test="${valiny.hasNext}">
 
                                         <li class="nav-item">
                                             <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="${pageContext.servletContext.contextPath}/${lien}/${valiny.previous}/10${u_param}" role="tab">Suivant</a>
                                         </li>
                                     </c:if>
                                 </ul>
+                            </div>
                             </div>
                         </div>
                     </div>

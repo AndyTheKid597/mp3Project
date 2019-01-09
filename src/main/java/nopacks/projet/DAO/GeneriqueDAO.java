@@ -179,21 +179,24 @@ public class GeneriqueDAO implements InterfaceDAO {
             HashMap<String, Object> cv = this.getColAndVal(p);
             String rqt = " update " + this.getNomTable(p) + " set ";
             String where = " where id=" + p.getId();
+            
             StringBuilder setena = new StringBuilder();
             boolean vol = false;
             for (String[] att : attribs) {
                 if (att[1].equals("id")) {
                     continue;
                 }
-                if (!vol) {
+                if (vol) {
                     setena.append(" , ");
                 }
                 setena.append(att[0]);
                 setena.append(" = ? ");
-                vol = false;
+                vol = true;
             }
             String st = setena.toString();
             rqt = rqt + st + where;
+            System.out.println("update request");
+            System.out.println(rqt);
             PreparedStatement ps = ct.prepareStatement(rqt);
             int i = 1;
             for (String[] att : attribs) {
@@ -403,6 +406,10 @@ public class GeneriqueDAO implements InterfaceDAO {
             Class rttype = antsoina.getParameterTypes()[0];
             System.out.println("rttype "+rttype);
             System.out.println("izy "+arg.getClass());
+            if(arg.getClass()==Long.class && rttype==Integer.class){
+                arg= new Integer(((Long)arg).intValue());
+                System.out.println("vocatst "+arg.getClass());
+            }
             //System.out.println(arg.getClass());
             //System.out.println(rttype);
             //System.out.println(antsoina);

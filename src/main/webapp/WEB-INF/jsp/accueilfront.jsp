@@ -93,10 +93,10 @@
                         <div class="single-album">
                             <img src="${pageContext.servletContext.contextPath}/res/${sg.image}" alt="">
                             <div class="album-info">
-                                <a href="#">
-                                    <h5>${sg.auteur}</h5>
+                                <a href="${pageContext.servletContext.contextPath}/site/single/${sg.id}">
+                                    <h5>${sg.titre}</h5>
                                 </a>
-                                <p>${sg.titre}</p>
+                                <p>${sg.auteur}</p>
                             </div>
                         </div>
                             </c:forEach>
