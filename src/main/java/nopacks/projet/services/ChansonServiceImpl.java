@@ -5,6 +5,7 @@
  */
 package nopacks.projet.services;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,6 +79,10 @@ public class ChansonServiceImpl implements ChansonService {
     public void deleteChanson(int id) {
         Chanson hira = new Chanson();
         hira.setId(id);
+        hira=(Chanson)this.chansonDAO.findById(hira);
+        String nf=hira.getNomfichier();
+        File fl=new File(this.UPLOAD_DIRECTORY+nf);
+        fl.delete();
         this.chansonDAO.delete(hira);
     }
 
