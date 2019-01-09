@@ -55,8 +55,8 @@
                           <div class="row">
                               <div class="col-12" style="padding-left:0;">
                                   <div class="hero-slides-content text-center">
-                                      <h6 data-animation="fadeInUp" data-delay="100ms" style="animation-delay: 100ms;">Twenty One Pilots</h6>
-                                      <h2 data-animation="fadeInUp" data-delay="300ms" style="animation-delay: 300ms;">Heathens<span>Heathens</span></h2>
+                                      <h6 data-animation="fadeInUp" data-delay="100ms" style="animation-delay: 100ms;">${hira.auteur}</h6>
+                                      <h2 data-animation="fadeInUp" data-delay="300ms" style="animation-delay: 300ms;">${hira.titre}<span>${hira.titre}</span></h2>
                                       <audio id="hirahira"  style="width:100%;" controls preload="true" src="${pageContext.servletContext.contextPath}/res/${hira.nomfichier}" controls></audio>
                                     </div>
 
