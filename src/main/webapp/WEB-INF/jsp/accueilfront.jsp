@@ -46,7 +46,7 @@
             <c:forEach items="${plusEcoutees.resultats}" var="sg">
             <div class="single-hero-slide d-flex align-items-center justify-content-center">
                 <!-- Slide Img -->
-                <div class="slide-img bg-img" style="background-image: url(${lien_assets}/img/bg-img/bg-1.jpg);"></div>
+                <div class="slide-img bg-img" style="background-image: url(${pageContext.servletContext.contextPath}/res/${sg.image});"></div>
                 <!-- Slide Content -->
                 <div class="container">
                     <div class="row">
