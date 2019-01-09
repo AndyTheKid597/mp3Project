@@ -43,8 +43,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class BackOfficeController {
 
     private actualisationStatut sync_status;
-    
-    
+
     private ChansonService chansonService;
     private ClientService clientService;
     @Autowired
@@ -64,55 +63,67 @@ public class BackOfficeController {
 
     @RequestMapping("/accueil")
     public ModelAndView accueil(HttpServletRequest req, Model md) {
-        if(!testLogged(req) && !md.asMap().containsKey("adminObjet")) return new ModelAndView("redirect:/admin/login?e=2");
-        Client ct=null;
-        if(testLogged(req)) ct=(Client)req.getAttribute("adminObject");
-        if(md.asMap().containsKey("adminObjet")) ct=(Client)md.asMap().get("adminObjet");
+        if (!testLogged(req) && !md.asMap().containsKey("adminObjet")) {
+            return new ModelAndView("redirect:/admin/login?e=2");
+        }
+        Client ct = null;
+        if (testLogged(req)) {
+            ct = (Client) req.getAttribute("adminObject");
+        }
+        if (md.asMap().containsKey("adminObjet")) {
+            ct = (Client) md.asMap().get("adminObjet");
+        }
         ModelAndView rt = new ModelAndView("accueilback");
-        rt.addObject("valiny",this.chansonService.listChansonsPage(0,10));
+        rt.addObject("valiny", this.chansonService.listChansonsPage(0, 10));
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
-        rt.addObject("adminObjet",ct);
-        rt.addObject("lien","accueil");
-        return rt;
-    }
-    
-     @RequestMapping("/accueil/{page}/{parpage}")
-    public ModelAndView accueil(HttpServletRequest req, @PathVariable(value="page") int page, @PathVariable(value="parpage") int parpage) {
-        if(!testLogged(req)) return new ModelAndView("redirect:/admin/login?e=2");
-        ModelAndView rt = new ModelAndView("accueilback");
-        rt.addObject("valiny",this.chansonService.listChansonsPage(page,parpage));
-        //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
-        rt.addObject("lien","accueil");
-        return rt;
-    }
-    
-    @RequestMapping("/rechercher")
-    public ModelAndView rechercher(HttpServletRequest req, @RequestParam(value="q",required=false) String query){
-        return rechercher(req,0,10,query);
-    }
-    
-    @RequestMapping("/rechercher/{page}/{parpage}")
-    public ModelAndView rechercher(HttpServletRequest req, @PathVariable(value="page") int page, @PathVariable(value="parpage") int parpage, @RequestParam(value="q",required=false) String query) {
-        if(!testLogged(req)) return new ModelAndView("redirect:/admin/login?e=2");
-        if(query==null || query=="") return new ModelAndView("redirect:../accueil?empty=1");
-        ModelAndView rt = new ModelAndView("accueilback");
-        rt.addObject("valiny",this.chansonService.rechercheSimpleChanson(query,page,parpage));
-        //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
-        rt.addObject("lien","rechercher");
-        rt.addObject("param",query);
+        rt.addObject("adminObjet", ct);
+        rt.addObject("lien", "accueil");
         return rt;
     }
 
-    public boolean testLogged(HttpServletRequest req){
-       return req.getSession().getAttribute("adminObjet")!=null;
+    @RequestMapping("/accueil/{page}/{parpage}")
+    public ModelAndView accueil(HttpServletRequest req, @PathVariable(value = "page") int page, @PathVariable(value = "parpage") int parpage) {
+        if (!testLogged(req)) {
+            return new ModelAndView("redirect:/admin/login?e=2");
+        }
+        ModelAndView rt = new ModelAndView("accueilback");
+        rt.addObject("valiny", this.chansonService.listChansonsPage(page, parpage));
+        //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
+        rt.addObject("lien", "accueil");
+        return rt;
     }
-    
+
+    @RequestMapping("/rechercher")
+    public ModelAndView rechercher(HttpServletRequest req, @RequestParam(value = "q", required = false) String query) {
+        return rechercher(req, 0, 10, query);
+    }
+
+    @RequestMapping("/rechercher/{page}/{parpage}")
+    public ModelAndView rechercher(HttpServletRequest req, @PathVariable(value = "page") int page, @PathVariable(value = "parpage") int parpage, @RequestParam(value = "q", required = false) String query) {
+        if (!testLogged(req)) {
+            return new ModelAndView("redirect:/admin/login?e=2");
+        }
+        if (query == null || query == "") {
+            return new ModelAndView("redirect:../accueil?empty=1");
+        }
+        ModelAndView rt = new ModelAndView("accueilback");
+        rt.addObject("valiny", this.chansonService.rechercheSimpleChanson(query, page, parpage));
+        //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
+        rt.addObject("lien", "rechercher");
+        rt.addObject("param", query);
+        return rt;
+    }
+
+    public boolean testLogged(HttpServletRequest req) {
+        return req.getSession().getAttribute("adminObjet") != null;
+    }
+
     @RequestMapping("syncstat")
-    public ModelAndView statutDeLaSynchro(){
-        ModelAndView md= new ModelAndView("syncstat");
+    public ModelAndView statutDeLaSynchro() {
+        ModelAndView md = new ModelAndView("syncstat");
         return md;
     }
-    
+
     @RequestMapping(value = "ajouterChanson", method = RequestMethod.POST)
     public String saveChanson(@RequestParam CommonsMultipartFile file) throws Exception {
 
@@ -127,104 +138,119 @@ public class BackOfficeController {
         stream.write(bytes);
         stream.flush();
         stream.close();
-        Chanson ct=this.chansonService.fromFile(filename);
-        return "redirect:/admin/modifier/"+ct.getId();
+        Chanson ct = this.chansonService.fromFile(filename);
+        return "redirect:/admin/modifier/" + ct.getId();
     }
-    
+
     @RequestMapping("/supprimer/{id}")
-    public String supprimerChanson(@PathVariable("id") int id, HttpServletRequest req){
-         if(!testLogged(req) ) return "redirect:/admin/login?e=2";
+    public String supprimerChanson(@PathVariable("id") int id, HttpServletRequest req) {
+        if (!testLogged(req)) {
+            return "redirect:/admin/login?e=2";
+        }
         this.chansonService.deleteChanson(id);
         return "redirect:../accueil";
     }
-    
-     @RequestMapping(value="/modifier/{id}", method=RequestMethod.GET)
-     public ModelAndView modifierUneChanson(@PathVariable("id") int id, @RequestParam(value="s",required=false) String succ, HttpServletRequest req){
-         if(!testLogged(req) ) return new ModelAndView("redirect:/admin/login?e=2");
-         ModelAndView md = new ModelAndView("modifier");
-         md.addObject("chanson",this.chansonService.findChansonById(id));
-         md.addObject("action","../modifier");
-         md.addObject("succ",succ);
-         return md;
-     }
-     
-     @RequestMapping(value="/modifier", method=RequestMethod.POST)
-     public String modif(@ModelAttribute("chanson") Chanson ray, HttpServletRequest req,@RequestParam(required=false) CommonsMultipartFile file){
-         if(!testLogged(req) ) return "redirect:/admin/login?e=2";
-                 System.out.println(" vomodif "+ray.getId());
-                 if(!file.isEmpty()){
-                     try{
 
-                         System.out.println("nisy fichier");
-        String path = context.getRealPath("");
-        String filename = file.getOriginalFilename();
-                         String nf="img/"+filename;
-                         System.out.println("azo nf "+nf);
-        System.out.println(path + this.chansonService.getUploadDir() + " " + filename);
-
-        byte[] bytes = file.getBytes();
-        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(
-                new File(this.chansonService.getUploadDir() + File.separator +"img"+File.separator + filename)));
-        stream.write(bytes);
-        stream.flush();
-        stream.close();
-        ray.setImage(nf);
-        System.out.println("vitaaaa"+nf);
-                     } catch (Exception ex){
-                         System.out.println("Upload exception");
-                         System.out.println(ex);
-                     }
-                 }
-         this.chansonService.updateChanson(ray);
-
-         return "redirect:modifier/"+ray.getId()+"?s=1";
-     }
-    @RequestMapping("/beginSynchro")    
-     public @ResponseBody String beginSynchro(){
-         System.out.println(" Mega actualisation de la base");
-         Syncer();
-         return "{succes}";
-     }
-    @Async
-    public void Syncer(){
-        if(sync_status==null || sync_status.isEnCours()==false){
-             sync_status=new actualisationStatut();
-         }
-         this.chansonService.initialiserBF(sync_status);
+    @RequestMapping(value = "/modifier/{id}", method = RequestMethod.GET)
+    public ModelAndView modifierUneChanson(@PathVariable("id") int id, @RequestParam(value = "s", required = false) String succ, HttpServletRequest req) {
+        if (!testLogged(req)) {
+            return new ModelAndView("redirect:/admin/login?e=2");
+        }
+        ModelAndView md = new ModelAndView("modifier");
+        md.addObject("chanson", this.chansonService.findChansonById(id));
+        md.addObject("action", "../modifier");
+        md.addObject("succ", succ);
+        return md;
     }
-     @RequestMapping("/statutSynchro")
-     public @ResponseBody actualisationStatut getStatutSynchro(){
-        if(sync_status!=null) return sync_status;
-        actualisationStatut ast=new actualisationStatut();
+
+    @RequestMapping(value = "/modifier", method = RequestMethod.POST)
+    public String modif(@ModelAttribute("chanson") Chanson ray, HttpServletRequest req, @RequestParam(required = false) CommonsMultipartFile file) {
+        if (!testLogged(req)) {
+            return "redirect:/admin/login?e=2";
+        }
+        System.out.println(" vomodif " + ray.getId());
+        if (!file.isEmpty()) {
+            try {
+
+                System.out.println("nisy fichier");
+                String path = context.getRealPath("");
+                String filename = file.getOriginalFilename();
+                String nf = "img/" + filename;
+                System.out.println("azo nf " + nf);
+                System.out.println(path + this.chansonService.getUploadDir() + " " + filename);
+
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(
+                        new File(this.chansonService.getUploadDir() + File.separator + "img" + File.separator + filename)));
+                stream.write(bytes);
+                stream.flush();
+                stream.close();
+                ray.setImage(nf);
+                System.out.println("vitaaaa" + nf);
+            } catch (Exception ex) {
+                System.out.println("Upload exception");
+                System.out.println(ex);
+            }
+        }
+        this.chansonService.updateChanson(ray);
+
+        return "redirect:modifier/" + ray.getId() + "?s=1";
+    }
+
+    @RequestMapping("/beginSynchro")
+    public @ResponseBody
+    String beginSynchro() {
+        System.out.println(" Mega actualisation de la base");
+        Syncer();
+        return "{succes}";
+    }
+
+    @Async
+    public void Syncer() {
+        if (sync_status == null || sync_status.isEnCours() == false) {
+            sync_status = new actualisationStatut();
+        }
+        this.chansonService.initialiserBF(sync_status);
+    }
+
+    @RequestMapping("/statutSynchro")
+    public @ResponseBody
+    actualisationStatut getStatutSynchro() {
+        if (sync_status != null) {
+            return sync_status;
+        }
+        actualisationStatut ast = new actualisationStatut();
         ast.getLastMessage();
         ast.setLastMessage("Pas de synchronisation en cours");
         ast.setEnCours(false);
         return ast;
-     }
-    
+    }
+
     @RequestMapping("/")
     public String redirAccueil() {
         return "redirect:/admin/login";
     }
 
-    @RequestMapping(value="/login")
-    public ModelAndView loginAccueil(        @RequestParam(value="e",required=false) String err) {
-        
+    @RequestMapping(value = "/login")
+    public ModelAndView loginAccueil(@RequestParam(value = "e", required = false) String err) {
+
         ModelAndView rt = new ModelAndView("login");
         rt.addObject("client", new Client());
-         rt.addObject("erreur",err);
+        rt.addObject("erreur", err);
         return rt;
     }
 
-    @RequestMapping(value="/stats")
-    public ModelAndView getStatistiques(HttpServletRequest req){
-        if(!testLogged(req) ) return new ModelAndView("redirect:/admin/login?e=2");
-        ModelAndView md=new ModelAndView("stats");
-        md.addObject("topChansons",this.chansonService.findChansonsPlusEcoutees(0, 10));
-        md.addObject("lien","stats");
+    @RequestMapping(value = "/stats")
+    public ModelAndView getStatistiques(HttpServletRequest req) {
+        if (!testLogged(req)) {
+            return new ModelAndView("redirect:/admin/login?e=2");
+        }
+        ModelAndView md = new ModelAndView("stats");
+        md.addObject("topChansons", this.chansonService.findChansonsPlusEcoutees(0, 10));
+        md.addObject("lien", "stats");
         return md;
     }
-    
+
     @RequestMapping(value = "/tester", method = RequestMethod.POST)
     public String testerLogin(@ModelAttribute("client") Client p, RedirectAttributes redirectAttrs) {
         Client rt = this.clientService.testLoginAdmin(p);
@@ -238,7 +264,6 @@ public class BackOfficeController {
             return "redirect:/admin/accueil";
         }
     }
-    
 
     @RequestMapping("/logout")
     public ModelAndView deconnecter(SessionStatus stt) {

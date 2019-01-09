@@ -483,10 +483,18 @@ public class GeneriqueDAO implements InterfaceDAO {
             //System.out.println();
             cx = connexion.getConnection();
             String n_table = getNomTable(p);
-            String whcon=rq.where();
-            String where=" where ";
-            if(whcon!=null) where= where+rq.where();
-            else where="";
+            //String whcon=rq.where();
+            //String where=" where ";
+            String whcon = rq.where();
+        String where = " where ";
+        String od= rq.orderby();
+        if (whcon == null) {
+            where = "";
+        } else {
+            where = where + whcon;
+        }
+          //  if(whcon!=null) where= where+rq.where();
+         //   else where="";
                         ArrayList<String[]> attr = this.getAttributsBaseModele(p);
             //System.out.println(attr.size());
             //System.out.println("select * from "+n_table);
@@ -497,7 +505,7 @@ public class GeneriqueDAO implements InterfaceDAO {
              conds=rq.mifanaraka();
             t=conds.size();
 
-             System.out.println("select count(*) from " + n_table+where);
+             System.out.println("select count(*) from " + n_table+where+od);
              
             for(int i=0;i<t;i++){
             System.out.println(conds.get(i));
@@ -509,7 +517,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             count = rs2.getInt(1);
             rs2.close();
             ps1.close();
-            PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where+ " limit ? offset ? ");
+            PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where+od+ " limit ? offset ? ");
           if(whcon!=null){
             for(int i=0;i<t;i++){
                 ps.setObject(i+1, conds.get(i));
