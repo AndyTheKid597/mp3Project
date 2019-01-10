@@ -8,6 +8,7 @@ package nopacks.projet.controller;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import nopacks.projet.modeles.Chanson;
+import nopacks.projet.modeles.ResultatPagination;
 import nopacks.projet.services.ChansonService;
 import nopacks.projet.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -61,4 +63,20 @@ public class SiteController {
           md.addObject("lien","single");
         return md;
     }
+    @RequestMapping("/resultat")
+    public ModelAndView rech(@RequestParam(value="rech",required=false) String succ) {
+        ModelAndView rt = new ModelAndView("resultat");
+        ResultatPagination rp=this.chansonService.rechercheSimpleChanson(succ, 0, 10);
+        int parpage=rp.getParPage();
+        int nombre=(int)rp.getTailleTotale();
+        int page=nombre/parpage;
+        rt.addObject("page",page);
+        rt.addObject("resultat",this.chansonService.rechercheSimpleChanson(succ, 0, 10));
+        rt.addObject("all",this.chansonService.findChansonsLast(0,10));
+        
+        //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
+        rt.addObject("lien","resultat");
+        return rt;
+    }
+
 }
