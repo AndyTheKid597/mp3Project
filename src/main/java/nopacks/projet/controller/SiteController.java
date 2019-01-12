@@ -114,7 +114,11 @@ public class SiteController {
         md.addObject("playlist", pl);
         md.addObject("idsd", idhira);
         if(rang<pdt.size()-1) md.addObject("suivant",rang+1);
-        if(rang>0) md.addObject("precedebt",rang-1);
+        else md.addObject("suivant", null);
+
+        if(rang>0) md.addObject("precedent",rang-1);
+                else md.addObject("suivant", null);
+        
         md.addObject("lien", "singlepl");
         return md;
     }

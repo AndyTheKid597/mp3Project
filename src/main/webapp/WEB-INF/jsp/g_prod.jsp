@@ -82,7 +82,7 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-9">
                     <div class="ablums-text text-center mb-70">
-                        <p>Chansons contenues dans la playlist</p>
+                        <c:if test="${!empty precedent}"><a href="${pageContext.servletContext.contextPath}/site/singlepl/${idsd}/${precedent}">Precedent</a></c:if><p>  Naviguer dans la playlist  </p><c:if test="${!empty suivant}"><a href="${pageContext.servletContext.contextPath}/site/singlepl/${idsd}/${suivant}"></a></c:if>
                     </div>
                 </div>
             </div>
@@ -210,7 +210,7 @@ var tpp=clientHeight+20;
 var audio = document.getElementById("hirahira");
 //audio.src = 'track2.mp3';
 audio.controls = true;
-audio.loop = true;
+audio.loop = false;
 audio.autoplay = false;
 window.addEventListener("load", initMp3Player, false);
 function initMp3Player(){
@@ -289,6 +289,14 @@ $(window).resize(function(){
     tpp=tpp*(canvas.height/canvas.clientHeight);
   console.log(" rdd "+$("#analyser_render").width());
 });
+
+<c:if test="${!empty suivant}">
+    audio.onended = function() {
+    window.location.href = "${pageContext.servletContext.contextPath}/site/singlepl/${idsd}/${suivant}";
+};
+</c:if>
+
+
     </script>
 </body>
 
