@@ -16,9 +16,11 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
          <task:annotation-driven/>
     <mvc:resources mapping="/admin/assets/**" location="/WEB-INF/assets-back/"/> 
     <mvc:resources mapping="/site/assets/**" location="/WEB-INF/assets-front/"/> 
-    <context:component-scan base-package="nopacks.projet.controller" />
-        
-
+    <mvc:resources mapping="/loginpage/assets/**" location="/WEB-INF/assets-login/"/> 
+    <context:component-scan base-package="nopacks.projet.controller " />
+    
+    
+    
     <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
                 destroy-method="close">
         <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
