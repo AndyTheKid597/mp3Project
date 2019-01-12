@@ -19,10 +19,11 @@ import nopacks.projet.modeles.PlaylistDetails;
  */
 public interface PlaylistService {
     public Playlist createPlaylist(Client ct, String nom);
-    public List<BaseModele> getDetails(Playlist p);
-    public List<BaseModele> findPlaylist(Client ct);
+    public List<PlaylistDetails> getDetails(Playlist p);
+    public List<Playlist> findPlaylist(Client ct);
     public void addChansonToPlaylist(Playlist p, Chanson ct);
     public void deleteDetail(PlaylistDetails pdt);
     public void deletePlaylist(Playlist p);
     public void majPlaylist(Playlist p);
+    public Playlist getPlaylistById(int id);
 }

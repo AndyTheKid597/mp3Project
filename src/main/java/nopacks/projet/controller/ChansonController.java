@@ -286,8 +286,5 @@ public class ChansonController {
         }
     }
     
-    @RequestMapping("/")
-    public String rdr(){
-        return "redirect:/site/index.html";
-    }
+
 }

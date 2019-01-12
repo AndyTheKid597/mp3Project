@@ -64,7 +64,7 @@
                                 <c:if test="${ erreur == '1' }">
                                     <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
                                         <span class="badge badge-pill badge-danger">Erreur</span>
-                                        Identifiants invalides ou privilège pas assez élevé.
+                                        Identifiants invalides .
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">×</span>
                                         </button>

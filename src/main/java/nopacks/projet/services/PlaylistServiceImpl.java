@@ -41,13 +41,13 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public List<BaseModele> getDetails(Playlist p) {
+    public List<PlaylistDetails> getDetails(Playlist p) {
         try {
             Requete rq=new Requete(new PlaylistDetails());
             rq.setCritere(CritereGenerator.eq("idplaylist", p.getId()));
             rq.setOrder(CritereGenerator.desc("id"));
             ResultatPagination rp= this.playlistDAO.findAllPage(rq, 0, -1);
-            return rp.getResultats();
+            return (List<PlaylistDetails>)(Object)rp.getResultats();
         } catch (Exception ex) {
             Logger.getLogger(PlaylistServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
@@ -57,12 +57,12 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public List<BaseModele> findPlaylist(Client ct) {
+    public List<Playlist> findPlaylist(Client ct) {
         try {
             Requete rq=new Requete(new Playlist());
             rq.setCritere(CritereGenerator.eq("idclient", ct.getId()));
             ResultatPagination rp= this.playlistDAO.findAllPage(rq, 0, -1);
-            return rp.getResultats();
+            return (List<Playlist>) (Object)rp.getResultats();
         } catch (Exception ex) {
             Logger.getLogger(PlaylistServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
@@ -70,6 +70,13 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
     }
 
+    @Override
+    public Playlist getPlaylistById(int id){
+        Playlist pl=new Playlist();
+        pl.setId(id);
+        return (Playlist)this.playlistDAO.findById(pl);
+    }
+    
     @Override
     public void addChansonToPlaylist(Playlist p, Chanson ct) {
         PlaylistDetails pdt=new PlaylistDetails();

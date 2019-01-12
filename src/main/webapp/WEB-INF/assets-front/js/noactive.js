@@ -16,7 +16,49 @@
     }
 
     // :: 3.0 Sliders Active Code
-  
+      // :: 3.0 Sliders Active Code
+    if ($.fn.owlCarousel) {
+        var albumSlides = $('.albums-slideshow');
+
+        $("[data-delay]").each(function () {
+            var anim_del = $(this).data('delay');
+            $(this).css('animation-delay', anim_del);
+        });
+
+        $("[data-duration]").each(function () {
+            var anim_dur = $(this).data('duration');
+            $(this).css('animation-duration', anim_dur);
+        });
+        albumSlides.owlCarousel({
+            items: 5,
+            margin: 30,
+            loop: true,
+            nav: true,
+            navText: ['<i class="fa fa-angle-double-left"></i>', '<i class="fa fa-angle-double-right"></i>'],
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            smartSpeed: 750,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                480: {
+                    items: 2
+                },
+                768: {
+                    items: 3
+                },
+                992: {
+                    items: 4
+                },
+                1200: {
+                    items: 5
+                }
+            }
+        });
+    }
+
     // :: 4.0 Masonary Gallery Active Code
     if ($.fn.imagesLoaded) {
         $('.oneMusic-albums').imagesLoaded(function () {

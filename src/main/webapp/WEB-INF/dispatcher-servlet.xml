@@ -40,6 +40,8 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
                 <beans:value>nopacks.projet.modeles.Chanson</beans:value>
                 <beans:value>nopacks.projet.modeles.Config</beans:value>
                 <beans:value>nopacks.projet.modeles.Client</beans:value>
+                <beans:value>nopacks.projet.modeles.Playlist</beans:value>
+                <beans:value>nopacks.projet.modeles.PlaylistDetails</beans:value>
             </beans:list>
         </beans:property>
         <beans:property name="hibernateProperties">
@@ -93,7 +95,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
         <beans:property name="chansonDAO" ref="hibernateDAO"></beans:property>
         <beans:property name="finder" ref="mp3Finder"></beans:property>
     </beans:bean>
-        <beans:bean id="PlaylistServiceHibernate" class="nopacks.projet.services.PlaylistServiceImpl">
+        <beans:bean id="playlistServiceHibernate" class="nopacks.projet.services.PlaylistServiceImpl">
         <beans:property name="playlistDAO" ref="hibernateDAO"></beans:property>
     </beans:bean>
         <beans:bean id="chansonServiceGenerique" class="nopacks.projet.services.ChansonServiceImpl">

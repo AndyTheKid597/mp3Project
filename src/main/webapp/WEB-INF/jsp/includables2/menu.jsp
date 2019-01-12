@@ -27,11 +27,11 @@
                             <div class="classynav">
                                 <ul>
                                     <li><a href="${pageContext.servletContext.contextPath}/site/index.html">Home</a></li>
-                                    <li><a href="#">Albums</a></li>
+                                    <li><a href="${pageContext.servletContext.contextPath}/site/playlist">Playlists</a></li>
                                     <li><a href="#">Pages</a>
                                         <ul class="dropdown">
                                             <li><a href="${pageContext.servletContext.contextPath}/site/index.html">Home</a></li>
-                                            <li><a href="#">Albums</a></li>
+                                            <li><a href="${pageContext.servletContext.contextPath}/site/playlist">Playlists</a></li>
                                             <li><a href="#">Events</a></li>
                                             <li><a href="#">News</a></li>
                                             <li><a href="#">Login</a></li>
@@ -61,7 +61,8 @@
                                 <div class="login-register-cart-button d-flex align-items-center">
                                     <!-- Login/Register -->
                                     <div class="login-register-btn mr-50">
-                                        <a href="#" id="loginBtn">Login / Register</a>
+                                        
+                                        <a href="${pageContext.servletContext.contextPath}/site/${empty(sessionScope.clientObjet) ? "loginclient" : "logout" }" id="loginBtn">${empty(sessionScope.clientObjet) ? "Login" : sessionScope.clientObjet.nom }</a>
                                     </div>
 
                                 </div>
