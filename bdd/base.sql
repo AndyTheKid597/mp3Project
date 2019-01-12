@@ -17,6 +17,7 @@ CREATE TABLE `bibliotheque` (
 `duration` BIGINT DEFAULT 0 ,
 `image` varchar(200),
 `counter` int default 0,
+`pending` boolean not null default false,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 CREATE TABLE `Config`(
@@ -42,5 +43,7 @@ CREATE UNIQUE INDEX login_unique
  ON Client(login);
 CREATE UNIQUE INDEX email_unique
  ON Client(email);
+
+
 
 INSERT INTO CLIENT(nom,login,mdp,email) VALUES('Rakototest','admin','admin','Attention@gmail.com');

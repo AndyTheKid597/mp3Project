@@ -76,16 +76,18 @@ public class HibernateDAO implements InterfaceDAO {
         ResultatPagination rt = new ResultatPagination();
         Session session = this.sessionFactory.openSession();
         Criteria criteria = session.createCriteria(p.getClass());
+                Criteria criteriaCount = session.createCriteria(p.getClass());
+        criteriaCount.setProjection(Projections.rowCount());
+        Long count = (Long) criteriaCount.uniqueResult();
+        rt.setTailleTotale(count);
+        if(parpage==-1) parpage=count.intValue();
         criteria.setFirstResult(page * parpage);
         criteria.setMaxResults(parpage);
         List<BaseModele> respage = criteria.list();
         rt.setResultats(respage);
         rt.setNumPage(page);
         rt.setParPage(parpage);
-        Criteria criteriaCount = session.createCriteria(p.getClass());
-        criteriaCount.setProjection(Projections.rowCount());
-        Long count = (Long) criteriaCount.uniqueResult();
-        rt.setTailleTotale(count);
+
         session.close();
         return rt;
     }
@@ -173,6 +175,7 @@ public class HibernateDAO implements InterfaceDAO {
             }
         }
         long count = ((Long) qrct.uniqueResult()).longValue();
+        if(parpage==-1) parpage=(int)count;
         Query qr = session.createQuery(" from " + nt + where+ od);
         if (conds != null) {
             int t = conds.size();

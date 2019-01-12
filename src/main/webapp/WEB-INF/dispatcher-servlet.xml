@@ -4,20 +4,21 @@
               xmlns:util="http://www.springframework.org/schema/util"
               xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
               xmlns:mvc="http://www.springframework.org/schema/mvc"
+              xmlns:task="http://www.springframework.org/schema/task"
               xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd		
-                http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+                http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
     <mvc:annotation-driven />
     <mvc:resources mapping="/res/**" location="file:E:/mp3/"/>
-         
+         <task:annotation-driven/>
     <mvc:resources mapping="/admin/assets/**" location="/WEB-INF/assets-back/"/> 
     <mvc:resources mapping="/site/assets/**" location="/WEB-INF/assets-front/"/> 
     <context:component-scan base-package="nopacks.projet.controller , nopacks.projet.services" />
-    
-    
-    
+        
+
     <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
                 destroy-method="close">
         <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -100,7 +101,11 @@
     <beans:bean id="clientServiceGenerique" class="nopacks.projet.services.ClientServiceImpl">
         <beans:property name="clientDAO" ref="generiqueDAO"></beans:property>
     </beans:bean>
-	
+    <beans:bean id="fichierListener" class="nopacks.projet.services.WatcherService" scope="singleton">
+         <beans:constructor-arg index="0" type="java.lang.String" value="E:/mp3/" />
+         <beans:property name="chansonService" ref="chansonServiceGenerique"/>
+         </beans:bean>
+        	
     <tx:annotation-driven transaction-manager="transactionManager"/>
 	
     <beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

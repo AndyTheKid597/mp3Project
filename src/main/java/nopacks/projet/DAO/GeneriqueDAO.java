@@ -136,6 +136,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             ResultSet rs2 = ps1.executeQuery("select count(*) from " + n_table);
             rs2.next();
             count = rs2.getInt(1);
+            if(parpage==-1) parpage=count;
             rs2.close();
             ps1.close();
             Statement ps = cx.createStatement();
@@ -515,6 +516,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             ResultSet rs2 = ps1.executeQuery();
             rs2.next();
             count = rs2.getInt(1);
+                        if(parpage==-1) parpage=count;
             rs2.close();
             ps1.close();
             PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where+od+ " limit ? offset ? ");

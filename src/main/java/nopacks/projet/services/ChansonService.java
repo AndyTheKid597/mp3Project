@@ -18,10 +18,12 @@ import nopacks.projet.mp3.mp3Finder;
 public interface ChansonService {
     public ResultatPagination listChansonsPage(int page, int parpage);
     public void addChanson(Chanson p);
+    public Chanson addChanson(String nomFichier);
     public void updateChanson(Chanson p);
     public Chanson findChansonById(int id);
     public List<Chanson> listChansons();
     public void deleteChanson(int id);
+    public void deleteChanson(String nomFichier);
     public void setUploadDir(String upd);
     public String getUploadDir();
     public List<String> findAllMp3InFolder();
@@ -34,4 +36,6 @@ public interface ChansonService {
     public ResultatPagination findChansonsPlusEcoutees(int page, int parpage);
     public ResultatPagination findChansonsLast(int page, int parpage);
     public void counterPlusChanson(Chanson p);
+    public ResultatPagination getChansonsFrais();
+    public void pend(Chanson p);
 }

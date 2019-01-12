@@ -18,6 +18,18 @@ import javax.persistence.Table;
 public class Chanson extends BaseModele{
     private String nomfichier,titre,d_up,d_down,auteur,album,date,commentaire,genre,track,image;
     private Integer counter;
+    private Boolean pending;
+
+    
+    
+    public Boolean getPending() {
+        return pending;
+    }
+
+    public void setPending(Boolean pending) {
+        this.pending = pending;
+    }
+    
 
     public Integer getCounter() {
         return counter;
@@ -37,6 +49,7 @@ public class Chanson extends BaseModele{
     public Chanson(){
         duration=new Long(0);
         counter=new Integer(0);
+        pending=false;
     }
     public String getNomfichier() {
         return nomfichier;

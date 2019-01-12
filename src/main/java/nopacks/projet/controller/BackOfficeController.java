@@ -80,6 +80,21 @@ public class BackOfficeController {
         rt.addObject("lien", "accueil");
         return rt;
     }
+    
+       @RequestMapping("/frais")
+    public ModelAndView Frais(HttpServletRequest req) {
+        if (!testLogged(req) ) {
+            return new ModelAndView("redirect:/admin/login?e=2");
+        }
+
+System.out.println("tonga atreto");
+        ModelAndView rt = new ModelAndView("accueilback");
+        rt.addObject("valiny", this.chansonService.getChansonsFrais());
+        //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
+
+        rt.addObject("lien", "news");
+        return rt;
+    }
 
     @RequestMapping("/accueil/{page}/{parpage}")
     public ModelAndView accueil(HttpServletRequest req, @PathVariable(value = "page") int page, @PathVariable(value = "parpage") int parpage) {

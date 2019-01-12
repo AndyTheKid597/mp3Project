@@ -69,10 +69,12 @@ public class mp3Util {
 
   //      in.close();
   boolean opened=false;
+  System.out.println("opening");
   while(!opened){
       try{
                   baseFileFormat = AudioSystem.getAudioFileFormat(file);
                   opened=true;
+                  System.out.println("opened");
       } catch (Exception ex){
     TimeUnit.SECONDS.sleep(1);
       }

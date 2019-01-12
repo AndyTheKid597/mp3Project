@@ -72,6 +72,7 @@ public class ChansonServiceImpl implements ChansonService {
     @Override
     @Transactional
     public void updateChanson(Chanson p) {
+        p.setPending(false);
         this.chansonDAO.update(p);
     }
 
@@ -323,4 +324,48 @@ public class ChansonServiceImpl implements ChansonService {
           Requete rq=new Requete(new Chanson());
         rq.setOrder(CritereGenerator.desc("id"));
         return this.chansonDAO.findAllPage(rq, page, parpage);  }
+
+    @Override
+    public Chanson addChanson(String nomFichier) {
+        return fromFile(nomFichier);
+    }
+
+    
+    
+    @Override
+    public void pend(Chanson p){
+        p.setPending(true);
+        this.chansonDAO.update(p);
+    }
+    
+    @Override
+    public void deleteChanson(String nomFichier) {
+        try {
+            Requete rq=new Requete(new Chanson());
+            rq.setCritere(CritereGenerator.eq("nomfichier",nomFichier));
+            Chanson tokana=(Chanson)this.chansonDAO.findBy(rq);
+            if(tokana!= null) this.chansonDAO.delete(tokana);
+        } catch (Exception ex) {
+            Logger.getLogger(ChansonServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        }
+    }
+
+    @Override
+    public ResultatPagination getChansonsFrais() {
+
+        try {
+                    Requete rq=new Requete(new Chanson());
+            rq.setCritere(CritereGenerator.eq("pending",true));
+            rq.setOrder(CritereGenerator.desc("id"));
+            ResultatPagination rp=this.chansonDAO.findAllPage(rq, 0, -1);
+            System.out.println("taille resultats "+rp.getResultats().size());
+            return rp;
+        } catch (Exception ex) {
+            Logger.getLogger(ChansonServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+            return null;
+        }
+        
+    }
 }

@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="${lien_assets}/style.css">
 </head>
 
-<body>
+<body style="overflow-x:hidden;">
     <!-- Preloader -->
     <div class="preloader d-flex align-items-center justify-content-center">
         <div class="lds-ellipsis">
