@@ -47,3 +47,24 @@ CREATE UNIQUE INDEX email_unique
 
 
 INSERT INTO CLIENT(nom,login,mdp,email) VALUES('Rakototest','admin','admin','Attention@gmail.com');
+
+CREATE TABLE `playlist`(
+`id` int NOT NULL AUTO_INCREMENT,
+`idclient` int,
+`nom` varchar(60),
+PRIMARY KEY(`id`)
+);
+CREATE UNIQUE INDEX np_unique
+ ON playlist(nom);
+CREATE TABLE `details_pl`(
+`id` int NOT NULL AUTO_INCREMENT,
+`idchanson` int NOT NULL ,
+`idplaylist` int ,
+    FOREIGN KEY (idplaylist)
+        REFERENCES playlist (id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (idchanson)
+        REFERENCES bibliotheque (id)
+        ON DELETE CASCADE,
+PRIMARY KEY(`id`)
+);

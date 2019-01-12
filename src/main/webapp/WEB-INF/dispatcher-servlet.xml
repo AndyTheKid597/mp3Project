@@ -16,7 +16,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
          <task:annotation-driven/>
     <mvc:resources mapping="/admin/assets/**" location="/WEB-INF/assets-back/"/> 
     <mvc:resources mapping="/site/assets/**" location="/WEB-INF/assets-front/"/> 
-    <context:component-scan base-package="nopacks.projet.controller , nopacks.projet.services" />
+    <context:component-scan base-package="nopacks.projet.controller" />
         
 
     <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
@@ -90,6 +90,9 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
     <beans:bean id="chansonServiceHibernate" class="nopacks.projet.services.ChansonServiceImpl">
         <beans:property name="chansonDAO" ref="hibernateDAO"></beans:property>
         <beans:property name="finder" ref="mp3Finder"></beans:property>
+    </beans:bean>
+        <beans:bean id="PlaylistServiceHibernate" class="nopacks.projet.services.PlaylistServiceImpl">
+        <beans:property name="playlistDAO" ref="hibernateDAO"></beans:property>
     </beans:bean>
         <beans:bean id="chansonServiceGenerique" class="nopacks.projet.services.ChansonServiceImpl">
         <beans:property name="chansonDAO" ref="generiqueDAO"></beans:property>
