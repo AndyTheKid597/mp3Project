@@ -14,6 +14,7 @@
          
     <mvc:resources mapping="/admin/assets/**" location="/WEB-INF/assets-back/"/> 
     <mvc:resources mapping="/site/assets/**" location="/WEB-INF/assets-front/"/> 
+    <mvc:resources mapping="/loginpage/assets/**" location="/WEB-INF/assets-login/"/> 
     <context:component-scan base-package="nopacks.projet.controller , nopacks.projet.services" />
     
     
