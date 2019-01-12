@@ -57,7 +57,7 @@
                                   <div class="hero-slides-content text-center">
                                       <h6 data-animation="fadeInUp" data-delay="100ms" style="animation-delay: 100ms;">${hira.auteur}</h6>
                                       <h2 data-animation="fadeInUp" data-delay="300ms" style="animation-delay: 300ms;">${hira.titre}<span>${hira.titre}</span></h2>
-                                      <audio id="hirahira"  style="width:100%;" controls preload="true" src="${pageContext.servletContext.contextPath}/res/${hira.nomfichier}" controls></audio>
+                                      <audio id="hirahira"  style="width:100%;" preload="true" src="${pageContext.servletContext.contextPath}/res/${hira.nomfichier}" controls></audio>
                                     </div>
 
                               </div>
@@ -210,8 +210,13 @@ var tpp=clientHeight+20;
 var audio = document.getElementById("hirahira");
 //audio.src = 'track2.mp3';
 audio.controls = true;
-audio.loop = false;
 audio.autoplay = false;
+<c:if test="${!empty suivant}">
+    audio.onended = function() {
+        alert("vita");
+    window.location.href = "${pageContext.servletContext.contextPath}/site/singlepl/${idsd}/${suivant}";
+};
+</c:if>
 window.addEventListener("load", initMp3Player, false);
 function initMp3Player(){
   context = new AudioContext(); // AudioContext object instance
@@ -290,11 +295,7 @@ $(window).resize(function(){
   console.log(" rdd "+$("#analyser_render").width());
 });
 
-<c:if test="${!empty suivant}">
-    audio.onended = function() {
-    window.location.href = "${pageContext.servletContext.contextPath}/site/singlepl/${idsd}/${suivant}";
-};
-</c:if>
+
 
 
     </script>
