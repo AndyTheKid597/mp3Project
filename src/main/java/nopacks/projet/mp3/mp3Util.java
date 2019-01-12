@@ -10,6 +10,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import org.tritonus.share.sampled.TAudioFormat;
 import org.tritonus.share.sampled.file.TAudioFileFormat;
 
@@ -47,25 +48,36 @@ public class mp3Util {
         System.out.println("trying to open file");
          file = new File(nomfichier);
          System.out.println("fichier ouvert");
-         in = AudioSystem.getAudioInputStream(file);
-         din = null;
-         System.out.println("inputstream azo");
-         baseFormat = in.getFormat();
-         decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
-                baseFormat.getSampleRate(),
-                16,
-                baseFormat.getChannels(),
-                baseFormat.getChannels() * 2,
-                baseFormat.getSampleRate(),
-                false);
-         System.out.println("format azo");
-        din = AudioSystem.getAudioInputStream(decodedFormat, in);
-System.out.println("azo input stream anle audio format");
-// Play now. 
-        rawplay(decodedFormat, din);
+         int sleepTime = 1000; // Sleep 1 second
 
-        in.close();
-        baseFileFormat = AudioSystem.getAudioFileFormat(file);
+//         in = AudioSystem.getAudioInputStream(file);
+         din = null;
+//         System.out.println("inputstream azo");
+ //        baseFormat = in.getFormat();
+  //       decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+   //             baseFormat.getSampleRate(),
+    //            16,
+     //           baseFormat.getChannels(),
+      //          baseFormat.getChannels() * 2,
+       //         baseFormat.getSampleRate(),
+        //        false);
+        // System.out.println("format azo");
+  //      din = AudioSystem.getAudioInputStream(decodedFormat, in);
+//System.out.println("azo input stream anle audio format");
+// Play now. 
+     //   rawplay(decodedFormat, din);
+
+  //      in.close();
+  boolean opened=false;
+  while(!opened){
+      try{
+                  baseFileFormat = AudioSystem.getAudioFileFormat(file);
+                  opened=true;
+      } catch (Exception ex){
+    TimeUnit.SECONDS.sleep(1);
+      }
+}
+
 
     }
 
@@ -216,6 +228,8 @@ System.out.println("azo input stream anle audio format");
         StringBuilder rt= new StringBuilder();
         boolean vol=false;
         rt.append(" [ ");
+        
+        if(vao!=null)
         for(Byte ray : vao){
             if(vol){
                 rt.append(" , ");
@@ -231,6 +245,7 @@ System.out.println("azo input stream anle audio format");
         StringBuilder rt= new StringBuilder();
         boolean vol=false;
         rt.append(" [ ");
+        if(vao2!=null)
         for(Byte ray : vao2){
             if(vol){
                 rt.append(" , ");
