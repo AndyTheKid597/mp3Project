@@ -82,7 +82,7 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-9">
                     <div class="ablums-text text-center mb-70">
-                        <c:if test="${!empty precedent}"><a href="${pageContext.servletContext.contextPath}/site/singlepl/${idsd}/${precedent}">Precedent</a></c:if><p>  Naviguer dans la playlist  </p><c:if test="${!empty suivant}"><a href="${pageContext.servletContext.contextPath}/site/singlepl/${idsd}/${suivant}"></a></c:if>
+                        <c:if test="${!empty precedent}"><a href="${pageContext.servletContext.contextPath}/site/singlepl/${idsd}/${precedent}">Precedent</a></c:if><p>  Naviguer dans la playlist  </p><c:if test="${!empty suivant}"><a href="${pageContext.servletContext.contextPath}/site/singlepl/${idsd}/${suivant}">Suivant</a></c:if>
                     </div>
                 </div>
             </div>
