@@ -210,10 +210,10 @@ var tpp=clientHeight+20;
 var audio = document.getElementById("hirahira");
 //audio.src = 'track2.mp3';
 audio.controls = true;
-audio.autoplay = false;
+audio.autoplay = true;
 <c:if test="${!empty suivant}">
     audio.onended = function() {
-        alert("vita");
+     //   alert("vita");
     window.location.href = "${pageContext.servletContext.contextPath}/site/singlepl/${idsd}/${suivant}";
 };
 </c:if>
