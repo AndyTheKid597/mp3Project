@@ -57,7 +57,7 @@
                                   <div class="hero-slides-content text-center">
                                       <h6 data-animation="fadeInUp" data-delay="100ms" style="animation-delay: 100ms;">${hira.auteur}</h6>
                                       <h2 data-animation="fadeInUp" data-delay="300ms" style="animation-delay: 300ms;">${hira.titre}<span>${hira.titre}</span></h2>
-                                      <audio id="hirahira"  style="width:100%;" preload="true" src="${pageContext.servletContext.contextPath}/res/${hira.nomfichier}" controls></audio>
+                                      <audio id="hirahira"  style="width:100%;" preload="true" src="${pageContext.servletContext.contextPath}/res/${hira.nomfichier}" controls type="audio/mpeg"></audio>
                                     </div>
 
                               </div>

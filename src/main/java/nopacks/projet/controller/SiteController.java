@@ -91,7 +91,11 @@ public class SiteController {
         ModelAndView md = new ModelAndView("f_prod");
         Chanson hira = this.chansonService.findChansonById(idhira);
         this.chansonService.counterPlusChanson(hira);
+        ResultatPagination rp1=this.chansonService.rechercheSimpleChanson(hira.getAuteur(), 0, 5);
+        ResultatPagination rp2=this.chansonService.rechercheSimpleChanson(hira.getGenre(), 0, 5);
         md.addObject("hira", hira);
+        md.addObject("memeAuteur",rp1);
+        md.addObject("memeGenre",rp2);
         md.addObject("lien", "single");
         return md;
     }

@@ -57,7 +57,7 @@
                                   <div class="hero-slides-content text-center">
                                       <h6 data-animation="fadeInUp" data-delay="100ms" style="animation-delay: 100ms;">${hira.auteur}</h6>
                                       <h2 data-animation="fadeInUp" data-delay="300ms" style="animation-delay: 300ms;">${hira.titre}<span>${hira.titre}</span></h2>
-                                      <audio id="hirahira"  style="width:100%;" controls preload="true" src="${pageContext.servletContext.contextPath}/res/${hira.nomfichier}" controls></audio>
+                                      <audio id="hirahira"  style="width:100%;" controls preload="true" src="${pageContext.servletContext.contextPath}/res/${hira.nomfichier}" controls type="audio/mpeg"></audio>
                                     </div>
 
                               </div>
@@ -69,6 +69,90 @@
     </section>
     <!-- ##### Hero Area End ##### -->
 
+            <!-- ##### Latest Albums Area Start ##### -->
+            <c:if test="${!empty(memeAuteur.resultats)}">
+    <section class="latest-albums-area section-padding-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading style-2">
+                        <h2></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-9">
+                    <div class="ablums-text text-center mb-70">
+                        <p>  Du meme auteur:</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="albums-slideshow owl-carousel">
+                        <!-- Single Album -->
+                        <c:forEach items="${memeAuteur.resultats}" var="sg" varStatus="loop">
+                        <div class="single-album">
+                            <img src="${pageContext.servletContext.contextPath}/res/${sg.image}" alt="">
+                            <div class="album-info">
+                                <a href="${pageContext.servletContext.contextPath}/site/single/${sg.id}">
+                                    <h5>${sg.titre}</h5>
+                                </a>
+                                <p>${sg.auteur}</p>
+                            </div>
+                        </div>
+                        </c:forEach>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### Latest Albums Area End ##### -->
+    </c:if>
+    
+     <!-- ##### Latest Albums Area Start ##### -->
+            <c:if test="${!empty(memeGenre.resultats)}">
+    <section class="latest-albums-area section-padding-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading style-2">
+                        <h2></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-9">
+                    <div class="ablums-text text-center mb-70">
+                        <p>  Recherches associées:</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="albums-slideshow owl-carousel">
+                        <!-- Single Album -->
+                        <c:forEach items="${memeGenre.resultats}" var="sg" varStatus="loop">
+                        <div class="single-album">
+                            <img src="${pageContext.servletContext.contextPath}/res/${sg.image}" alt="">
+                            <div class="album-info">
+                                <a href="${pageContext.servletContext.contextPath}/site/single/${sg.id}">
+                                    <h5>${sg.titre}</h5>
+                                </a>
+                                <p>${sg.auteur}</p>
+                            </div>
+                        </div>
+                        </c:forEach>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### Latest Albums Area End ##### -->
+    </c:if>
+    
         <!-- ##### Footer Area Start ##### -->
     <footer class="footer-area">
         <div class="container">
