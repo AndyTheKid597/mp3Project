@@ -5,16 +5,20 @@
  */
 package nopacks.projet.controller;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import nopacks.projet.modeles.BaseModele;
 import nopacks.projet.modeles.Chanson;
 import nopacks.projet.modeles.Client;
 import nopacks.projet.modeles.ResultatPagination;
 import nopacks.projet.modeles.Playlist;
 import nopacks.projet.modeles.PlaylistDetails;
+import nopacks.projet.mp3.MultipartFileSender;
 import nopacks.projet.services.ChansonService;
 import nopacks.projet.services.ClientService;
 import nopacks.projet.services.PlaylistService;
@@ -100,6 +104,17 @@ public class SiteController {
         return md;
     }
 
+     @RequestMapping(value="/mp3/{nom}", method = RequestMethod.GET)
+    public void getMp3(@PathVariable(value="nom") String nf, HttpServletRequest request, HttpServletResponse response) throws Exception {
+         System.out.println("Download du fichier "+ nf);
+
+            MultipartFileSender.fromPath((new File(this.chansonService.getUploadDir()+nf+".mp3").toPath()))
+                    .with(request)
+                    .with(response)
+                .serveResource();
+
+    }
+    
     @RequestMapping("/singlepl/{id}/{rang}")
     public ModelAndView anakraypl(@PathVariable(value = "id") int idhira, @PathVariable(value = "rang") int rang, HttpServletRequest req) {
         ModelAndView md = new ModelAndView("g_prod");
