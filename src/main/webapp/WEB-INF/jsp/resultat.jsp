@@ -46,7 +46,7 @@
             <div class="row">
 
                 <!-- Single Event Area -->
-                <c:forEach items="${all.resultats}" var="sg">
+                <c:forEach items="${resultat.resultats}" var="sg">
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="single-event-area mb-30">
                         <div class="event-thumbnail">

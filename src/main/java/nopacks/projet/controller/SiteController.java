@@ -158,24 +158,37 @@ public class SiteController {
     }
     
     @RequestMapping("/resultat")
-    public ModelAndView rech(@RequestParam(value = "rech", required = false) String succ, HttpServletRequest req) {
+    public ModelAndView rech(@RequestParam(value = "rech", required = false) String succ,@RequestParam(value = "page", required = false) String pejy, HttpServletRequest req) {
+        int pj=0;
+        try{
+            pj=Integer.parseInt(pejy);
+        }
+        catch(Exception ex){
+            System.out.println(" "+ex.getMessage()+"---------"+ex.getStackTrace());
+        }
         ModelAndView rt = new ModelAndView("resultat");
-        ResultatPagination rp = this.chansonService.rechercheSimpleChanson(succ, 0, 10);
+        ResultatPagination rp = this.chansonService.rechercheSimpleChanson(succ, pj, 10);
         int parpage = rp.getParPage();
         int nombre = (int) rp.getTailleTotale();
         int page = nombre / parpage;
         rt.addObject("page", page);
-        rt.addObject("resultat", this.chansonService.rechercheSimpleChanson(succ, 0, 10));
-        rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
-
+        rt.addObject("resultat", this.chansonService.rechercheSimpleChanson(succ, pj, 10));
+        //rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("lien", "resultat");
         return rt;
     }
-    @RequestMapping("/resultatadvanaced")
-    public ModelAndView rechercheadvanced(@RequestParam(value = "titre", required = false) String titre,@RequestParam(value = "nomfichier", required = false) String nomfichier,@RequestParam(value = "commentaire", required = false) String commentaire,@RequestParam(value = "genre", required = false) String genre,@RequestParam(value = "auteur", required = false) String auteur,@RequestParam(value = "album", required = false) String album,@RequestParam(value = "date", required = false) String date, HttpServletRequest req) {
+    @RequestMapping("/resultatadvanced")
+    public ModelAndView rechercheadvanced(@RequestParam(value = "titre", required = false) String titre,@RequestParam(value = "nomfichier", required = false) String nomfichier,@RequestParam(value = "commentaire", required = false) String commentaire,@RequestParam(value = "genre", required = false) String genre,@RequestParam(value = "auteur", required = false) String auteur,@RequestParam(value = "album", required = false) String album,@RequestParam(value = "date", required = false) String date,@RequestParam(value = "page", required = false) String pejy, HttpServletRequest req) {
+        int pj=0;
+        try{
+            pj=Integer.parseInt(pejy);
+        }
+        catch(Exception ex){
+            System.out.println(" "+ex.getMessage()+"---------"+ex.getStackTrace());
+        }
         ModelAndView rt = new ModelAndView("resultat");
-        ResultatPagination rp = this.chansonService.rechercheAdvanced(nomfichier, titre, commentaire, genre, auteur, album, date,0,20);
+        ResultatPagination rp = this.chansonService.rechercheAdvanced(nomfichier, titre, commentaire, genre, auteur, album, date,pj,20);
         int parpage = rp.getParPage();
         if(parpage==0){
             parpage=1;
@@ -183,9 +196,8 @@ public class SiteController {
         int nombre = (int) rp.getTailleTotale();
         int page = nombre / parpage;
         rt.addObject("page", page);
-        rt.addObject("resultat", this.chansonService.rechercheAdvanced(nomfichier, titre, commentaire, genre, auteur, album, date, 0, 20));
-        rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
-
+        rt.addObject("resultat", this.chansonService.rechercheAdvanced(nomfichier, titre, commentaire, genre, auteur, album, date, pj, 20));
+        //rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("lien", "resultat");
         return rt;
@@ -213,4 +225,5 @@ public class SiteController {
             return "redirect:/site/index.html";
         }
     }
+    
 }
