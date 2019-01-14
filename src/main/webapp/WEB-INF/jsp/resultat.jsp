@@ -39,6 +39,14 @@
            </jsp:include>
     <!-- ##### Header Area End ##### -->
 
+    <!-- ##### Hero Area Start ##### -->
+    <section class="hero-area">
+        <div class="hero-slides owl-carousel">
+            <!-- Single Hero Slide -->
+        </div>
+    </section>
+    <!-- ##### Hero Area End ##### -->
+
     <!-- ##### Latest Albums Area End ##### -->
 <!-- ##### Events Area Start ##### -->
     <section class="events-area section-padding-100">
@@ -53,11 +61,11 @@
                             <img src="${lien_assets}/img/bg-img/a1.jpg" alt="">
                         </div>
                         <div class="event-text">
-                            <h4>${sg.titre}</h4>
+                            <h4>${sg.auteur}</h4>
                             
                             <div class="event-meta-data">
                             </div>
-                            <a href="${pageContext.servletContext.contextPath}/site/single/${sg.id}" class="btn see-more-btn">${sg.auteur}</a>
+                            <a href="${pageContext.servletContext.contextPath}/site/single/${sg.id}" class="btn see-more-btn">${sg.titre}</a>
                         </div>
                     </div>
                 </div>

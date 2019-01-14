@@ -69,4 +69,4 @@ CREATE TABLE `details_pl`(
         ON DELETE CASCADE,
 PRIMARY KEY(`id`)
 );
-select count(*) as col_0_0_ from bibliotheque chanson0_ where chanson0_.nomfichier like ? or chanson0_.titre like ? or chanson0_.commentaire like ? or chanson0_.genre like ? or chanson0_.auteur like ? or chanson0_.album like ? or chanson0_.date like ?
+select count(*) as col_0_0_ from bibliotheque chanson0_ where chanson0_.nomfichier like '%under again%' or chanson0_.titre like '%under again%' or chanson0_.commentaire like '%under again%' or chanson0_.genre like '%under again%' or chanson0_.auteur like '%under again%' or chanson0_.album like '%under again%' or chanson0_.date like '%under again%'

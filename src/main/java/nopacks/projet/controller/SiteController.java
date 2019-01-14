@@ -186,6 +186,7 @@ public class SiteController {
         }
         catch(Exception ex){
             System.out.println(" "+ex.getMessage()+"---------"+ex.getStackTrace());
+            pj=0;
         }
         ModelAndView rt = new ModelAndView("resultat");
         ResultatPagination rp = this.chansonService.rechercheAdvanced(nomfichier, titre, commentaire, genre, auteur, album, date,pj,20);
@@ -197,7 +198,7 @@ public class SiteController {
         int page = nombre / parpage;
         rt.addObject("page", page);
         rt.addObject("resultat", this.chansonService.rechercheAdvanced(nomfichier, titre, commentaire, genre, auteur, album, date, pj, 20));
-        //rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
+        rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("lien", "resultat");
         return rt;
