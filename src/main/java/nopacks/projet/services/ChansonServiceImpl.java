@@ -307,6 +307,38 @@ public class ChansonServiceImpl implements ChansonService {
         }
     }
     @Override
+    public ResultatPagination rechercheAdvanced(String nomfichier,String titre,String commentaire,String genre,String auteur,String album,String date, int page, int parpage) {
+        try {
+            Requete rq = new Requete(new Chanson());
+            rq.setCritere(
+                    CritereGenerator.and(
+                            CritereGenerator.and(
+                                    CritereGenerator.like("nomfichier", nomfichier),
+                                    CritereGenerator.like("titre", titre)
+                            ),
+                            CritereGenerator.and(
+                                    CritereGenerator.and(
+                                            CritereGenerator.like("commentaire", commentaire),
+                                            CritereGenerator.like("genre", genre)
+                                    ),
+                                    CritereGenerator.and(
+                                            CritereGenerator.like("auteur", auteur),
+                                            CritereGenerator.and(
+                                                    CritereGenerator.like("album", album),
+                                                    CritereGenerator.like("date", date)
+                                            )
+                                    )
+                            )
+                    )
+            );
+            return this.chansonDAO.findAllPage(rq, page, parpage);
+        } catch (Exception ex) {
+            Logger.getLogger(ChansonServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+    @Override
     public ResultatPagination findChansonsPlusEcoutees(int page, int parpage){
         Requete rq=new Requete(new Chanson());
         rq.setOrder(CritereGenerator.desc("counter"));

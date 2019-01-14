@@ -172,6 +172,24 @@ public class SiteController {
         rt.addObject("lien", "resultat");
         return rt;
     }
+    @RequestMapping("/resultatadvanaced")
+    public ModelAndView rechercheadvanced(@RequestParam(value = "titre", required = false) String titre,@RequestParam(value = "nomfichier", required = false) String nomfichier,@RequestParam(value = "commentaire", required = false) String commentaire,@RequestParam(value = "genre", required = false) String genre,@RequestParam(value = "auteur", required = false) String auteur,@RequestParam(value = "album", required = false) String album,@RequestParam(value = "date", required = false) String date, HttpServletRequest req) {
+        ModelAndView rt = new ModelAndView("resultat");
+        ResultatPagination rp = this.chansonService.rechercheAdvanced(nomfichier, titre, commentaire, genre, auteur, album, date,0,20);
+        int parpage = rp.getParPage();
+        if(parpage==0){
+            parpage=1;
+        }
+        int nombre = (int) rp.getTailleTotale();
+        int page = nombre / parpage;
+        rt.addObject("page", page);
+        rt.addObject("resultat", this.chansonService.rechercheAdvanced(nomfichier, titre, commentaire, genre, auteur, album, date, 0, 20));
+        rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
+
+        //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
+        rt.addObject("lien", "resultat");
+        return rt;
+    }
 
     @RequestMapping(value = "/loginclient")
     public ModelAndView loginAccueil(@RequestParam(value = "e", required = false) String err) {
