@@ -99,7 +99,7 @@
                                 <p>${sg.auteur}</p>
                             </div>
                         </div>
-                            </c:forEach>
+                        </c:forEach>
 
                     </div>
                 </div>

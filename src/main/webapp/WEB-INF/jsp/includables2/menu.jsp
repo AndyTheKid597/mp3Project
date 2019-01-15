@@ -2,7 +2,7 @@
 <header class="header-area" id="header">
         <!-- Navbar Area -->
         <div class="oneMusic-main-menu">
-            <div class="classy-nav-container breakpoint-off">
+            <div class="classy-nav-container breakpoint-off" style="background-color: black;">
                 <div class="container">
                     <!-- Menu -->
                     <nav class="classy-navbar justify-content-between" id="oneMusicNav">
@@ -25,6 +25,9 @@
 
                             <!-- Nav Start -->
                             <div class="classynav">
+                                <form action="${pageContext.servletContext.contextPath}/site/resultat" method="get" class="form-inline ">
+                                        <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" aria-label="Search" name="rech">
+                                </form>
                                 <ul>
                                     <li><a href="${pageContext.servletContext.contextPath}/site/index.html">Home</a></li>
                                     <li><a href="${pageContext.servletContext.contextPath}/site/playlist">Playlists</a></li>
@@ -32,7 +35,7 @@
                                         <ul class="dropdown">
                                             <li><a href="${pageContext.servletContext.contextPath}/site/index.html">Home</a></li>
                                             <li><a href="${pageContext.servletContext.contextPath}/site/playlist">Playlists</a></li>
-                                            <li><a href="#">Events</a></li>
+                                            <li><a href="${pageContext.servletContext.contextPath}/site/goAdvanced">Advanced search</a></li>
                                             <li><a href="#">News</a></li>
                                             <li><a href="#">Login</a></li>
                                             <li><a href="#">Dropdown</a>

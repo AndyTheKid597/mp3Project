@@ -28,6 +28,7 @@ PRIMARY KEY(`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX cle_unique
  ON Config(cle);
+alter table bibliotheque add column `pending` boolean not null default false;
 
 CREATE TABLE `Client`(
 `id` int NOT NULL AUTO_INCREMENT,
@@ -68,3 +69,4 @@ CREATE TABLE `details_pl`(
         ON DELETE CASCADE,
 PRIMARY KEY(`id`)
 );
+select count(*) as col_0_0_ from bibliotheque chanson0_ where chanson0_.nomfichier like '%under again%' or chanson0_.titre like '%under again%' or chanson0_.commentaire like '%under again%' or chanson0_.genre like '%under again%' or chanson0_.auteur like '%under again%' or chanson0_.album like '%under again%' or chanson0_.date like '%under again%'
