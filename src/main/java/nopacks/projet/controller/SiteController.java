@@ -203,6 +203,11 @@ public class SiteController {
         rt.addObject("lien", "resultat");
         return rt;
     }
+    @RequestMapping("/goAdvanced")
+    public ModelAndView goAdvanced(HttpServletRequest req) {
+        ModelAndView rt = new ModelAndView("advancedsearch");
+        return rt;
+    }
 
     @RequestMapping(value = "/loginclient")
     public ModelAndView loginAccueil(@RequestParam(value = "e", required = false) String err) {
