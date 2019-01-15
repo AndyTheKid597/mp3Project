@@ -48,6 +48,19 @@
     <section class="events-area section-padding-100">
         <div class="container">
             <div class="row">
+                <div class="col-12">
+                    <div class="browse-by-catagories catagory-menu d-flex flex-wrap align-items-center mb-70">
+                        <c:if test="${resultat.isHasPrevious()}">
+                        <a href="${pageContext.servletContext.contextPath}${url}&page=" data-filter=".b" class="active"><</a>
+                        </c:if>
+                        <c:if test="${resultat.isHasNext()}">
+                        <a href="${pageContext.servletContext.contextPath}${url}&page=${resultat.getNext()}" data-filter=".c" class="active">></a>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
 
                 <!-- Single Event Area -->
                 <c:forEach items="${resultat.resultats}" var="sg">

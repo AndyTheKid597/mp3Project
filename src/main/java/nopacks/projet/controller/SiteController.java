@@ -160,6 +160,7 @@ public class SiteController {
     @RequestMapping("/resultat")
     public ModelAndView rech(@RequestParam(value = "rech", required = false) String succ,@RequestParam(value = "page", required = false) String pejy, HttpServletRequest req) {
         int pj=0;
+        String query="/site/resultat?rech="+succ;
         try{
             pj=Integer.parseInt(pejy);
         }
@@ -175,12 +176,14 @@ public class SiteController {
         rt.addObject("resultat", this.chansonService.rechercheSimpleChanson(succ, pj, 10));
         //rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
+        rt.addObject("url", query);
         rt.addObject("lien", "resultat");
         return rt;
     }
     @RequestMapping("/resultatadvanced")
     public ModelAndView rechercheadvanced(@RequestParam(value = "titre", required = false) String titre,@RequestParam(value = "nomfichier", required = false) String nomfichier,@RequestParam(value = "commentaire", required = false) String commentaire,@RequestParam(value = "genre", required = false) String genre,@RequestParam(value = "auteur", required = false) String auteur,@RequestParam(value = "album", required = false) String album,@RequestParam(value = "date", required = false) String date,@RequestParam(value = "page", required = false) String pejy, HttpServletRequest req) {
         int pj=0;
+        String query="/site/resultatadvanced?titre="+titre+"&nomfichier="+nomfichier+"&commentaire="+commentaire+"&genre="+genre+"&auteur="+auteur+"&album="+album+"&date=";
         try{
             pj=Integer.parseInt(pejy);
         }
@@ -201,6 +204,7 @@ public class SiteController {
         rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("lien", "resultat");
+        rt.addObject("url", query);
         return rt;
     }
     @RequestMapping("/goAdvanced")
