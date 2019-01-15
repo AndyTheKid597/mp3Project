@@ -110,7 +110,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
     </beans:bean>
     <beans:bean id="fichierListener" class="nopacks.projet.services.WatcherService" scope="singleton">
          <beans:constructor-arg index="0" type="java.lang.String" value="E:/mp3/" />
-         <beans:property name="chansonService" ref="chansonServiceGenerique"/>
+         <beans:property name="chansonService" ref="chansonServiceHibernate"/>
          </beans:bean>
         	
     <tx:annotation-driven transaction-manager="transactionManager"/>

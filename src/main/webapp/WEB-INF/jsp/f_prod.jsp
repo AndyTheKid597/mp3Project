@@ -55,7 +55,7 @@
                           <div class="row">
                               <div class="col-12" style="padding-left:0;">
                                   <div class="hero-slides-content text-center">
-                                      <h6 data-animation="fadeInUp" data-delay="100ms" style="animation-delay: 100ms;">${hira.auteur}</h6>
+                                      <h6 id="auteurdiv" data-animation="fadeInUp" data-delay="100ms" style="animation-delay: 100ms;">${hira.auteur}</h6>
                                       <h2 data-animation="fadeInUp" data-delay="300ms" style="animation-delay: 300ms;">${hira.titre}<span>${hira.titre}</span></h2>
                                       <audio id="hirahira"  style="width:100%;" controls preload="true" src="${pageContext.servletContext.contextPath}/site/mp3/${hira.nomfichier}" controls type="audio/mpeg"></audio>
                                     </div>
@@ -304,7 +304,7 @@ function frameLooper(){
   for (var i = 0; i < 120; i++) {
     avg+=fbc_array[i];
   }
-  avg=avg/(120*400);
+  avg=avg/(120*600);
   //	console.log(avg);
   ctx.fillStyle = "rgba("+crgb[0]+", "+crgb[1]+", "+crgb[2]+", " + avg + ")";
   ctx.fillRect(0,canvas.height,canvas.width,-canvas.height,1.5);

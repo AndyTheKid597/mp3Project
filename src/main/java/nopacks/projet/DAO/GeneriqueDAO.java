@@ -68,7 +68,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             String ctrqt = "(" + liste[0] + ")";
             String interrogation = "(" + liste[1] + ")";
             rqt = rqt + ctrqt + " values " + interrogation;
-            System.out.println(rqt);
+            //System.out.println(rqt);
             PreparedStatement ps = ct.prepareStatement(rqt);
             int i = 1;
             for (String[] att : attribs) {
@@ -78,7 +78,7 @@ public class GeneriqueDAO implements InterfaceDAO {
                 ps.setObject(i, this.callGetter(p, att[0]));
                 i++;
             }
-            System.out.println(ps);
+            //System.out.println(ps);
             // ps.executeUpdate();
             ps.executeUpdate();
         } catch (Exception ex) {
@@ -91,11 +91,11 @@ public class GeneriqueDAO implements InterfaceDAO {
     @PostConstruct
     public void testatge(){
         HashMap<String,HashMap<String,String>> config=this.cacher.getcf();
-        System.out.println("postiniiiiiiittt");
-        System.out.println(config.size());
+        //System.out.println("postiniiiiiiittt");
+        //System.out.println(config.size());
         String ind=config.keySet().iterator().next();
-        System.out.println(ind);
-        System.out.println(config.get(ind).get("duree"));
+        //System.out.println(ind);
+        //System.out.println(config.get(ind).get("duree"));
     }
     
     @Override
@@ -123,15 +123,15 @@ public class GeneriqueDAO implements InterfaceDAO {
         Connection cx = null;
         int count = 0;
         try {
-            //System.out.println("findAll ");
-            //System.out.println();
-            //System.out.println();
-            //System.out.println();
+            ////System.out.println("findAll ");
+            ////System.out.println();
+            ////System.out.println();
+            ////System.out.println();
             cx = connexion.getConnection();
             String n_table = getNomTable(p);
             ArrayList<String[]> attr = this.getAttributsBaseModele(p);
-            //System.out.println(attr.size());
-            //System.out.println("select * from "+n_table);
+            ////System.out.println(attr.size());
+            ////System.out.println("select * from "+n_table);
             Statement ps1 = cx.createStatement();
             ResultSet rs2 = ps1.executeQuery("select count(*) from " + n_table);
             rs2.next();
@@ -144,7 +144,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             ResultSet rs = ps.executeQuery("select * from " + n_table + " limit " + parpage + " offset " + (page * parpage));
             rt = new ArrayList<BaseModele>();
             while (rs.next()) {
-                //System.out.println(" next ");
+                ////System.out.println(" next ");
                 rt.add(rsToObject(p, rs, attr));
             }
             rs.close();
@@ -160,10 +160,10 @@ public class GeneriqueDAO implements InterfaceDAO {
             } catch (Exception ex) {
 
             }
-            //System.out.println();
-            //System.out.println();
-            //System.out.println();
-            //System.out.println("fin find");
+            ////System.out.println();
+            ////System.out.println();
+            ////System.out.println();
+            ////System.out.println("fin find");
             rp.setResultats(rt);
             rp.setNumPage(page);
             rp.setParPage(parpage);
@@ -196,8 +196,8 @@ public class GeneriqueDAO implements InterfaceDAO {
             }
             String st = setena.toString();
             rqt = rqt + st + where;
-            System.out.println("update request");
-            System.out.println(rqt);
+            //System.out.println("update request");
+            //System.out.println(rqt);
             PreparedStatement ps = ct.prepareStatement(rqt);
             int i = 1;
             for (String[] att : attribs) {
@@ -207,7 +207,7 @@ public class GeneriqueDAO implements InterfaceDAO {
                 ps.setObject(i, cv.get(att[0]));
                 i++;
             }
-            System.out.println(ps);
+            //System.out.println(ps);
             //ps.executeUpdate();
             ps.executeUpdate();
         } catch (Exception ex) {
@@ -233,20 +233,20 @@ public class GeneriqueDAO implements InterfaceDAO {
         List<BaseModele> rt = null;
         Connection cx = null;
         try {
-            //System.out.println("findAll ");
-            //System.out.println();
-            //System.out.println();
-            //System.out.println();
+            ////System.out.println("findAll ");
+            ////System.out.println();
+            ////System.out.println();
+            ////System.out.println();
             cx = connexion.getConnection();
             String n_table = getNomTable(p);
             ArrayList<String[]> attr = this.getAttributsBaseModele(p);
-            //System.out.println(attr.size());
-            //System.out.println("select * from "+n_table);
+            ////System.out.println(attr.size());
+            ////System.out.println("select * from "+n_table);
             Statement ps = cx.createStatement();
             ResultSet rs = ps.executeQuery("select * from " + n_table);
             rt = new ArrayList<BaseModele>();
             while (rs.next()) {
-                //System.out.println(" next ");
+                ////System.out.println(" next ");
                 rt.add(rsToObject(p, rs, attr));
             }
             rs.close();
@@ -262,28 +262,28 @@ public class GeneriqueDAO implements InterfaceDAO {
             } catch (Exception ex) {
 
             }
-            //System.out.println();
-            //System.out.println();
-            //System.out.println();
-            //System.out.println("fin find");
+            ////System.out.println();
+            ////System.out.println();
+            ////System.out.println();
+            ////System.out.println("fin find");
             return rt;
         }
     }
 
     private BaseModele rsToObject(BaseModele p, ResultSet rs, ArrayList<String[]> attribs) throws Exception {
         BaseModele rt = p.getClass().newInstance();
-        System.out.println(attribs.size());
+        //System.out.println(attribs.size());
         for (String[] ray : attribs) {
-            System.out.println(ray[1]);
+            //System.out.println(ray[1]);
             Object averiny = rs.getObject(ray[1]);
             if (averiny == null) {
                 continue;
             }
-            System.out.println(ray[1]+" "+averiny);
+            //System.out.println(ray[1]+" "+averiny);
             callSetter(rt, ray[0], averiny);
-            System.out.println(" manaraka amzay ");
+            //System.out.println(" manaraka amzay ");
         }
-        System.out.println("on retourne");
+        //System.out.println("on retourne");
         return rt;
     }
 
@@ -303,17 +303,17 @@ public class GeneriqueDAO implements InterfaceDAO {
             List<BaseModele> liste = findAll(testchan);
             for (BaseModele bm : liste) {
                 Chanson tpchan = ((Chanson) bm);
-                System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
+                //System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
             }
             Requete rq = new Requete(testchan);
             rq.setCritere(CritereGenerator.or(CritereGenerator.like("nomfichier", "a"), CritereGenerator.gteq("id", new Integer(5))));
-            System.out.println(rq.contenu());
-            System.out.println(rq.where());
+            //System.out.println(rq.contenu());
+            //System.out.println(rq.where());
            ResultatPagination liste2 = this.findAllPage(rq, 0, 10);
-           System.out.println("tonga farany");
+           //System.out.println("tonga farany");
                       for (BaseModele bm : liste2.getResultats()) {
                 Chanson tpchan = ((Chanson) bm);
-                System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
+                //System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
             }
             // this.update(testchan);
             // this.save(liste.get(0)); //efa mandeha
@@ -376,8 +376,8 @@ public class GeneriqueDAO implements InterfaceDAO {
     private HashMap<String, Object> getColAndVal(BaseModele cible, ArrayList<String[]> attributs) throws Exception {
         HashMap<String, Object> rt = new HashMap<>();
         for (String[] att : attributs) {
-            System.out.println(cible);
-            System.out.println(att[0]);
+            //System.out.println(cible);
+            //System.out.println(att[0]);
             rt.put(att[1], callGetter(cible, att[0]));
         }
         return rt;
@@ -397,7 +397,7 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     private Object callGetter(Object cible, String attribut) throws Exception {
         Method antsoina = getGetter(cible, attribut);
-        System.out.println(antsoina);
+        //System.out.println(antsoina);
         return antsoina.invoke(cible, null);
     }
 
@@ -405,28 +405,28 @@ public class GeneriqueDAO implements InterfaceDAO {
         try {
             Method antsoina = getSetter(cible, attribut);
             Class rttype = antsoina.getParameterTypes()[0];
-            System.out.println("rttype "+rttype);
-            System.out.println("izy "+arg.getClass());
+            //System.out.println("rttype "+rttype);
+            //System.out.println("izy "+arg.getClass());
             if(arg.getClass()==Long.class && rttype==Integer.class){
                 arg= new Integer(((Long)arg).intValue());
-                System.out.println("vocatst "+arg.getClass());
+                //System.out.println("vocatst "+arg.getClass());
             }
-            //System.out.println(arg.getClass());
-            //System.out.println(rttype);
-            //System.out.println(antsoina);
+            ////System.out.println(arg.getClass());
+            ////System.out.println(rttype);
+            ////System.out.println(antsoina);
 //            if (rttype == Integer.TYPE) {
 //
 //                if (arg.getClass() == Integer.class) {
-//                    //System.out.println("niditra teto");
+//                    ////System.out.println("niditra teto");
 //                    antsoina.invoke(cible, ((Integer) arg).intValue());
 //                } else if (arg.getClass() == Float.class) {
-//                    //System.out.println("niditra teto");
+//                    ////System.out.println("niditra teto");
 //                    antsoina.invoke(cible, ((Float) arg).intValue());
 //                } else if (arg.getClass() == Double.class) {
-//                    //System.out.println("niditra teto");
+//                    ////System.out.println("niditra teto");
 //                    antsoina.invoke(cible, ((Double) arg).intValue());
 //                } else if (arg.getClass() == Long.class) {
-//                    //System.out.println("niditra teto");
+//                    ////System.out.println("niditra teto");
 //                    antsoina.invoke(cible, ((Long) arg).intValue());
 //                } else {
 //                    antsoina.invoke(cible, ((Integer) arg).intValue());
@@ -434,9 +434,9 @@ public class GeneriqueDAO implements InterfaceDAO {
 //            } else {
             antsoina.invoke(cible, arg);
             //           }
-            //System.out.println("tody");
+            ////System.out.println("tody");
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            //System.out.println(ex.getMessage());
             throw (ex);
         }
     }
@@ -478,10 +478,10 @@ public class GeneriqueDAO implements InterfaceDAO {
         Connection cx = null;
         int count = 0;
         try {
-            //System.out.println("findAll ");
-            //System.out.println();
-            //System.out.println();
-            //System.out.println();
+            ////System.out.println("findAll ");
+            ////System.out.println();
+            ////System.out.println();
+            ////System.out.println();
             cx = connexion.getConnection();
             String n_table = getNomTable(p);
             //String whcon=rq.where();
@@ -497,8 +497,8 @@ public class GeneriqueDAO implements InterfaceDAO {
           //  if(whcon!=null) where= where+rq.where();
          //   else where="";
                         ArrayList<String[]> attr = this.getAttributsBaseModele(p);
-            //System.out.println(attr.size());
-            //System.out.println("select * from "+n_table);
+            ////System.out.println(attr.size());
+            ////System.out.println("select * from "+n_table);
             PreparedStatement ps1 = cx.prepareStatement("select count(*) from " + n_table+where);
             ArrayList<Object> conds=null;
             int t=0;
@@ -506,10 +506,10 @@ public class GeneriqueDAO implements InterfaceDAO {
              conds=rq.mifanaraka();
             t=conds.size();
 
-             System.out.println("select count(*) from " + n_table+where+od);
+             //System.out.println("select count(*) from " + n_table+where+od);
              
             for(int i=0;i<t;i++){
-            System.out.println(conds.get(i));
+            //System.out.println(conds.get(i));
                 ps1.setObject(i+1, conds.get(i));
             }
             }
@@ -531,7 +531,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             ResultSet rs = ps.executeQuery();
             rt = new ArrayList<BaseModele>();
             while (rs.next()) {
-                //System.out.println(" next ");
+                ////System.out.println(" next ");
                 rt.add(rsToObject(p, rs, attr));
             }
             rs.close();
@@ -547,10 +547,10 @@ public class GeneriqueDAO implements InterfaceDAO {
             } catch (Exception ex) {
 
             }
-            //System.out.println();
-            //System.out.println();
-            //System.out.println();
-            //System.out.println("fin find");
+            ////System.out.println();
+            ////System.out.println();
+            ////System.out.println();
+            ////System.out.println("fin find");
             rp.setResultats(rt);
             rp.setNumPage(page);
             rp.setParPage(parpage);
@@ -567,10 +567,10 @@ public class GeneriqueDAO implements InterfaceDAO {
         Connection cx = null;
         int count = 0;
         try {
-            //System.out.println("findAll ");
-            //System.out.println();
-            //System.out.println();
-            //System.out.println();
+            ////System.out.println("findAll ");
+            ////System.out.println();
+            ////System.out.println();
+            ////System.out.println();
             Object rttest=this.cacher.get(rq);
         if(rttest!=null) retour=(BaseModele)rttest;
             cx = connexion.getConnection();
@@ -589,24 +589,24 @@ public class GeneriqueDAO implements InterfaceDAO {
             int t=conds.size();
 
            
-          System.out.println("select * from " + n_table +where);
+          //System.out.println("select * from " + n_table +where);
           
             for(int i=0;i<t;i++){
-                System.out.println(conds.get(i));
+                //System.out.println(conds.get(i));
                 ps.setObject(i+1, conds.get(i));
             }
              }
             ResultSet rs = ps.executeQuery();
             if(!rs.next()) return null;
-                System.out.println(" next ");
+                //System.out.println(" next ");
                 retour= (BaseModele) rsToObject(p, rs, attr);
-            System.out.println(retour.getId());
+            //System.out.println(retour.getId());
             rs.close();
             ps.close();
                   this.cacher.add(rq, retour);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            System.out.println(ex.getMessage());
+            //System.out.println(ex.getMessage());
             throw (ex);
         } finally {
             try {
@@ -616,7 +616,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             } catch (Exception ex) {
 
             }
-            System.out.println("add depuis generique dao");
+            //System.out.println("add depuis generique dao");
        
             return retour;
         }   

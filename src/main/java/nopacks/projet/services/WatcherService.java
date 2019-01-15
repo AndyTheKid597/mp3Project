@@ -6,6 +6,9 @@
 package nopacks.projet.services;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nopacks.projet.modeles.Chanson;
@@ -40,30 +43,36 @@ public class WatcherService extends Thread {
                     StandardWatchEventKinds.ENTRY_CREATE,
                     StandardWatchEventKinds.ENTRY_DELETE);
             
-          
+            
         } catch (Exception ex) {
             Logger.getLogger(WatcherService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1)
     public void actual(){
         try {
             WatchKey key;
+            ArrayList<String> toDelete=new ArrayList<String>();
+            ArrayList<String> toAdd=new ArrayList<String>();
             System.out.println("Niantso test fixhier");
-            while ((key = watcherService.take()) != null) {
-                int i=0;
+                   int i=0;
+            while ((key = watcherService.poll(5, TimeUnit.SECONDS)) != null) {
+         
                 System.out.println(this);
+                List<WatchEvent<?>> lwt=null;
                 for (WatchEvent<?> event : key.pollEvents()) {
                     System.out.println(i+
                             ". Event kind:" + event.kind()
                                     + ". File affected: " + event.context() + ".");
                     if(event.context().toString().endsWith(".mp3")){
                     if(event.kind()==StandardWatchEventKinds.ENTRY_DELETE){
-                        chansonService.deleteChanson(event.context().toString());
+                        toDelete.add(event.context().toString());
+                     //   chansonService.deleteChanson(event.context().toString());
                     } else if(event.kind()==StandardWatchEventKinds.ENTRY_CREATE){
-                        Chanson ct=chansonService.addChanson(event.context().toString());
-                        chansonService.pend(ct);
-                        ct=null;
+                        toAdd.add(event.context().toString());
+                       // Chanson ct=chansonService.addChanson(event.context().toString());
+                        //chansonService.pend(ct);
+                        //ct=null;
                     }
                     }
                     
@@ -71,9 +80,20 @@ public class WatcherService extends Thread {
                     
                 }
                 key.reset();
+                System.out.println("rq");
+            }
+            for(String ray: toDelete){
+                chansonService.deleteChanson(ray);
+            }
+            for(String ray: toAdd){
+                 Chanson ct=chansonService.addChanson(ray);
+                        chansonService.pend(ct);
+                        ct=null;
             }
             actual();
+            
         } catch (Exception ex) {
+            System.out.println(ex.getMessage());
             Logger.getLogger(WatcherService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

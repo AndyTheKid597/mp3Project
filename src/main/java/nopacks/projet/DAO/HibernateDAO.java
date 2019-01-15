@@ -55,11 +55,11 @@ public class HibernateDAO implements InterfaceDAO {
     @Override
     public List<BaseModele> findAll(BaseModele p) {
         Session session = this.sessionFactory.openSession();
-        System.out.println(p.getClass());
-        System.out.println(p.getClass().getSuperclass());
+        //////System.out.println(p.getClass());
+        //////System.out.println(p.getClass().getSuperclass());
         List<BaseModele> liste = session.createCriteria(p.getClass()).list();
         session.close();
-        System.out.println("taille " + liste.size());
+        //////System.out.println("taille " + liste.size());
         return liste;
     }
 
@@ -98,7 +98,7 @@ public class HibernateDAO implements InterfaceDAO {
         //session.update(p);
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        System.out.println(p.getId());
+        //////System.out.println(p.getId());
         session.update(p);
         tx.commit();
         session.close();
@@ -109,7 +109,7 @@ public class HibernateDAO implements InterfaceDAO {
     public void delete(BaseModele p) {
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        System.out.println(p.getId());
+        //////System.out.println(p.getId());
         BaseModele anatybase = (BaseModele) session.load(p.getClass(), p.getId());
 
         if (anatybase != null) {
@@ -132,21 +132,21 @@ public class HibernateDAO implements InterfaceDAO {
 
     public void tester() {
         try {
-            System.out.println("begin 22");
+            //////System.out.println("begin 22");
             Chanson testchan = new Chanson();
             Requete rq = new Requete(testchan);
             rq.setCritere(CritereGenerator.or(CritereGenerator.like("nomfichier", "a"), CritereGenerator.gteq("id", new Integer(5))));
-            System.out.println(rq.contenu());
-            System.out.println(rq.where());
+            //////System.out.println(rq.contenu());
+            //////System.out.println(rq.where());
             ResultatPagination liste2 = this.findAllPage(rq, 0, 10);
-            System.out.println("tonga farany22");
+            //////System.out.println("tonga farany22");
             for (BaseModele bm : liste2.getResultats()) {
                 Chanson tpchan = ((Chanson) bm);
-                System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
+                //////System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            System.out.println(ex.getMessage());
+            //////System.out.println(ex.getMessage());
         }
     }
 
@@ -170,7 +170,7 @@ public class HibernateDAO implements InterfaceDAO {
             int t = conds.size();
 
             for (int i = 0; i < t; i++) {
-                System.out.println(conds.get(i));
+                //////System.out.println(conds.get(i));
                 qrct.setParameter(i, conds.get(i));
             }
         }
@@ -200,7 +200,7 @@ public class HibernateDAO implements InterfaceDAO {
         if (rttest != null) {
             return (BaseModele) rttest;
         }
-        System.out.println("skip code return");
+        //////System.out.println("skip code return");
         Session session = this.sessionFactory.openSession();
         String nt = rq.getBm().getClass().getSimpleName();
         String whcon = rq.where();
@@ -248,7 +248,7 @@ public class HibernateDAO implements InterfaceDAO {
             return rt;
         } catch (Exception ex) {
             ex.printStackTrace();
-            System.out.println(ex.getMessage());
+            //////System.out.println(ex.getMessage());
             if (session != null) {
                 session.close();
             }

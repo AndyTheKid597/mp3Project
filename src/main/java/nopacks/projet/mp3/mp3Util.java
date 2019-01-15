@@ -74,8 +74,9 @@ public class mp3Util {
       try{
                   baseFileFormat = AudioSystem.getAudioFileFormat(file);
                   opened=true;
-                  System.out.println("opened");
+                  System.out.println("opened ");
       } catch (Exception ex){
+          System.out.println(ex.getMessage());
     TimeUnit.SECONDS.sleep(1);
       }
 }
