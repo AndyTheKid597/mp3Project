@@ -166,14 +166,16 @@ public class SiteController {
         }
         catch(Exception ex){
             System.out.println(" "+ex.getMessage()+"---------"+ex.getStackTrace());
+            pj=0;
         }
         ModelAndView rt = new ModelAndView("resultat");
         ResultatPagination rp = this.chansonService.rechercheSimpleChanson(succ, pj, 10);
         int parpage = rp.getParPage();
         int nombre = (int) rp.getTailleTotale();
         int page = nombre / parpage;
+        System.out.println("atataille "+rp.getResultats().size());
         rt.addObject("page", page);
-        rt.addObject("resultat", this.chansonService.rechercheSimpleChanson(succ, pj, 10));
+        rt.addObject("resultat", rp);
         //rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("url", query);

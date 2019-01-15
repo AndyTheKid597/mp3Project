@@ -67,14 +67,14 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="single-event-area mb-30">
                         <div class="event-thumbnail">
-                            <img src="${lien_assets}/img/bg-img/a1.jpg" alt="">
+                            <img src="${pageContext.servletContext.contextPath}/res/${!empty(sg.image)? sg.image : "img/generique.jpg"}" style="height:250px;  object-fit: cover;" alt="">
                         </div>
-                        <div class="event-text">
+                        <div class="event-text" style="height:190   px;">
                             <h4>${sg.auteur}</h4>
                             
                             <div class="event-meta-data">
                             </div>
-                            <a href="${pageContext.servletContext.contextPath}/site/single/${sg.id}" class="btn see-more-btn">${sg.titre}</a>
+                            <a href="${pageContext.servletContext.contextPath}/site/single/${sg.id}" class="btn see-more-btn" style="white-space: initial;">${sg.titre}</a>
                         </div>
                     </div>
                 </div>
