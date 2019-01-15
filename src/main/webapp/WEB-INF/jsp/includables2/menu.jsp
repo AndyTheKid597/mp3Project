@@ -2,7 +2,7 @@
 <header class="header-area" id="header">
         <!-- Navbar Area -->
         <div class="oneMusic-main-menu">
-            <div class="classy-nav-container breakpoint-off">
+            <div class="classy-nav-container breakpoint-off" style="background-color: black;">
                 <div class="container">
                     <!-- Menu -->
                     <nav class="classy-navbar justify-content-between" id="oneMusicNav">
