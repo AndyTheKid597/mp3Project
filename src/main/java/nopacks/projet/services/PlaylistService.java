@@ -26,4 +26,5 @@ public interface PlaylistService {
     public void deletePlaylist(Playlist p);
     public void majPlaylist(Playlist p);
     public Playlist getPlaylistById(int id);
+    public PlaylistDetails findDetail(Playlist p, int idchanson);
 }

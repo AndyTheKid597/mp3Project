@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group wow fadeInUp" data-wow-delay="200ms">
-                                        <input type="email" class="form-control" id="email" placeholder="Title" name="titre">
+                                        <input type="text" class="form-control" id="email" placeholder="Title" name="titre">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">

@@ -94,6 +94,7 @@
                             <img src="${lien_assets}/img/bg-img/e2.jpg" alt="">
                             <div class="album-info">
                                 <a href="${pageContext.servletContext.contextPath}/site/singlepl/${sg.id}/0">
+                                    <a href="${pageContext.servletContext.contextPath}/site/detPl?id=${sg.id}">Editer</a>
                                     <h5>${sg.nom}</h5>
                                 </a>
                             </div>
@@ -102,7 +103,7 @@
                         <div class="single-album">
                             <img src="${lien_assets}/img/bg-img/e2.jpg" alt="">
                             <div class="album-info">
-                                <a href="#">
+                                <a href="${pageContext.servletContext.contextPath}/site/creerPlaylist">
                                     <h5>Ajouter</h5>
                                 </a>
                             </div>

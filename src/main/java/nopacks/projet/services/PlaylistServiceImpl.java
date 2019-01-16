@@ -99,5 +99,18 @@ public class PlaylistServiceImpl implements PlaylistService {
     public void majPlaylist(Playlist p) {
         this.playlistDAO.update(p);
     }
+
+    @Override
+    public PlaylistDetails findDetail(Playlist p, int idchanson) {
+        try {
+            Requete rq= new Requete(new PlaylistDetails());
+            rq.setCritere(CritereGenerator.and(CritereGenerator.eq("idchanson", idchanson), CritereGenerator.eq("idplaylist", p.getId())));
+            return (PlaylistDetails) this.playlistDAO.findBy(rq);
+        } catch (Exception ex) {
+           System.out.println(ex.getMessage());
+           return null;
+        }
+        
+    }
     
 }

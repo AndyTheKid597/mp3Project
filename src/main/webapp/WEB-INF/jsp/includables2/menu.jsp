@@ -37,7 +37,7 @@
                                             <li><a href="${pageContext.servletContext.contextPath}/site/playlist">Playlists</a></li>
                                             <li><a href="${pageContext.servletContext.contextPath}/site/goAdvanced">Advanced search</a></li>
                                             <li><a href="#">News</a></li>
-                                            <li><a href="#">Login</a></li>
+                                            <li><a href="${pageContext.servletContext.contextPath}/site/loginclient">Login</a></li>
                                             <li><a href="#">Dropdown</a>
                                                 <ul class="dropdown">
                                                     <li><a href="#">Even Dropdown</a></li>

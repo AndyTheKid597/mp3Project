@@ -239,5 +239,51 @@ public class SiteController {
             return "redirect:/site/index.html";
         }
     }
+    @RequestMapping(value="/creerPlaylist")
+    public ModelAndView pagePl(HttpServletRequest req){
+        ModelAndView md=new ModelAndView("addPlaylist");
+        return md;
+    }
+    @RequestMapping(value="/creerPl")
+    public String manaoPl(HttpServletRequest req, @RequestParam("np") String nomplaylist){
+         Client ct=(Client)req.getSession().getAttribute("clientObjet");
+        Playlist pl=this.playlistService.createPlaylist(ct, nomplaylist);
+        return "redirect:/site/detPl?id="+pl.getId();
+    }
+    @RequestMapping("/detPl")
+    public ModelAndView voirdetails(@RequestParam("id") int id){
+        Playlist pl=this.playlistService.getPlaylistById(id);
+        List<PlaylistDetails> dp=this.playlistService.getDetails(pl);
+        ModelAndView md=new ModelAndView("det");
+        md.addObject("playlist",pl);
+        md.addObject("details",dp);
+        md.addObject("listechansons",this.chansonService.listChansons());
+        md.addObject("idpl",id);
+        
+          ArrayList<Chanson> lc=new ArrayList<>();
+        for(PlaylistDetails ray:dp){
+            lc.add(this.chansonService.findChansonById(ray.getIdchanson()));
+            
+        }
+        md.addObject("lchan",lc);
+        return md;
+    }
+    @RequestMapping(value="/ajouterDetailsPlaylist", method=RequestMethod.POST)
+    public String voirdetails2(@RequestParam("id") int id,@RequestParam("idchanson") int idchanson){
+        System.out.println("niditra ato");
+        Playlist pl=this.playlistService.getPlaylistById(id);
+        Chanson ct=this.chansonService.findChansonById(idchanson);
+        this.playlistService.addChansonToPlaylist(pl, ct);
+       return "redirect:/site/detPl?id="+id;
+    }
     
+     @RequestMapping(value="/deleteDetailsPlaylist", method=RequestMethod.GET)
+    public String voirdetails3(@RequestParam("id") int id,@RequestParam("idchanson") int idchanson){
+        System.out.println("niditra ato");
+        Playlist pl=this.playlistService.getPlaylistById(id);
+        PlaylistDetails pld=this.playlistService.findDetail(pl, idchanson);
+        this.playlistService.deleteDetail(pld);
+       return "redirect:/site/detPl?id="+id;
+    }
+
 }
