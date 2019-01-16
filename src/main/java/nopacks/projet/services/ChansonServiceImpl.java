@@ -212,6 +212,7 @@ public class ChansonServiceImpl implements ChansonService {
                     ch.setGenre(m_util.getGenre());
                     ch.setTitre(m_util.getTitre());
                     ch.setTrack(m_util.getTrack());
+                    ch.setPending(true);
                     System.out.println("insert " + ch.getNomfichier());
                     sync_stat.setLastMessage(" insertion..");
                     this.chansonDAO.save(ch);

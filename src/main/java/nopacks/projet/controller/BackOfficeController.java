@@ -8,6 +8,7 @@ package nopacks.projet.controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,7 +42,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin")
 @SessionAttributes("adminObjet")
 public class BackOfficeController {
-
+    private boolean syncedBool;
     private actualisationStatut sync_status;
 
     private ChansonService chansonService;
@@ -55,6 +56,11 @@ public class BackOfficeController {
         this.chansonService = ps;
     }
 
+    @PostConstruct
+    public void checkSyncBool(){
+        Syncer();
+    }
+    
     @Autowired(required = true)
     @Qualifier(value = "clientServiceGenerique")
     public void setClientService(ClientService ps) {
