@@ -38,12 +38,11 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     private BasicDataSource connexion;
     private Cacher cacher;
-    
-    public void setCacher(Cacher cacher){
-        this.cacher=cacher;
+
+    public void setCacher(Cacher cacher) {
+        this.cacher = cacher;
     }
-    
-    
+
     public void setConnexion(BasicDataSource ds) {
         this.connexion = ds;
     }
@@ -60,8 +59,10 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     @Override
     public void save(BaseModele p) {
+        Connection ct = null;
+        PreparedStatement ps = null;
         try {
-            Connection ct = connexion.getConnection();
+            ct = connexion.getConnection();
             ArrayList<String[]> attribs = this.getAttributsBaseModele(p);
             String[] liste = getCol(p, attribs);
             String rqt = "insert into " + this.getNomTable(p);
@@ -69,7 +70,7 @@ public class GeneriqueDAO implements InterfaceDAO {
             String interrogation = "(" + liste[1] + ")";
             rqt = rqt + ctrqt + " values " + interrogation;
             //System.out.println(rqt);
-            PreparedStatement ps = ct.prepareStatement(rqt);
+            ps = ct.prepareStatement(rqt);
             int i = 1;
             for (String[] att : attribs) {
                 if (att[1].equals("id")) {
@@ -81,31 +82,50 @@ public class GeneriqueDAO implements InterfaceDAO {
             //System.out.println(ps);
             // ps.executeUpdate();
             ps.executeUpdate();
+
         } catch (Exception ex) {
             ex.printStackTrace();
 
+        } finally {
+            try {
+                if (ps != null && !ps.isClosed()) {
+                    ps.close();
+                }
+                if (ct != null && !ct.isClosed()) {
+                    ct.close();
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
         }
 
     }
 
     @PostConstruct
-    public void testatge(){
-        HashMap<String,HashMap<String,String>> config=this.cacher.getcf();
+    public void testatge() {
+        HashMap<String, HashMap<String, String>> config = this.cacher.getcf();
         //System.out.println("postiniiiiiiittt");
         //System.out.println(config.size());
-        String ind=config.keySet().iterator().next();
+        String ind = config.keySet().iterator().next();
         //System.out.println(ind);
         //System.out.println(config.get(ind).get("duree"));
     }
-    
+
     @Override
     public BaseModele findById(BaseModele p) {
+        Connection ct=null;
+        PreparedStatement ps=null;
+
         try {
-            PreparedStatement ps = connexion.getConnection().prepareStatement("select * from " + this.getNomTable(p) + " where id=?");
+
+            ct = connexion.getConnection();
+            ps = ct.prepareStatement("select * from " + this.getNomTable(p) + " where id=?");
             ps.setInt(1, p.getId());
             ResultSet rs = ps.executeQuery();
             ArrayList<String[]> attribs = this.getAttributsBaseModele(p);
-            if (!rs.next()) {
+            if (!rs.next()) 
+            {
+                rs.close();
                 return null;
             }
             BaseModele resultat = rsToObject(p, rs, attribs);
@@ -113,6 +133,17 @@ public class GeneriqueDAO implements InterfaceDAO {
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
+        } finally{
+                        try {
+                if (ps != null && !ps.isClosed()) {
+                    ps.close();
+                }
+                if (ct != null && !ct.isClosed()) {
+                    ct.close();
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
@@ -136,7 +167,9 @@ public class GeneriqueDAO implements InterfaceDAO {
             ResultSet rs2 = ps1.executeQuery("select count(*) from " + n_table);
             rs2.next();
             count = rs2.getInt(1);
-            if(parpage==-1) parpage=count;
+            if (parpage == -1) {
+                parpage = count;
+            }
             rs2.close();
             ps1.close();
             Statement ps = cx.createStatement();
@@ -174,13 +207,16 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     @Override
     public void update(BaseModele p) {
+                    Connection ct=null;
+                   PreparedStatement ps=null;
         try {
-            Connection ct = connexion.getConnection();
+
+            ct = connexion.getConnection();
             ArrayList<String[]> attribs = this.getAttributsBaseModele(p);
             HashMap<String, Object> cv = this.getColAndVal(p);
             String rqt = " update " + this.getNomTable(p) + " set ";
             String where = " where id=" + p.getId();
-            
+
             StringBuilder setena = new StringBuilder();
             boolean vol = false;
             for (String[] att : attribs) {
@@ -198,7 +234,8 @@ public class GeneriqueDAO implements InterfaceDAO {
             rqt = rqt + st + where;
             //System.out.println("update request");
             //System.out.println(rqt);
-            PreparedStatement ps = ct.prepareStatement(rqt);
+
+            ps = ct.prepareStatement(rqt);
             int i = 1;
             for (String[] att : attribs) {
                 if (att[1].equals("id")) {
@@ -213,18 +250,43 @@ public class GeneriqueDAO implements InterfaceDAO {
         } catch (Exception ex) {
             ex.printStackTrace();
 
+        } finally{
+                        try {
+                if (ps != null && !ps.isClosed()) {
+                    ps.close();
+                }
+                if (ct != null && !ct.isClosed()) {
+                    ct.close();
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
     @Override
     public void delete(BaseModele p) {
+                    Connection ct=null;
+            Statement st=null;
         try {
             String rqt = "delete from " + this.getNomTable(p) + " where id=" + p.getId();
-            Statement st = connexion.getConnection().createStatement();
+ ct=connexion.getConnection();
+            st =ct.createStatement();
             st.executeUpdate(rqt);
             st.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally{
+                        try {
+                if (st != null && !st.isClosed()) {
+                    st.close();
+                }
+                if (ct != null && !ct.isClosed()) {
+                    ct.close();
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
@@ -295,7 +357,6 @@ public class GeneriqueDAO implements InterfaceDAO {
         return p.getClass().getSimpleName();
     }
 
-
     public void tester() {
         try {
             Chanson testchan = new Chanson();
@@ -309,9 +370,9 @@ public class GeneriqueDAO implements InterfaceDAO {
             rq.setCritere(CritereGenerator.or(CritereGenerator.like("nomfichier", "a"), CritereGenerator.gteq("id", new Integer(5))));
             //System.out.println(rq.contenu());
             //System.out.println(rq.where());
-           ResultatPagination liste2 = this.findAllPage(rq, 0, 10);
-           //System.out.println("tonga farany");
-                      for (BaseModele bm : liste2.getResultats()) {
+            ResultatPagination liste2 = this.findAllPage(rq, 0, 10);
+            //System.out.println("tonga farany");
+            for (BaseModele bm : liste2.getResultats()) {
                 Chanson tpchan = ((Chanson) bm);
                 //System.out.println(tpchan.getId() + " " + tpchan.getNomfichier());
             }
@@ -407,8 +468,8 @@ public class GeneriqueDAO implements InterfaceDAO {
             Class rttype = antsoina.getParameterTypes()[0];
             //System.out.println("rttype "+rttype);
             //System.out.println("izy "+arg.getClass());
-            if(arg.getClass()==Long.class && rttype==Integer.class){
-                arg= new Integer(((Long)arg).intValue());
+            if (arg.getClass() == Long.class && rttype == Integer.class) {
+                arg = new Integer(((Long) arg).intValue());
                 //System.out.println("vocatst "+arg.getClass());
             }
             ////System.out.println(arg.getClass());
@@ -487,47 +548,48 @@ public class GeneriqueDAO implements InterfaceDAO {
             //String whcon=rq.where();
             //String where=" where ";
             String whcon = rq.where();
-        String where = " where ";
-        String od= rq.orderby();
-        if (whcon == null) {
-            where = "";
-        } else {
-            where = where + whcon;
-        }
-          //  if(whcon!=null) where= where+rq.where();
-         //   else where="";
-                        ArrayList<String[]> attr = this.getAttributsBaseModele(p);
+            String where = " where ";
+            String od = rq.orderby();
+            if (whcon == null) {
+                where = "";
+            } else {
+                where = where + whcon;
+            }
+            //  if(whcon!=null) where= where+rq.where();
+            //   else where="";
+            ArrayList<String[]> attr = this.getAttributsBaseModele(p);
             ////System.out.println(attr.size());
             ////System.out.println("select * from "+n_table);
-            PreparedStatement ps1 = cx.prepareStatement("select count(*) from " + n_table+where);
-            ArrayList<Object> conds=null;
-            int t=0;
-            if(whcon!=null){
-             conds=rq.mifanaraka();
-            t=conds.size();
+            PreparedStatement ps1 = cx.prepareStatement("select count(*) from " + n_table + where);
+            ArrayList<Object> conds = null;
+            int t = 0;
+            if (whcon != null) {
+                conds = rq.mifanaraka();
+                t = conds.size();
 
-             //System.out.println("select count(*) from " + n_table+where+od);
-             
-            for(int i=0;i<t;i++){
-            //System.out.println(conds.get(i));
-                ps1.setObject(i+1, conds.get(i));
-            }
+                //System.out.println("select count(*) from " + n_table+where+od);
+                for (int i = 0; i < t; i++) {
+                    //System.out.println(conds.get(i));
+                    ps1.setObject(i + 1, conds.get(i));
+                }
             }
             ResultSet rs2 = ps1.executeQuery();
             rs2.next();
             count = rs2.getInt(1);
-                        if(parpage==-1) parpage=count;
+            if (parpage == -1) {
+                parpage = count;
+            }
             rs2.close();
             ps1.close();
-            PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where+od+ " limit ? offset ? ");
-          if(whcon!=null){
-            for(int i=0;i<t;i++){
-                ps.setObject(i+1, conds.get(i));
+            PreparedStatement ps = cx.prepareStatement("select * from " + n_table + where + od + " limit ? offset ? ");
+            if (whcon != null) {
+                for (int i = 0; i < t; i++) {
+                    ps.setObject(i + 1, conds.get(i));
+                }
             }
-          }
-            ps.setInt(t+1,parpage);
-            ps.setInt(t+2,(page * parpage));
-            
+            ps.setInt(t + 1, parpage);
+            ps.setInt(t + 2, (page * parpage));
+
             ResultSet rs = ps.executeQuery();
             rt = new ArrayList<BaseModele>();
             while (rs.next()) {
@@ -561,8 +623,8 @@ public class GeneriqueDAO implements InterfaceDAO {
 
     @Override
     public BaseModele findBy(Requete rq) {
-        
-    BaseModele p = rq.getBm();
+
+        BaseModele p = rq.getBm();
         BaseModele retour = null;
         Connection cx = null;
         int count = 0;
@@ -571,39 +633,44 @@ public class GeneriqueDAO implements InterfaceDAO {
             ////System.out.println();
             ////System.out.println();
             ////System.out.println();
-            Object rttest=this.cacher.get(rq);
-        if(rttest!=null) retour=(BaseModele)rttest;
+            Object rttest = this.cacher.get(rq);
+            if (rttest != null) {
+                retour = (BaseModele) rttest;
+            }
             cx = connexion.getConnection();
             String n_table = getNomTable(p);
-            String whcon=rq.where();
-            String where=" where ";
-            if(whcon==null) where="";
-            else where=where+whcon;
-            ArrayList<Object> conds=null;
-            String od=rq.orderby();
-             PreparedStatement ps = cx.prepareStatement("select * from " + n_table +where+od);
-            ArrayList<String[]> attr = this.getAttributsBaseModele(p);
-             if(whcon!=null){
-                
-            conds=rq.mifanaraka();
-            int t=conds.size();
-
-           
-          //System.out.println("select * from " + n_table +where);
-          
-            for(int i=0;i<t;i++){
-                //System.out.println(conds.get(i));
-                ps.setObject(i+1, conds.get(i));
+            String whcon = rq.where();
+            String where = " where ";
+            if (whcon == null) {
+                where = "";
+            } else {
+                where = where + whcon;
             }
-             }
+            ArrayList<Object> conds = null;
+            String od = rq.orderby();
+            PreparedStatement ps = cx.prepareStatement("select * from " + n_table + where + od);
+            ArrayList<String[]> attr = this.getAttributsBaseModele(p);
+            if (whcon != null) {
+
+                conds = rq.mifanaraka();
+                int t = conds.size();
+
+                //System.out.println("select * from " + n_table +where);
+                for (int i = 0; i < t; i++) {
+                    //System.out.println(conds.get(i));
+                    ps.setObject(i + 1, conds.get(i));
+                }
+            }
             ResultSet rs = ps.executeQuery();
-            if(!rs.next()) return null;
-                //System.out.println(" next ");
-                retour= (BaseModele) rsToObject(p, rs, attr);
+            if (!rs.next()) {
+                return null;
+            }
+            //System.out.println(" next ");
+            retour = (BaseModele) rsToObject(p, rs, attr);
             //System.out.println(retour.getId());
             rs.close();
             ps.close();
-                  this.cacher.add(rq, retour);
+            this.cacher.add(rq, retour);
         } catch (SQLException ex) {
             ex.printStackTrace();
             //System.out.println(ex.getMessage());
@@ -617,33 +684,63 @@ public class GeneriqueDAO implements InterfaceDAO {
 
             }
             //System.out.println("add depuis generique dao");
-       
+
             return retour;
-        }   
+        }
     }
 
     @Override
     public void deleteAll(BaseModele p) {
+        Connection ct=null;
+        Statement st=null;
         try {
             String rqt = "delete from " + this.getNomTable(p);
-            Statement st = connexion.getConnection().createStatement();
+            ct=connexion.getConnection();
+            st = ct.createStatement();
             st.executeUpdate(rqt);
             st.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally{
+                        try {
+                if (st!= null && !st.isClosed()) {
+                    st.close();
+                }
+                if (ct != null && !ct.isClosed()) {
+                    ct.close();
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
     @Override
     public int maxID(BaseModele p) {
-         try {
-            PreparedStatement ps = connexion.getConnection().prepareStatement("select max(id) from " + this.getNomTable(p));
+        Connection ct=null;
+        PreparedStatement ps=null;
+        try {
+            ct=connexion.getConnection();
+            ps = ct.prepareStatement("select max(id) from " + this.getNomTable(p));
             ResultSet rs = ps.executeQuery();
             rs.next();
-            return rs.getInt(1);
+            int rt= rs.getInt(1);
+            rs.close();
+            return rt;
         } catch (Exception ex) {
             ex.printStackTrace();
             return -1;
+        }finally{
+                        try {
+                if (ps!= null && !ps.isClosed()) {
+                    ps.close();
+                }
+                if (ct != null && !ct.isClosed()) {
+                    ct.close();
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 }

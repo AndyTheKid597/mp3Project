@@ -50,6 +50,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="browse-by-catagories catagory-menu d-flex flex-wrap align-items-center mb-70">
+                         <a href="#" data-filter=".b" class="active"></a>
                         <c:if test="${resultat.isHasPrevious()}">
                         <a href="${pageContext.servletContext.contextPath}${url}&page=" data-filter=".b" class="active"><</a>
                         </c:if>
@@ -69,7 +70,7 @@
                         <div class="event-thumbnail">
                             <img src="${pageContext.servletContext.contextPath}/res/${!empty(sg.image)? sg.image : "img/generique.jpg"}" style="height:250px;  object-fit: cover;" alt="">
                         </div>
-                        <div class="event-text" style="height:190   px;">
+                        <div class="event-text" style="height:190px;">
                             <h4>${sg.auteur}</h4>
                             
                             <div class="event-meta-data">
@@ -80,6 +81,19 @@
                 </div>
                 </c:forEach>
 
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="browse-by-catagories catagory-menu d-flex flex-wrap align-items-center mb-70">
+                         <a href="#" data-filter=".b" class="active"></a>
+                        <c:if test="${resultat.isHasPrevious()}">
+                        <a href="${pageContext.servletContext.contextPath}${url}&page=" data-filter=".b" class="active"><</a>
+                        </c:if>
+                        <c:if test="${resultat.isHasNext()}">
+                        <a href="${pageContext.servletContext.contextPath}${url}&page=${resultat.getNext()}" data-filter=".c" class="active">></a>
+                        </c:if>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

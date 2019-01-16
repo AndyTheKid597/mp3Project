@@ -202,7 +202,9 @@ public class SiteController {
         int nombre = (int) rp.getTailleTotale();
         int page = nombre / parpage;
         rt.addObject("page", page);
-        rt.addObject("resultat", this.chansonService.rechercheAdvanced(nomfichier, titre, commentaire, genre, auteur, album, date, pj, 20));
+        ResultatPagination resultatny=this.chansonService.rechercheAdvanced(nomfichier, titre, commentaire, genre, auteur, album, date, pj, 20);
+        System.out.println("angeanzy :"+resultatny.getResultats().size());
+        rt.addObject("resultat", resultatny);
         rt.addObject("all", this.chansonService.findChansonsLast(0, 10));
         //rt.addObject("listeChansons",this.chansonService.listChansonsPage(0, 10).getResultats());
         rt.addObject("lien", "resultat");

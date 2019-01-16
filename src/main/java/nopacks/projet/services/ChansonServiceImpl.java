@@ -331,6 +331,8 @@ public class ChansonServiceImpl implements ChansonService {
                             )
                     )
             );
+            System.out.println("requete "+rq.where());
+            System.out.println("requete "+rq.contenu());
             return this.chansonDAO.findAllPage(rq, page, parpage);
         } catch (Exception ex) {
             Logger.getLogger(ChansonServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
